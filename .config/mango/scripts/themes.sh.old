@@ -1,0 +1,111 @@
+#!/usr/bin/env bash
+set -e
+
+# 🎨 Arte ASCII
+ascii_art="
+  ▗▄▄▄▖▗▖ ▗▖▗▄▄▄▖▗▖  ▗▖▗▄▄▄▖ ▗▄▄▖
+    █  ▐▌ ▐▌▐▌   ▐▛▚▞▜▌▐▌   ▐▌   
+    █  ▐▛▀▜▌▐▛▀▀▘▐▌  ▐▌▐▛▀▀▘ ▝▀▚▖
+    █  ▐▌ ▐▌▐▙▄▄▖▐▌  ▐▌▐▙▄▄▖▗▄▄▞▘
+"
+if command -v gum >/dev/null 2>&1; then
+  gum style --foreground 212 --border none --margin "1 2" --padding "1 3" --align center "$ascii_art"
+else
+  echo -e "\n\e[1;35m$ascii_art\e[0m\n"
+fi
+
+# === RUTAS ===
+THEMES_DIR="$HOME/.config/themes/"
+CURRENT_THEME_DIR="$HOME/.config/current/theme"
+NVIM_THEME_FILE="$HOME/.config/nvim/plugin/theme.lua"
+SCRIPTSDIR="$HOME/.config/mango/scripts"
+WAYBAR_CSS_DEST="$HOME/.config/mango/waybar/style.css"
+
+# === SELECCIÓN DE TEMA ===
+THEMES=($(ls "$THEMES_DIR" 2>/dev/null))
+[[ ${#THEMES[@]} -eq 0 ]] && { echo "No hay temas"; exit 1; }
+
+THEME_NAME=$(gum choose "${THEMES[@]}" --header "Selecciona un tema" --height 12 --cursor "➜ ")
+[[ -z "$THEME_NAME" ]] && { echo "Cancelado"; exit 1; }
+
+THEME_NAME=$(echo "$THEME_NAME" | tr '[:upper:]' '[:lower:]' | tr ' ' '-')
+THEME_PATH="$THEMES_DIR/$THEME_NAME"
+WALLPAPERS_DIR="$THEME_PATH/wallpapers"
+THEME_FILE="$THEME_PATH/${THEME_NAME}.ini"
+WAYBAR_CSS_SRC="$THEME_PATH/waybar.css"
+
+[[ ! -d "$THEME_PATH" ]] && { echo "Tema no existe"; exit 1; }
+[[ ! -f "$THEME_FILE" ]] && { echo "No existe .ini"; exit 1; }
+
+# echo "Aplicando tema: $THEME_NAME"
+
+# === APLICAR TEMA BASE ===
+mkdir -p "$HOME/.config/foot" "$(dirname "$CURRENT_THEME_DIR")" "$(dirname "$WAYBAR_CSS_DEST")"
+ln -nsf "$THEME_PATH" "$CURRENT_THEME_DIR"
+cp -v "$THEME_FILE" "$HOME/.config/foot/foot.ini"
+
+# === WALLPAPER ALEATORIO + WALLUST + WAYBAR.CSS DEL TEMA (TRIPLE COMBO) ===
+if [[ -d "$WALLPAPERS_DIR" && -n "$(ls -A "$WALLPAPERS_DIR" 2>/dev/null)" ]]; then
+  mapfile -t WALLPAPERS < <(find "$WALLPAPERS_DIR" -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.webp" \) | sort)
+  
+  if [[ ${#WALLPAPERS[@]} -gt 0 ]]; then
+    WALLPAPER="${WALLPAPERS[$(( RANDOM % ${#WALLPAPERS[@]} ))]}"
+    echo "Wallpaper aleatorio → $(basename "$WALLPAPER")"
+
+    cp "$WALLPAPER" ~/.config/wall.png
+    swww img "$WALLPAPER" --transition-type wipe --transition-fps 60 --transition-duration 2
+
+    # 2. Generar colores con wallust (dinámicos)
+    wallust run "$WALLPAPER" -s >/dev/null 2>&1
+    sleep 0.8
+
+    # 3. PERO SOBREESCRIBIR con el waybar.css del tema (para que funcione como antes)
+    if [[ -f "$WAYBAR_CSS_SRC" ]]; then
+      cp -f "$WAYBAR_CSS_SRC" "$WAYBAR_CSS_DEST"
+      # echo "WAYBAR.CSS DEL TEMA APLICADO (como la versión vieja)"
+    fi
+
+    # 4. Recargar Waybar
+    pkill -SIGUSR2 waybar 2>/dev/null || {
+      pkill waybar
+      sleep 0.3
+      waybar -c ~/.config/mango/waybar/config -s "$WAYBAR_CSS_DEST" >/dev/null 2>&1 &
+    }
+    notify-send "Tema completo" "$THEME_NAME\n$(basename "$WALLPAPER")" -i "$WALLPAPER"
+    pkill -USR2 swaync-client 2>/dev/null || swaync-client -rs &
+    "$SCRIPTSDIR/mako.sh" 2>/dev/null || true
+  fi
+else
+  echo "No hay wallpapers → solo se aplicó el tema base"
+  # Si no hay wallpaper, al menos aplicar el waybar.css del tema
+  [[ -f "$WAYBAR_CSS_SRC" ]] && cp -f "$WAYBAR_CSS_SRC" "$WAYBAR_CSS_DEST" && pkill -SIGUSR2 waybar
+fi
+
+# === CAMBIAR TEMA DE NEOVIM ===
+if gum confirm "¿Deseas también cambiar el tema de Neovim?"; then
+  if [[ -f "$NVIM_THEME_FILE" ]]; then
+    # Menú para elegir tema de Neovim
+    NVIM_THEME=$(gum choose \
+      "kanagawa-wave" \
+      "tokyonight" \
+      --header "🎨 Selecciona tema de Neovim" --height 10)
+    
+    if [[ -n "$NVIM_THEME" ]]; then
+      # Crear backup
+      cp "$NVIM_THEME_FILE" "${NVIM_THEME_FILE}.bak"
+      
+      # Comentar todos los temas
+      sed -i 's/^[[:space:]]*vim\.cmd("colorscheme/  -- vim.cmd("colorscheme/g' "$NVIM_THEME_FILE"
+      
+      # Descomentar el tema seleccionado
+      sed -i "s/^[[:space:]]*--[[:space:]]*vim\.cmd(\"colorscheme ${NVIM_THEME}\")/  vim.cmd(\"colorscheme ${NVIM_THEME}\")/g" "$NVIM_THEME_FILE"
+      
+      echo "✅ Tema de Neovim cambiado a '$NVIM_THEME'"
+    fi
+  else
+    echo "⚠️ No se encontró el archivo de tema de Neovim en $NVIM_THEME_FILE"
+  fi
+fi
+echo ""
+# echo "TEMA '$THEME_NAME' + WALLPAPER ALEATORIO + WAYBAR (100% FUNCIONAL)"
+gum confirm "Presiona Enter para salir" > /dev/null

@@ -1,0 +1,23 @@
+# Colores ANSI 0-7 (Normal)
+\033]4;0;{{colors.crust.hex}}\033\      # Black (0) -> crust
+\033]4;1;{{colors.red.hex}}\033\        # Red (1) -> red
+\033]4;2;{{colors.green.hex}}\033\      # Green (2) -> green
+\033]4;3;{{colors.yellow.hex}}\033\     # Yellow (3) -> yellow
+\033]4;4;{{colors.blue.hex}}\033\       # Blue (4) -> blue
+\033]4;5;{{colors.pink.hex}}\033\       # Magenta (5) -> pink
+\033]4;6;{{colors.teal.hex}}\033\       # Cyan (6) -> teal
+\033]4;7;{{colors.text.hex}}\033\       # White (7) -> text
+
+# Colores ANSI 8-15 (Bright)
+\033]4;8;{{colors.subtext0.hex}}\033\   # Bright Black (8) -> subtext0
+\033]4;9;{{colors.flamingo.hex}}\033\   # Bright Red (9) -> flamingo
+\033]4;10;{{colors.green.hex}}\033\     # Bright Green (10) -> green (puede ser lime, pero green es estándar)
+\033]4;11;{{colors.peach.hex}}\033\     # Bright Yellow (11) -> peach
+\033]4;12;{{colors.lavender.hex}}\033\  # Bright Blue (12) -> lavender
+\033]4;13;{{colors.mauve.hex}}\033\     # Bright Magenta (13) -> mauve
+\033]4;14;{{colors.sky.hex}}\033\       # Bright Cyan (14) -> sky
+\033]4;15;{{colors.rosewater.hex}}\033\ # Bright White (15) -> rosewater
+
+# Colores Foreground (Texto por defecto) y Background (Fondo)
+\033]10;{{colors.text.hex}}\033\        # Foreground (color de texto por defecto)
+# \033]11;{{colors.base.hex}}\033\       # COMENTADO: NO CAMBIA EL FONDO DE LA TERMINAL (Foot)

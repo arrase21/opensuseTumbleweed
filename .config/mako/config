@@ -1,0 +1,20 @@
+# 🦊 Config de Mako generado automáticamente por Wallust
+# Thu Nov 20 12:35:58 PM -05 2025
+
+font=JetBrainsMono Nerd Font 10
+max-visible=10
+# default-timeout=10000
+ignore-timeout=1
+
+background-color=#1C7446ee
+text-color=#B6EACF
+border-color=#052718
+progress-color=#052718
+margin=1
+padding=1
+border-size=4
+border-radius=8
+
+[urgency=high]
+border-color=#061F14
+

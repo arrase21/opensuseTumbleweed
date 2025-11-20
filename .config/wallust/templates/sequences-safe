@@ -1,0 +1,4 @@
+# Contenido de ~/.config/wallust/templates/sequences-safe
+{% for color in colors -%}
+\033]4;{{loop.index0}};{{color.hex}}\033\{% endfor -%}
+\033]10;{{colors.foreground.hex}}\033\\
