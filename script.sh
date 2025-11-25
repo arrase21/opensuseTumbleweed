@@ -43,7 +43,7 @@ sudo zypper --non-interactive install -y \
   loupe gnome-system-monitor thunar hyprlock opi typescript npm meson \
   gjs-devel gtk3-devel gtk-layer-shell-devel wlogout upower NetworkManager \
   libdbusmenu-gtk3-4 swayidle scdoc libpulse-devel rust cargo sox neovim \
-  ghostty foot fish tmux starship bluez mako simple-mtpfs fuse 
+  ghostty foot fish tmux starship bluez mako simple-mtpfs fuse fd bat fzf \
 
 # --- Configuración de usuario ---
 step "Updates user directory"
