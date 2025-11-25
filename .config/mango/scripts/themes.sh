@@ -48,7 +48,7 @@ if gum confirm "¿Deseas también cambiar el tema de Neovim?"; then
       "kanagawa-wave" \
       "tokyonight" \
       "solarized-osaka" \
-      "pixel" \
+      "gruvbox" \
       --header "🎨 Selecciona tema de Neovim" --height 10)
 
     if [[ -n "$NVIM_THEME" ]]; then
