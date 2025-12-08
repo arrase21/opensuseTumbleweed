@@ -123,7 +123,25 @@ xmap_leader('gs', '<Cmd>lua MiniGit.show_at_cursor()<CR>', 'Show at selection')
 -- l is for 'Language'. Common usage: ======================================================
 local formatting_cmd = '<Cmd>lua require("conform").format({lsp_fallback=true})<CR>'
 nmap_leader('la', '<Cmd>lua vim.lsp.buf.code_action()<CR>', 'Actions')
-nmap_leader('ld', '<Cmd>lua vim.diagnostic.open_float()<CR>', 'Diagnostic popup')
+-- nmap_leader('ld', '<Cmd>lua vim.diagnostic.open_float()<CR>', 'Diagnostic popup')
+nmap_leader('ld', function()
+  vim.diagnostic.jump({
+    count = 1,
+    on_jump = function()
+      vim.diagnostic.open_float()
+    end
+  })
+end, 'Go to next diagnostic + popup')
+
+nmap_leader('lD', function()
+  vim.diagnostic.jump({
+    count = -1,
+    on_jump = function()
+      vim.diagnostic.open_float()
+    end
+  })
+end, 'Go to prev diagnostic + popup')
+
 nmap_leader('lf', formatting_cmd, 'Format')
 nmap_leader('li', '<Cmd>lua vim.lsp.buf.implementation()<CR>', 'Implementation')
 nmap_leader('lh', '<Cmd>lua vim.lsp.buf.hover()<CR>', 'Hover')
@@ -173,6 +191,7 @@ nmap_leader('vL', '<Cmd>lua MiniVisits.remove_label()<CR>', 'Remove label')
 local map = vim.keymap.set
 local opts = { noremap = true, silent = true }
 
+-- map("n", "[d", vim.diagnostic.goto_next, opts)
 map("i", "kj", "<ESC>", opts)
 map("i", "KJ", "<ESC>", opts)
 -- Wrire
@@ -188,6 +207,7 @@ map("n", "<A-j>", ":m .+1<CR>==", opts)
 map("n", "<A-k>", ":m .-2<CR>==", opts)
 -- Quit
 map("n", "<leader>qq", "<cmd>qa<cr>", { desc = "Quit All" })
+map("n", "<leader>qa", "<cmd>q<cr>", { desc = "Quit" })
 
 -- Select
 map("i", "<Tab>", function()
@@ -197,11 +217,23 @@ map("i", "<S-Tab>", function()
   return vim.fn.pumvisible() == 1 and "<C-p>" or "<S-Tab>"
 end, { expr = true, noremap = true })
 
--- Confirmar con Enter
-map("i", "<CR>", function()
-  if vim.fn.pumvisible() == 1 then
-    return "<C-y>"
-  end
-  return "<CR>"
-end, { expr = true, noremap = true })
+-- Agrega esto en tu sección de mappings:
+map("n", "gd", vim.lsp.buf.definition, opts)      -- Go to definition
+map("n", "gy", vim.lsp.buf.type_definition, opts) -- Go to type
+map("n", "gD", vim.lsp.buf.declaration, opts)     -- Go to declaration
+map("n", "gr", vim.lsp.buf.references, opts)      -- Go to references
+map("n", "gi", vim.lsp.buf.implementation, opts)  -- Go to implementation
+
+-- Resize window using <ctrl> arrow keys
+map("n", "<C-A-k>", "<cmd>resize +2<cr>", { desc = "Increase Window Height" })
+map("n", "<C-A-j>", "<cmd>resize -2<cr>", { desc = "Decrease Window Height" })
+map("n", "<C-A-L>", "<cmd>vertical resize -2<cr>", { desc = "Decrease Window Width" })
+map("n", "<C-A-h>", "<cmd>vertical resize +2<cr>", { desc = "Increase Window Width" })
+
+-- Move to window using the <ctrl> hjkl keys
+map("n", "<C-h>", "<C-w>h", { desc = "Go to Left Window", remap = true })
+map("n", "<C-j>", "<C-w>j", { desc = "Go to Lower Window", remap = true })
+map("n", "<C-k>", "<C-w>k", { desc = "Go to Upper Window", remap = true })
+map("n", "<C-l>", "<C-w>l", { desc = "Go to Right Window", remap = true })
+
 -- stylua: ignore end

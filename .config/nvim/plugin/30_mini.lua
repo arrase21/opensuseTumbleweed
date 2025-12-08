@@ -19,13 +19,13 @@ now(function()
 end)
 
 -- Mini Misc ==========================================================================
--- Uses `now()` for `setup_xxx()` to work when started like `nvim -- path/to/file`
-now_if_args(function()
-  require('mini.misc').setup()
-  MiniMisc.setup_auto_root()
-  MiniMisc.setup_restore_cursor()
-  MiniMisc.setup_termbg_sync()
-end)
+-- -- Uses `now()` for `setup_xxx()` to work when started like `nvim -- path/to/file`
+-- now_if_args(function()
+--   require('mini.misc').setup()
+--   MiniMisc.setup_auto_root()
+--   MiniMisc.setup_restore_cursor()
+--   MiniMisc.setup_termbg_sync()
+-- end)
 -- Mini Session ========================================================================
 now(function() require('mini.sessions').setup() end)
 
@@ -51,11 +51,15 @@ later(function() require('mini.comment').setup() end)
 
 -- Mini Completion =======================================================================
 now(function()
-  local process_items_opts = { kind_priority = { Text = -1, Snippet = 99 } }
+  local process_items_opts = { kind_priority = { Text = 99, Snippet = 99 } }
   local process_items = function(items, base)
     return MiniCompletion.default_process_items(items, base, process_items_opts)
   end
   require('mini.completion').setup({
+    window = {
+      info = { height = 25, width = 80, border = nil },
+      signature = { height = 25, width = 80, border = nil },
+    },
     lsp_completion = {
       source_func = 'omnifunc',
       auto_setup = false,
@@ -80,7 +84,7 @@ later(function()
 end)
 
 -- Mini Files ========================================================================
-later(function()
+now(function()
   require('mini.files').setup(
     {
       windows = {
@@ -111,7 +115,13 @@ later(function() require('mini.indentscope').setup() end)
 
 -- Mini Pairs ========================================================================
 later(function()
-  require('mini.pairs').setup({ modes = { command = true } })
+  require('mini.pairs').setup({
+    modes = { insert = true, command = true, terminal = false },
+    skip_next = [=[[%w%%%'%[%"%.%`%$]]=],
+    skip_ts = { "string" },
+    skip_unbalanced = true,
+    markdown = true,
+  })
 end)
 
 -- Mini Pick ========================================================================

@@ -1,25 +1,31 @@
 -- ~/.config/nvim/lua/dashboard.lua
-local M = {}
+local m = {}
 
 local header = {
-  [[                                                                     ]],
-  [[       ████ ██████           █████      ██                     ]],
-  [[      ███████████             █████                             ]],
-  [[      █████████ ███████████████████ ███   ███████████   ]],
-  [[     █████████  ███    █████████████ █████ ██████████████   ]],
-  [[    █████████ ██████████ █████████ █████ █████ ████ █████   ]],
-  [[  ███████████ ███    ███ █████████ █████ █████ ████ █████  ]],
-  [[ ██████  █████████████████████ ████ █████ █████ ████ ██████ ]],
+  -- [[                                                                     ]],
+  -- [[       ████ ██████           █████      ██                     ]],
+  -- [[      ███████████             █████                             ]],
+  -- [[      █████████ ███████████████████ ███   ███████████   ]],
+  -- [[     █████████  ███    █████████████ █████ ██████████████   ]],
+  -- [[    █████████ ██████████ █████████ █████ █████ ████ █████   ]],
+  -- [[  ███████████ ███    ███ █████████ █████ █████ ████ █████  ]],
+  -- [[ ██████  █████████████████████ ████ █████ █████ ████ ██████ ]],
   [[                                                                       ]],
+  [[ █████╗ ██████╗ ██████╗  █████╗ ███████╗███████╗██╗   ██╗██╗███╗   ███╗]],
+  [[██╔══██╗██╔══██╗██╔══██╗██╔══██╗██╔════╝██╔════╝██║   ██║██║████╗ ████║]],
+  [[███████║██████╔╝██████╔╝███████║███████╗█████╗  ██║   ██║██║██╔████╔██║]],
+  [[██╔══██║██╔══██╗██╔══██╗██╔══██║╚════██║██╔══╝  ╚██╗ ██╔╝██║██║╚██╔╝██║]],
+  [[██║  ██║██║  ██║██║  ██║██║  ██║███████║███████╗ ╚████╔╝ ██║██║ ╚═╝ ██║]],
+  [[╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚══════╝  ╚═══╝  ╚═╝╚═╝     ╚═╝]],
 }
 
 local get_icon = require("mini.icons").get
 
 local buttons = {
-  { "dracula", "Find File",       "f", function() require("mini.pick").builtin.files() end },
-  { "config",  "Restore Session", "s", function() vim.cmd("SessionLoad") end },
-  { "change",  "Quit Neovim",     "q", function() vim.cmd("qa") end },
-  { "tads", "Clear Recent Files", "c", function()
+  { "dracula", "find file",       "f", function() require("mini.pick").builtin.files() end },
+  { "config",  "restore session", "s", function() vim.cmd("sessionload") end },
+  { "change",  "quit neovim",     "q", function() vim.cmd("qa") end },
+  { "tads", "clear recent files", "c", function()
     local shada = vim.fn.stdpath("state") .. "/shada/main.shada"
     os.remove(shada)
     vim.v.oldfiles = {}
@@ -35,10 +41,12 @@ local function center(str)
   return string.rep(" ", math.max(0, math.floor((width - len) / 2))) .. str
 end
 
-function M.show()
+local ns = vim.api.nvim_create_namespace("dashboard_ns")
+
+function m.show()
   local buf = vim.api.nvim_get_current_buf()
-  -- vim.api.nvim_buf_set_name(buf, "NeovimDashboard")
-  vim.api.nvim_buf_set_name(buf, "Neovim")
+  -- vim.api.nvim_buf_set_name(buf, "neovimdashboard")
+  vim.api.nvim_buf_set_name(buf, "neovim")
   vim.api.nvim_set_current_buf(buf)
 
   vim.bo[buf].buftype = "nofile"
@@ -58,11 +66,11 @@ function M.show()
   local lines = {}
   local highlights = {}
 
-  -- Header ===========================================================================================
+  -- header ===========================================================================================
   for _, line in ipairs(header) do table.insert(lines, center(line)) end
   table.insert(lines, ""); table.insert(lines, "")
 
-  -- Botones con iconos reales ========================================================================
+  -- botones con iconos reales ========================================================================
   local button_rows = {}
   for _, btn in ipairs(buttons) do
     local icon, hl = get_icon("filetype", btn[1])
@@ -73,16 +81,17 @@ function M.show()
     table.insert(button_rows, { row = row, action = btn[4] })
     local col = math.floor((vim.api.nvim_win_get_width(0) - vim.fn.strdisplaywidth(text)) / 2)
 
-    -- Highlights =========================================================================================
-    table.insert(highlights, { hl or "DashboardIcon", row, col, col + vim.fn.strdisplaywidth(icon) + 2 })
+    -- highlights =========================================================================================
+    table.insert(highlights, { hl or "dashboardicon", row, col, col + vim.fn.strdisplaywidth(icon) + 2 })
     table.insert(highlights,
-      { "DashboardDesc", row, col + vim.fn.strdisplaywidth(icon) + 2, col + vim.fn.strdisplaywidth(icon) + 2 +
+      { "dashboarddesc", row, col + vim.fn.strdisplaywidth(icon) + 2, col + vim.fn.strdisplaywidth(icon) + 2 +
       vim.fn.strdisplaywidth(btn[2]) })
-    table.insert(highlights, { "DashboardKey", row, col + vim.fn.strdisplaywidth(text) - 3, -1 })
+
+    table.insert(highlights, { "dashboardkey", row, col + vim.fn.strdisplaywidth(text) - 3, -1 })
     vim.keymap.set("n", btn[3], btn[4], { buffer = buf, silent = true })
   end
 
-  vim.api.nvim_buf_set_keymap(buf, "n", "<CR>", "", {
+  vim.api.nvim_buf_set_keymap(buf, "n", "<cr>", "", {
     callback = function()
       local current_row = vim.api.nvim_win_get_cursor(0)[1] - 1 -- fila actual (0-indexed)
 
@@ -96,13 +105,13 @@ function M.show()
     silent = true,
     nowait = true,
   })
-  table.insert(lines, ""); table.insert(lines, center("Recent Files")); table.insert(lines, "")
+  table.insert(lines, ""); table.insert(lines, center("recent files")); table.insert(lines, "")
 
-  -- Recent files ===========================================================================================================
+  -- recent files ===========================================================================================================
   local recent = {}
   for _, f in ipairs(vim.v.oldfiles) do
     if #recent >= 10 then break end
-    if vim.fn.filereadable(f) == 1 and not f:find("COMMIT_EDITMSG") then
+    if vim.fn.filereadable(f) == 1 and not f:find("commit_editmsg") then
       table.insert(recent, f)
     end
   end
@@ -129,13 +138,13 @@ function M.show()
 
     table.insert(highlights, { hl, row, col + 2, col + 2 + vim.fn.strdisplaywidth(icon) })
     table.insert(highlights,
-      { "DashboardDesc", row, col + vim.fn.strdisplaywidth(icon) + 4, col + vim.fn.strdisplaywidth(line) + 2 })
-    table.insert(highlights, { "DashboardKey", row, col + vim.fn.strdisplaywidth(full_line) - 2, -1 })
+      { "dashboarddesc", row, col + vim.fn.strdisplaywidth(icon) + 4, col + vim.fn.strdisplaywidth(line) + 2 })
+    table.insert(highlights, { "dashboardkey", row, col + vim.fn.strdisplaywidth(full_line) - 2, -1 })
 
     vim.keymap.set("n", num, function() vim.cmd("edit " .. vim.fn.fnameescape(file)) end,
       { buffer = buf, silent = true })
   end
-  vim.api.nvim_buf_set_keymap(buf, "n", "<CR>", "", {
+  vim.api.nvim_buf_set_keymap(buf, "n", "<cr>", "", {
     callback = function()
       local current_row = vim.api.nvim_win_get_cursor(0)[1] - 1
 
@@ -157,14 +166,14 @@ function M.show()
     nowait = true,
   })
 
-  -- Footter ==========================================================================
+  -- footter ==========================================================================
   local ms = "?.??"
   if vim.uv then
     local now = vim.uv.hrtime()
     ms = string.format("%.2f", (now - (vim.g.nvim_start_time or now)) / 1e6)
   end
   table.insert(lines, "")
-  table.insert(lines, center("Neovim started in " .. ms .. "ms"))
+  table.insert(lines, center("neovim started in " .. ms .. "ms"))
 
   vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
 
@@ -182,21 +191,21 @@ function M.show()
   end, 10)
 end
 
-vim.api.nvim_create_autocmd("VimEnter", {
+vim.api.nvim_create_autocmd("vimenter", {
   callback = function()
     if vim.fn.argc(-1) > 0 then return end
     local bufname = vim.api.nvim_buf_get_name(0)
     if bufname ~= "" and vim.uv.fs_stat(bufname) then return end
     local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
-    if #lines > 1 or (lines[1] and lines[1]:match("%S")) then return end
+    if #lines > 1 or (lines[1] and lines[1]:match("%s")) then return end
     if vim.g.started_by_firenvim or vim.bo.filetype == "oil" then return end
-    M.show()
+    m.show()
   end,
-  group = vim.api.nvim_create_augroup("CustomDashboard", { clear = true }),
+  group = vim.api.nvim_create_augroup("customdashboard", { clear = true }),
 })
 
--- Colors  ==========================================================================
-vim.api.nvim_set_hl(0, "DashboardIcon", { fg = "#89b4fa", bold = true })
-vim.api.nvim_set_hl(0, "DashboardDesc", { fg = "#cdd6f4" })
-vim.api.nvim_set_hl(0, "DashboardKey", { fg = "#a6e3a1", bold = true })
-return M
+-- colors  ==========================================================================
+vim.api.nvim_set_hl(0, "dashboardicon", { fg = "#89b4fa", bold = true })
+vim.api.nvim_set_hl(0, "dashboarddesc", { fg = "#cdd6f4" })
+vim.api.nvim_set_hl(0, "dashboardkey", { fg = "#a6e3a1", bold = true })
+return m

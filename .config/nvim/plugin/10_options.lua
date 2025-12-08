@@ -1,3 +1,5 @@
+vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
+vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
 -- stylua: ignore start
 -- General ====================================================================
 vim.g.mapleader       = ' '            -- Use <Space> as a leader key
@@ -49,8 +51,8 @@ vim.o.linebreak      = true
 vim.o.list           = false
 vim.o.number         = true
 vim.o.relativenumber = true
-vim.o.pumheight      = 15
-vim.o.pumblend       = 0
+vim.o.pumheight      = 100
+vim.o.pumblend       = 2
 vim.o.ruler          = false
 vim.o.shortmess      = 'CFOSWaco'
 vim.o.showmode       = false
@@ -105,7 +107,6 @@ local diagnostic_opts = {
   float = {
     source = "always",
     header = "",
-    border = "double",
     focusable = true,
   },
   virtual_text = true,

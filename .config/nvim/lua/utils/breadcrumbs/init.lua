@@ -15,7 +15,7 @@ function M.get()
 
   local handler = handlers[ft]
   if handler then
-    return require("breadcrumbs." .. handler).get()
+    return require("utils.breadcrumbs." .. handler).get()
   end
 
   return ""
