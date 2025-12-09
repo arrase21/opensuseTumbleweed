@@ -1,9 +1,6 @@
--- Yank ===
-Config.new_autocmd("TextYankPost", "*", function()
-  (vim.hl or vim.highlight).on_yank()
-end, "Highlight text on yank")
+-- ==================== LSP COMPLETE CONFIG ================================
 
--- Autoformat on save (LSP) ===========================================
+-- Autoformat on save (LSP) ===============================================
 Config.lsp_autoformat = {}
 Config.lsp_autoformat.buffer_setup = function(bufnr)
   local group = 'lsp_autoformat'
@@ -19,6 +16,53 @@ Config.lsp_autoformat.buffer_setup = function(bufnr)
   })
 end
 
+-- ✅ ÚNICO LspAttach: maneja TODO =========================================
+Config.new_autocmd('LspAttach', '*', function(event)
+  local client = vim.lsp.get_client_by_id(event.data.client_id)
+  if not client then return end
+
+  local bufnr = event.buf
+
+  -- 🔥 Desactivar features problemáticos
+  if client.server_capabilities then
+    client.server_capabilities.semanticTokensProvider = nil
+    client.server_capabilities.colorProvider = nil
+  end
+
+  -- Autoformat si soporta formatting
+  if client.server_capabilities.documentFormattingProvider then
+    Config.lsp_autoformat.buffer_setup(bufnr)
+  end
+
+  -- 🔥 Document highlight (LazyVim style)
+  if client.server_capabilities.documentHighlightProvider then
+    local group = vim.api.nvim_create_augroup('lsp_document_highlight', { clear = false })
+
+    vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
+      buffer = bufnr,
+      group = group,
+      callback = vim.lsp.buf.document_highlight,
+      desc = 'LSP document highlight',
+    })
+
+    vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
+      buffer = bufnr,
+      group = group,
+      callback = vim.lsp.buf.clear_references,
+      desc = 'Clear LSP references',
+    })
+  end
+
+  -- Aquí puedes agregar más handlers (keymaps, etc.)
+end, 'LSP: autoformat + document highlight + semanticTokens off')
+
+-- ==================== TUS OTRAS CONFIGS (sin cambios) ====================
+
+-- Yank ===
+Config.new_autocmd("TextYankPost", "*", function()
+  (vim.hl or vim.highlight).on_yank()
+end, "Highlight text on yank")
+
 Config.checktime = {}
 Config.checktime = function()
   vim.api.nvim_create_autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
@@ -31,28 +75,7 @@ Config.checktime = function()
   })
 end
 
--- Attach only when LSP client supports formatting =======================
--- ✅ AGREGADO: Desactivar semantic tokens y colorProvider
-Config.new_autocmd('LspAttach', '*', function(event)
-  local id = vim.tbl_get(event, 'data', 'client_id')
-  local client = id and vim.lsp.get_client_by_id(id)
-  if not client then return end
-
-  -- 🔥 CRÍTICO: Desactivar features que crean highlights dinámicos
-  if client.server_capabilities then
-    -- Desactiva semantic tokens (mayor consumidor de highlights)
-    client.server_capabilities.semanticTokensProvider = nil
-    -- Desactiva color previews en CSS/HTML
-    client.server_capabilities.colorProvider = nil
-  end
-
-  -- Autoformat si es soportado
-  if client:supports_method('textDocument/formatting') then
-    Config.lsp_autoformat.buffer_setup(event.buf)
-  end
-end, 'Enable autoformat on save for buffers with LSP formatting support')
-
--- Return to last cursor position when reopening a file =====================
+-- Return to last cursor position when reopening a file ===================
 Config.new_autocmd("BufReadPost", "*", function(event)
   local exclude = { "gitcommit" }
   local buf = event.buf
@@ -67,7 +90,7 @@ Config.new_autocmd("BufReadPost", "*", function(event)
   end
 end, "Restore last cursor position")
 
--- ===================
+-- VimEnter para MiniFiles ================================================
 vim.api.nvim_create_autocmd("VimEnter", {
   callback = function()
     local arg = vim.fn.argv(0)
@@ -76,7 +99,7 @@ vim.api.nvim_create_autocmd("VimEnter", {
         if MiniFiles then
           MiniFiles.open()
         end
-      end, 10) -- Espera 10ms para que los plugins carguen
+      end, 10)
     end
   end,
 })
