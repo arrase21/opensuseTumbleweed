@@ -34,6 +34,8 @@ title "Installing  Mangowc  environment - openSUSE Tumbleweed"
 title "Installing dependencies"
 sudo zypper --non-interactive install -y \
   bc curl cliphist findutils gawk git go grim gvfs gvfs-backends \
+  protobuf-devel gtk4-devel libpoppler-glib-devel gtk4-layer-shell-devel  \
+  libadwaita-devel glib2-devel cairo-devel pango-devel graphene-devel\
   ImageMagick inxi jq kitty libnotify-tools nano openssl pamixer \
   pavucontrol playerctl polkit-gnome python312-requests python312-pip \
   python312-pyquery qt5ct qt6ct qt6-svg-devel rofi-wayland slurp swappy \
@@ -42,8 +44,8 @@ sudo zypper --non-interactive install -y \
   fastfetch mousepad mpv mpv-mpris nvtop qalculate-gtk ydotool waybar \
   loupe gnome-system-monitor thunar hyprlock opi typescript npm meson \
   gjs-devel gtk3-devel gtk-layer-shell-devel wlogout upower NetworkManager \
-  libdbusmenu-gtk3-4 swayidle scdoc libpulse-devel rust cargo sox neovim \
-  ghostty foot fish tmux starship bluez mako simple-mtpfs fuse fd bat fzf \
+  libdbusmenu-gtk3-4 swayidle swaybg scdoc libpulse-devel rust cargo sox  \
+  ghostty foot fish tmux starship bluez mako simple-mtpfs fuse fd bat fzf telegram-desktop || true
 
 # --- Configuración de usuario ---
 step "Updates user directory"
@@ -51,24 +53,34 @@ xdg-user-dirs-update
 
 mkdir -p "$HOME/repos" "$HOME/.config" "$HOME/.local/share/fonts" "$HOME/.local/bin"
 
-step "Cloning dot-files"
+step "Cloning Config"
 cd "$HOME/repos"
-if [ ! -d dot-files ]; then
-  git clone https://github.com/arrase21/dot-files
+if [ ! -d opensuseTumbleweed ]; then
+  git clone https://github.com/arrase21/opensuseTumbleweed.git
 else
-  git -C dot-files pull
+  git -C opensuseTumbleweed pull
 fi
 
 step "Copy config & resources"
-cp -r "$HOME/repos/dot-files/.config/"* "$HOME/.config/"
-cp -r "$HOME/repos/dot-files/wallpapers/"* "$HOME/Pictures/" 2>/dev/null || true
-cp -r "$HOME/repos/dot-files/fonts/"* "$HOME/.local/share/fonts/" 2>/dev/null || true
-cp -r "$HOME/repos/dot-files/.local/"* "$HOME/.local/" 2>/dev/null || true
+cp -r "$HOME/repos/opensuseTumbleweed/.config/"* "$HOME/.config/"
+cp -r "$HOME/repos/opensuseTumbleweed/wallpapers/"* "$HOME/Pictures/" 2>/dev/null || true
+cp -r "$HOME/repos/opensuseTumbleweed/fonts/"* "$HOME/.local/share/fonts/" 2>/dev/null || true
+cp -r "$HOME/repos/opensueTumbleweed/.local/"* "$HOME/.local/" 2>/dev/null || true
+cp -r "$HOME/repos/opensueTumbleweed/.themes/" "$HOME/" 2>/dev/null || true
+cp -r "$HOME/repos/opensueTumbleweed/.icons/" "$HOME/" 2>/dev/null || true
 
 # --- Instalación Brave ---
 step "Installing Brave Browser"
 if ! command -v brave-browser >/dev/null 2>&1; then
   curl -fsS https://dl.brave.com/install.sh | sh
+fi
+
+# --- Instalación Tmux ---
+step "Installing Tmux plugins"
+if [ ! -d tmuxPlugin ]; then
+  git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+else
+  git -C tmuxPlugin pull
 fi
 
 # --- Herramientas Rust ---

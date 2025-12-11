@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+export PATH="$HOME/.cargo/bin:$HOME/go/bin:$HOME/.local/bin:$HOME/bin:/usr/local/bin:/usr/bin:/bin:$PATH"
 # Directorio de wallpapers
 wallDIR="$HOME/Pictures/wallpapers"
 iDIR="$HOME/.config/swaync/images" # Para notificaciones

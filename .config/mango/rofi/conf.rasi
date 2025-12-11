@@ -1,0 +1,29 @@
+// @import "color.rasi"
+@theme "~/.config/mango/rofi/themes/style11alt"
+entry {
+    enabled:                     true;
+    background-color:            inherit;
+    cursor:                      text;
+    placeholder:                 "Search...";
+}
+
+configuration {
+modes: "window,drun,run,filebrowser";
+show-icons: true;
+drun-display-format: "{name} [<span weight='light' size='small'><i>({generic})</i></span>]";
+case-smart: true;
+sidebar-mode: true;
+display-window: " ";
+display-Clipboard: " ";
+display-run: " ";
+display-drun: " ";
+display-filebrowser: " ";
+  timeout {
+      action: "kb-cancel";
+      delay:  0;
+  }
+  filebrowser {
+      directories-first: true;
+      sorting-method:    "name";
+  }
+}

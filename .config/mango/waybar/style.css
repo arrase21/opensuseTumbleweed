@@ -7,8 +7,8 @@
 @define-color textcolor1 @color3;
 @define-color textcolor2 @color7;
 @define-color textcolor4 @color5;
-@define-color foreground #d4be98;
-@define-color background #282828;
+@define-color foreground #cdd6f4;
+@define-color background #181824;
 
 * {
   background-color:@background;
@@ -43,7 +43,7 @@
   font-size: 0;
   min-width: 0;
   min-height: 0;
-  margin: -8px;
+  margin: 0px;
   padding: 0;
   color: transparent;
   background-color: transparent;

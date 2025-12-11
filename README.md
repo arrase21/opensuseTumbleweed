@@ -34,9 +34,9 @@ Includes launchers, notifications, editor  — fully configured!
 
 ### 📦 Using Curl
 ```bash
-curl -O https://raw.githubusercontent.com/arrase21/dot-files/main/install-configs.sh
-chmod +x install-configs.sh
-sudo ./install
+curl -O https://raw.githubusercontent.com/arrase21/opensuseTumbleweed/main/script.sh
+chmod +x script.sh
+sudo ./script
 ```
 ---
 💚 Made for openSUSE Tumbleweed users

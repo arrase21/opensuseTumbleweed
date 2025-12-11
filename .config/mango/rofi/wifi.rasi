@@ -1,0 +1,20 @@
+@import "conf.rasi"
+window {
+  location:center;
+  anchor:center;
+  fullscreen:     false;
+  width:          360px;      // un poco más estrecho
+  height:         70%;        // casi toda la altura
+  y-offset:       5%;         // centrado verticalmente
+  margin:         0px 0px 0px 8px;
+  border-radius:  18px;
+  padding:        4px;
+}
+element {
+    font:                       "CaskaydiaMono Nerd Font 15";
+    margin : 0px 0px;
+}
+
+entry {
+    placeholder: "...";
+}
