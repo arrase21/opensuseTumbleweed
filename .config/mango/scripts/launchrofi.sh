@@ -112,7 +112,7 @@ settings_func() {
             customize_func
             ;;
         "󰚰  Update Config")
-            foot --override=colors.alpha=1 --app-id=Update -e bash ~/Dotfiles/bin/update_binarydots
+            # foot --override=colors.alpha=1 --app-id=Update -e bash ~/Dotfiles/bin/update_binarydots
             cd ~
             settings_func
             ;;
