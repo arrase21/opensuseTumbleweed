@@ -8,10 +8,15 @@
 #		resume 'bash $HOME/.config/hypr/scripts/lightresume.sh resume' \
 #	timeout 3600 'systemctl suspend'
 
-set +e
+
+# swayidle -w \
+#   timeout 60 'swaylock -f -c 000000 && sleep 10 && wlr-dpms off' \
+#   resume 'wlr-dpms on && ~/.config/mango/scripts/restart_wlsunset.sh' \
+#   # timeout 60 'dimland -a 0.3' \
+#   resume '~/.config/mango/scripts/exitdim.sh'
 
 swayidle -w \
-  timeout 60 'swaylock -f -c 000000 && sleep 10 && wlr-dpms off' \
+  timeout 30 'hyprlock' \
   resume 'wlr-dpms on && ~/.config/mango/scripts/restart_wlsunset.sh' \
-  # timeout 60 'dimland -a 0.3' \
-  resume '~/.config/mango/scripts/exitdim.sh'
+  timeout 60 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
+  before-sleep 'hyprlock -f -c 000000'

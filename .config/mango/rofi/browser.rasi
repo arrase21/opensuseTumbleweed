@@ -1,5 +1,5 @@
 /* ---- Global Configuration Fonts ---- */
 @import "~/.config/mango/rofi/0-shared-fonts.rasi"
-// @theme "~/.config/mango/rofi/themes/style11.rasi"
+// @theme "~/.config/mango/rofi/themes/style_windows_dark"
 @theme "~/.config/mango/rofi/themes/style1"
 

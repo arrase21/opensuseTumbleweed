@@ -83,7 +83,9 @@ change_theme() {
     ls -la "$SCR/wallpaper.sh" 2>&1 | tee -a "$LOG_FILE" || log_msg "Archivo no encontrado"
   fi
   
+  "$SCR/chrome.sh"
   # Esperar un momento para que los procesos terminen
+ 
   sleep 1
   
   log_msg "Tema cambiado a '$chosen'"

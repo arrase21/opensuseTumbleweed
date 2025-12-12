@@ -70,3 +70,4 @@ notify-send "Wallpaper cambiado" "$choice_basename" -i "$selected_file"
 }
 
 main
+

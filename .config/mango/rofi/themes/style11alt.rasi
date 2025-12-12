@@ -31,7 +31,7 @@ window {
     anchor:         west;
     fullscreen:     false;
     width:          360px;      // un poco más estrecho
-    height:         90%;        // casi toda la altura
+    height:         75%;        // casi toda la altura
     y-offset:       5%;         // centrado verticalmente
     margin:         0px 0px 0px 8px;
     border-radius:  18px;

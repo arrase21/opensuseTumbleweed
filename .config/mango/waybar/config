@@ -19,7 +19,7 @@
   ],
   "custom/menu":{
     "format": " |",
-    "on-click":"foot --app-id=gyr-launcher -e gyr",
+    "on-click":"rofi -config $HOME/.config/mango/rofi/config.rasi -show drun",
   },
 
   "dwl/tags": {
