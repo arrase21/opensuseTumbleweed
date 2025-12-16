@@ -10,18 +10,17 @@ configuration {
 /*****----- Global Properties -----*****/
 * {
     // background-color : @background;
-    foreground-colour: @color7;
-    outline-variant: @color13;
-    outline: @color9;
-    on-surface-variant: @color7;
-    on-surface: @color15;
-    primary-container: @color9;
-    on-primary: @color9;
-    border-colour: @color15;
-    element-bg:@color9;
-    surface-container: @color13;
-    outline: @color9;
-    primary: @color7;
+    foreground-colour:    @color7;
+    outline-variant:      @color13;
+    on-surface-variant:   @color7;
+    on-surface:           @color15;
+    primary-container:    @color9;
+    on-primary:           @color9;
+    border-colour:        @color15;
+    element-bg:           @color9;
+    surface-container:    @color13;
+    outline:              @color9;
+    primary:              @color7;
     on-primary-container: @color7;
   }
 
@@ -35,26 +34,29 @@ window {
     y-offset:       5%;         // centrado verticalmente
     margin:         0px 0px 0px 8px;
     border-radius:  18px;
-    padding:        4px;
+    // padding:        4px;
 }
 /*****----- Main Box -----*****/
-//     children:                    [ "inputbar", "message", "listview", "mode-switcher" ];
-// }
 mainbox {
-    padding:        8px;        // menos padding
-    spacing:        6px;
+    background-color:               @element-bg;
+    children:                       [ inputbar, message, listview ];
+    spacing:                        10px;
+    padding:                        10px;
+    border-radius:  18px;
 }
 /*****----- Inputbar -----*****/
 inputbar {
     margin:         0px 0px 6px 0px;
     padding:        10px;
     background-color:            @color4;
+    border-radius: 10px;
 }
 prompt {
     enabled:                     true;
     background-color:            transparent;
     text-color:                  inherit;
     margin: 			 0 4px;
+
 }
 textbox-prompt-colon {
     enabled:                     true;
@@ -64,9 +66,8 @@ textbox-prompt-colon {
     text-color:                  inherit;
 }
 entry {
-    enabled:                     true;
-    background-color:            transparent;
-    text-color:                  inherit;
+    background-color:               @color4;
+    text-color:                     inherit;
     cursor:                      text;
     placeholder:                 "Type to search";
     opacity:                     0.3;
@@ -98,11 +99,12 @@ case-indicator {
 
 /*****----- Listview -----*****/
 listview {
-    lines:          12;         // más filas visibles
-    fixed-height:   false;      // deja que crezca con el contenido
-    padding:        0px 0px;
-    spacing:        4px;
-    background-color:            transparent;
+    lines:                  12;
+    fixed-height:           false;
+    padding:                0px 0px;
+    spacing:                4px;
+    background-color:       @element-bg;
+    text-color:                     @foreground-colour;
 }
 scrollbar {
     handle-width:                5px ;
@@ -112,7 +114,9 @@ scrollbar {
 /*****----- Elements -----*****/
 element {
     margin:         1px 0px;
-    background-color:            transparent;
+    background-color:               transparent;
+    text-color:                     @foreground-colour;
+    border-radius:                  10px;
 }
 element.selected {
     background:                  @color4;
@@ -120,9 +124,8 @@ element.selected {
 }
 
 element-icon {
-    background-color:            transparent;
+    background-color:            inherit;
     text-color:                  inherit;
-    // size:                        12px;
     cursor:                      inherit;
 }
 

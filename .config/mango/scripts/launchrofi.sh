@@ -112,7 +112,7 @@ settings_func() {
             customize_func
             ;;
         "󰚰  Update Config")
-            # foot --override=colors.alpha=1 --app-id=Update -e bash ~/Dotfiles/bin/update_binarydots
+            foot --override=colors.alpha=1 --app-id=Update -e bash ~/Dotfiles/bin/update_binarydots
             cd ~
             settings_func
             ;;
@@ -189,7 +189,7 @@ manual_func() {
             system_menu
             ;;
         "  Keybinds")
-            rofi -dmenu -theme-str 'window {width: 52%;}' -dmenu -theme-str 'listview {lines: 14;}' -i -p ' ' < ~/.config/hypr/scripts/help.txt
+            rofi -config $HOME/.config/mango/rofi/browser.rasi -show drun -dmenu -i -p  ' ' < ~/.config/mango/scripts/help.txt
             ;;
         *)
             echo "No option selected"
