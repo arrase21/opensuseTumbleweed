@@ -20,3 +20,4 @@ swayidle -w \
   resume 'wlr-dpms on && ~/.config/mango/scripts/restart_wlsunset.sh' \
   timeout 60 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
   before-sleep 'hyprlock -f -c 000000'
+

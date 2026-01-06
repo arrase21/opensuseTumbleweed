@@ -25,9 +25,8 @@ end
 _G.Config.now_if_args = vim.fn.argc(-1) > 0 and MiniDeps.now or MiniDeps.later
 
 
-vim.lsp.enable({ "pyrefly" })
 vim.lsp.enable({ "gopls" })
+vim.lsp.enable({ "pyrefly" })
 vim.lsp.enable({ "luals" })
 vim.lsp.enable({ "ruff" })
-
-require("dashboard")
+-- vim.lsp.enable({ "zuban" })

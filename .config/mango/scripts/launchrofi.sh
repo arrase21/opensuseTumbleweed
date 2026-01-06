@@ -11,6 +11,9 @@ usage() {
     exit 1
 }
 
+drun_launcher() {
+rofi -config ~/.config/mango/rofi/config.rasi -show drun
+}
 
 custom_menu() {
     options=" \n \n \n \n\n\n"
@@ -80,7 +83,7 @@ default_apps_func() {
             default_apps_func
             ;;
         "󰠮  Editor")
-            bash ~/config/mango/scripts/set-default-editor
+            bash ~/.config/mango/scripts/set-default-editor
             default_apps_func
             ;;
         *)
@@ -257,7 +260,7 @@ misc_func() {
             misc_func
             ;;
         "󰈈  Toggle Eye Saver")
-            bash $HOME/Dotfiles/scripts/toggle-sunset
+            bash $HOME/.config/mango/scripts/Sunset.sh
             misc_func
             ;;
         *)
@@ -267,10 +270,13 @@ misc_func() {
 }
 
 system_menu() {
-    options="  Connections\n󰃢  Maintaining\n󰅇  Clipboard\n󰄀  Screenshot\n󰐱  Miscellaneous\n  Session Options\n  Manual\n󰌽  Themes\n  Wallpapers\n  Settings"
+    options="  Apps\n  Connections\n󰃢  Maintaining\n󰅇  Clipboard\n󰄀  Screenshot\n󰐱  Miscellaneous\n  Session Options\n  Manual\n󰌽  Themes\n  Wallpapers\n  Settings"
     # chosen=$(echo -e "$options" | rofi -config ~/.config/mango/rofi/sysmenu.rasi -dmenu -theme-str 'listview {lines: 14;}' -theme-str 'mainbox {children: ["inputbar","listview" ];}'  -p "")
     chosen=$(echo -e "$options" | rofi -config ~/.config/mango/rofi/sysmenu.rasi -dmenu -p "")
     case $chosen in
+        "  Apps")
+            drun_launcher
+            ;;
         "  Connections")
             connections_func
             ;;
@@ -339,9 +345,9 @@ if [[ $# -ne 1 ]]; then
 fi
 # Execute the appropriate function based on the provided flag
 case "$1" in
-    # --drun|-d)
-    #     drun_launcher
-    #     ;;
+    --drun|-d)
+        drun_launcher
+        ;;
     # --window|-w)
     #     rofi \
     #     -show window \

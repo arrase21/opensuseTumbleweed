@@ -111,7 +111,7 @@ end)
 later(function() require('mini.git').setup() end)
 
 -- Mini indentscope ========================================================================
-later(function() require('mini.indentscope').setup() end)
+-- later(function() require('mini.indentscope').setup() end)
 
 -- Mini Pairs ========================================================================
 later(function()

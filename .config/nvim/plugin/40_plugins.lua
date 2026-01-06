@@ -139,9 +139,7 @@ MiniDeps.now(function()
   add("rebelot/kanagawa.nvim")
   require('kanagawa').setup({
     transparent = true,
-
-    -- 🔥 DESHABILITAR funciones que generan highlights dinámicos
-    compile = false, -- No compilar highlights en tiempo real
+    compile = false,
     undercurl = true,
     commentStyle = { italic = true },
     functionStyle = {},
@@ -228,4 +226,54 @@ MiniDeps.now(function()
     },
   })
   vim.cmd("colorscheme gruvbox")
+end)
+
+package.preload["lazy.stats"] = function()
+  return {
+    stats = function()
+      return {
+        startuptime = 0,
+        count = 0,
+        loaded = 0,
+      }
+    end,
+  }
+end
+
+MiniDeps.now(function()
+  add("folke/snacks.nvim")
+  require("snacks").setup({
+    explorer = { enabled = true },
+    indent = { enabled = true },
+    input = { enabled = true },
+    picker = {
+      enabled = false
+      -- layout = "vscode",
+    },
+    notifier = { enabled = false },
+    quickfile = { enabled = true },
+    scope = { enabled = true },
+    scroll = { enabled = true },
+    statuscolumn = { enabled = true },
+    words = { enabled = true },
+    dashboard = {
+      preset = {
+        header = [[
+   █████╗ ██████╗ ██████╗  █████╗ ███████╗███████╗██╗   ██╗██╗███╗   ███╗
+  ██╔══██╗██╔══██╗██╔══██╗██╔══██╗██╔════╝██╔════╝██║   ██║██║████╗ ████║
+  ███████║██████╔╝██████╔╝███████║███████╗█████╗  ██║   ██║██║██╔████╔██║
+  ██╔══██║██╔══██╗██╔══██╗██╔══██║╚════██║██╔══╝  ╚██╗ ██╔╝██║██║╚██╔╝██║
+  ██║  ██║██║  ██║██║  ██║██║  ██║███████║███████╗ ╚████╔╝ ██║██║ ╚═╝ ██║
+  ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚══════╝  ╚═══╝  ╚═╝╚═╝     ╚═╝
+        ]],
+      },
+      sections = {
+        { section = "header" },
+        { icon = " ", title = "Keymaps", section = "keys", indent = 2, padding = 1 },
+        { icon = " ", title = "Recent Files", section = "recent_files", indent = 2, padding = 1 },
+        { icon = " ", title = "Projects", section = "projects", indent = 2, padding = 1 },
+        { section = "startup" },
+      },
+    },
+  })
 end)

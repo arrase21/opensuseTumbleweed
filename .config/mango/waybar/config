@@ -114,7 +114,7 @@
     "format-disabled": "󰂲",
     "format-connected": "",
     "tooltip-format": "Devices connected: {num_connections}",
-    "on-click": "foot --app-id=blue-term -e bash ~/.config/mango/scripts/blue.sh"
+    "on-click": "foot --app-id=blue-term -e bash ~/.config/mango/scripts/bluethoot.sh"
   },
 
   "group/audio": {

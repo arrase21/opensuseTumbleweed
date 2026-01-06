@@ -79,7 +79,7 @@ vim.o.foldnestmax    = 10
 
 if vim.fn.has('nvim-0.12') == 1 then
   vim.o.pummaxwidth = 100                                 -- Limit maximum width of popup menu
-  vim.o.completefuzzycollect = 'keyword,files,whole_line' -- Use fuzzy matching when collecting candidates
+  -- vim.o.completefuzzycollect = 'keyword,files,whole_line' -- Use fuzzy matching when collecting candidates
   vim.o.completetimeout = 100
   vim.o.pumborder = 'rounded'
   require('vim._extui').enable({ enable = true })
