@@ -10,6 +10,7 @@
     "custom/mpris",
     "group/tray-expander",
     "custom/mtp",
+    "group/motherboard",
     "bluetooth",
     "network",
     "group/audio",
@@ -41,12 +42,40 @@
     "smooth-scrolling-threshold": 1
   },
 
-  "cpu": {
+  "cpu2": {
     "interval": 5,
-    "format": "󰍛",
+    "format": "󰍛 {load}%",
     "on-click": "xdg-terminal-exec btop"
   },
+  "cpu": {
+    "format": "󰍛 {usage}% ",
+    "interval": 1,
+    "min-length": 5,
+    "format-alt-click": "click",
+    "format-alt": "{icon0}{icon1}{icon2}{icon3} {usage:>2}% 󰍛",
+    "format-icons": [
+      "▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"
+    ],
+    "on-click-right": "xdg-terminal-exec btop"
+  },
 
+  "memory": {
+    "interval": 10,
+    "format": "{used:0.1f}G󰾆 ",
+    "format-alt": "{percentage}%󰾆 ",
+    "format-alt-click": "click",
+    "tooltip": true,
+    "tooltip-format": "{used:0.1f}GB/{total:0.1f}G",
+    "on-click-right": "xdg-terminal-exec btop"
+  },
+
+  "temperature": {
+    "critical-threshold": 90,
+    "format": "{icon}{temperatureC}°C",
+    "tooltip": true,
+    "format-icons": ["󰈸"]
+  },
+  
   "custom/power": {
     "format": "",
     "tooltip": false,
@@ -116,7 +145,19 @@
     "tooltip-format": "Devices connected: {num_connections}",
     "on-click": "foot --app-id=blue-term -e bash ~/.config/mango/scripts/bluethoot.sh"
   },
-
+  "group/motherboard": {
+	  "orientation": "horizontal",
+    "drawer": {
+      "transition-duration": 500,
+      "children-class": "cpu",
+      "transition-left-to-right": true
+    },
+	  "modules": [
+		  "cpu",
+		  "memory",
+		  "temperature",
+    ]
+  },
   "group/audio": {
     "orientation": "inherit",
     "drawer": {

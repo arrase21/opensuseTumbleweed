@@ -81,7 +81,17 @@
 }
 
 #custom-mtp,
-#cpu,
+
+#cpu {
+  margin-right: 6px;
+}
+#temperature{
+  margin-right: 6px;
+}
+#memory{
+  margin-right: 6px;
+}
+
 #custom-mpris,
 #backlight,
 #battery,
@@ -94,19 +104,19 @@
 }
 
 #tray {
-  margin-right: 16px;
+  margin-right: 10px;
 }
 
 #bluetooth {
-  margin-right: 17px;
+  margin-right: 10px;
 }
 
 #network {
-  margin-right: 13px;
+  margin-right: 10px;
 }
 
 #custom-expand-icon {
-  margin-right: 20px;
+  margin-right: 15px;
 }
 
 tooltip {
