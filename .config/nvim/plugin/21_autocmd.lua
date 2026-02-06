@@ -1,62 +1,34 @@
--- ==================== LSP COMPLETE CONFIG ================================
+vim.api.nvim_create_autocmd("LspAttach", {
+  desc = "LSP autoformat",
+  callback = function(event)
+    local client = vim.lsp.get_client_by_id(event.data.client_id)
+    if not client then return end
 
--- Autoformat on save (LSP) ===============================================
-Config.lsp_autoformat = {}
-Config.lsp_autoformat.buffer_setup = function(bufnr)
-  local group = 'lsp_autoformat'
-  vim.api.nvim_create_augroup(group, { clear = false })
-  vim.api.nvim_clear_autocmds({ group = group, buffer = bufnr })
-  vim.api.nvim_create_autocmd('BufWritePre', {
-    buffer = bufnr,
-    group = group,
-    desc = 'LSP format on save',
-    callback = function()
-      vim.lsp.buf.format({ async = false, timeout_ms = 10000 })
-    end,
-  })
-end
+    -- Solo si soporta formatting
+    if not client.server_capabilities.documentFormattingProvider then
+      return
+    end
 
--- ✅ ÚNICO LspAttach: maneja TODO =========================================
-Config.new_autocmd('LspAttach', '*', function(event)
-  local client = vim.lsp.get_client_by_id(event.data.client_id)
-  if not client then return end
+    local bufnr = event.buf
+    local group = vim.api.nvim_create_augroup("lsp_autoformat", { clear = false })
 
-  local bufnr = event.buf
+    -- Evita duplicados
+    vim.api.nvim_clear_autocmds({ group = group, buffer = bufnr })
 
-  -- 🔥 Desactivar features problemáticos
-  if client.server_capabilities then
-    client.server_capabilities.semanticTokensProvider = nil
-    client.server_capabilities.colorProvider = nil
-  end
-
-  -- Autoformat si soporta formatting
-  if client.server_capabilities.documentFormattingProvider then
-    Config.lsp_autoformat.buffer_setup(bufnr)
-  end
-
-  -- 🔥 Document highlight (LazyVim style)
-  if client.server_capabilities.documentHighlightProvider then
-    local group = vim.api.nvim_create_augroup('lsp_document_highlight', { clear = false })
-
-    vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
-      buffer = bufnr,
+    vim.api.nvim_create_autocmd("BufWritePre", {
       group = group,
-      callback = vim.lsp.buf.document_highlight,
-      desc = 'LSP document highlight',
-    })
-
-    vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
       buffer = bufnr,
-      group = group,
-      callback = vim.lsp.buf.clear_references,
-      desc = 'Clear LSP references',
+      desc = "Format before save",
+      callback = function()
+        vim.lsp.buf.format({
+          bufnr = bufnr,
+          async = false,
+          timeout_ms = 10000,
+        })
+      end,
     })
-  end
-
-  -- Aquí puedes agregar más handlers (keymaps, etc.)
-end, 'LSP: autoformat + document highlight + semanticTokens off')
-
--- ==================== TUS OTRAS CONFIGS (sin cambios) ====================
+  end,
+})
 
 -- Yank ===
 Config.new_autocmd("TextYankPost", "*", function()
@@ -104,8 +76,18 @@ vim.api.nvim_create_autocmd("VimEnter", {
   end,
 })
 
-vim.api.nvim_create_autocmd("filetype", {
+vim.api.nvim_create_autocmd("FileType", {
   callback = function()
     vim.opt_local.formatoptions:remove({ "c", "r", "o" })
   end
+})
+
+
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'go', 'lua', 'python', 'http' },
+  callback = function()
+    if pcall(vim.treesitter.start) then
+      vim.treesitter.start()
+    end
+  end,
 })

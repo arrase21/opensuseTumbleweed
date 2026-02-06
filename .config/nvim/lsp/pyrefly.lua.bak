@@ -1,6 +1,6 @@
 ---@type vim.lsp.Config
 return {
-  cmd = { 'zuban', 'server' },
+  cmd = { 'pylsp' },
   filetypes = { 'python' },
   root_markers = {
     'pyproject.toml',
@@ -10,7 +10,5 @@ return {
     'Pipfile',
     '.git',
   },
-  on_exit = function(code, _, _)
-    vim.notify('Closing Pyrefly LSP exited with code: ' .. code, vim.log.levels.INFO)
-  end,
+  single_file_support = true,
 }

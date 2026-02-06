@@ -1,7 +1,10 @@
 local M = {}
 
 function M.get()
-  local ft = vim.bo.filetype
+  local ft = vim.bo.filetype or ""
+  if type(ft) == "table" then
+    ft = ft[1] or ""
+  end
 
   local handlers = {
     go              = "go",

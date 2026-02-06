@@ -1,32 +1,39 @@
--- ┌─────────────────────┐
--- │ Welcome to minifork │
--- └─────────────────────┘
+local configs = vim.tbl_map(function(path)
+  return vim.fn.fnamemodify(path, ':t:r')
+end, vim.api.nvim_get_runtime_file('lsp/*.lua', true))
 
-local mini_path = vim.fn.stdpath('data') .. '/site/pack/deps/start/mini.nvim'
-if not vim.loop.fs_stat(mini_path) then
-  vim.cmd('echo "Installing `mini.nvim`" | redraw')
-  local origin = 'https://github.com/nvim-mini/mini.nvim'
-  local clone_cmd = { 'git', 'clone', '--filter=blob:none', origin, mini_path }
-  vim.fn.system(clone_cmd)
-  vim.cmd('packadd mini.nvim | helptags ALL')
-  vim.cmd('echo "Installed `mini.nvim`" | redraw')
-end
+vim.lsp.enable(configs)
 
-require('mini.deps').setup()
+-- Plugins ================================================================================================================
+vim.pack.add({
+  { src = "https://github.com/craftzdog/solarized-osaka.nvim" },
+  { src = "https://github.com/rebelot/kanagawa.nvim" },
+  { src = "https://github.com/folke/tokyonight.nvim" },
+  { src = "https://gitlab.com/motaz-shokry/gruvbox.nvim" },
+  { src = "https://github.com/mistweaverco/kulala.nvim" },
+  { src = "https://github.com/nvim-mini/mini.nvim" },
+  { src = "https://github.com/nvim-lualine/lualine.nvim" },
+  { src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "main" }
+})
 
-_G.Config = {}
+--AutoCmd or configs ===========================================================================================
+_G.Config = _G.Config or {}
 
 local gr = vim.api.nvim_create_augroup('custom-config', {})
+
 _G.Config.new_autocmd = function(event, pattern, callback, desc)
-  local opts = { group = gr, pattern = pattern, callback = callback, desc = desc }
-  vim.api.nvim_create_autocmd(event, opts)
+  vim.api.nvim_create_autocmd(event, {
+    group = gr,
+    pattern = pattern,
+    callback = callback,
+    desc = desc,
+  })
 end
 
-_G.Config.now_if_args = vim.fn.argc(-1) > 0 and MiniDeps.now or MiniDeps.later
 
-
-vim.lsp.enable({ "gopls" })
-vim.lsp.enable({ "pyrefly" })
-vim.lsp.enable({ "luals" })
-vim.lsp.enable({ "ruff" })
--- vim.lsp.enable({ "zuban" })
+-- Themes ==================================================================
+require('plugins.themes')
+-- vim.cmd('colorscheme tokyonight')
+vim.cmd('colorscheme solarized-osaka')
+-- vim.cmd("colorscheme kanagawa-wave")
+-- vim.cmd("colorscheme gruvbox-soft")

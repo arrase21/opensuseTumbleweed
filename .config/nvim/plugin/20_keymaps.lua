@@ -1,7 +1,30 @@
-local nmap = function(lhs, rhs, desc)
-  vim.keymap.set('n', lhs, rhs, { desc = desc })
+-- Packge clean ====================================================
+local function pack_clean()
+	local active_plugins = {}
+	local unused_plugins = {}
+
+	for _, plugin in ipairs(vim.pack.get()) do
+		active_plugins[plugin.spec.name] = plugin.active
+	end
+
+	for _, plugin in ipairs(vim.pack.get()) do
+		if not active_plugins[plugin.spec.name] then
+			table.insert(unused_plugins, plugin.spec.name)
+		end
+	end
+
+	if #unused_plugins == 0 then
+		print("No unused plugins.")
+		return
+	end
+
+	local choice = vim.fn.confirm("Remove unused plugins?", "&Yes\n&No", 2)
+	if choice == 1 then
+		vim.pack.del(unused_plugins)
+	end
 end
 
+-- Activate InlayHint ===========================================================================
 local function inlay_hint()
   local buf = vim.api.nvim_get_current_buf()
   vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = buf }), { bufnr = buf })
@@ -9,6 +32,11 @@ local function inlay_hint()
     vim.lsp.inlay_hint.is_enabled({ bufnr = buf }) and "Inlay hints: ON" or "Inlay hints: OFF",
     vim.log.levels.INFO
   )
+end
+
+-- Mappings ======================================================================================
+local nmap = function(lhs, rhs, desc)
+  vim.keymap.set('n', lhs, rhs, { desc = desc })
 end
 
 -- Paste linewise before/after current line
@@ -28,6 +56,7 @@ _G.Config.leader_group_clues = {
   { mode = 'n', keys = '<Leader>l', desc = ' Language' },
   { mode = 'n', keys = '<Leader>o', desc = '󰚩 Other' },
   { mode = 'n', keys = '<Leader>q', desc = '󰗼  Quit/Session' },
+  { mode = 'n', keys = '<Leader>r', desc = '󰗼  kulala/rest' },
   { mode = 'n', keys = '<Leader>s', desc = '+Session' },
   { mode = 'n', keys = '<Leader>t', desc = '+Terminal' },
   { mode = 'n', keys = '<Leader>v', desc = '+Visits' },
@@ -153,6 +182,7 @@ xmap_leader('lf', formatting_cmd, 'Format selection')
 
 -- o is for 'Other'. Common usage:
 nmap_leader("oa", "gg<S-v>G", 'select all')
+nmap_leader("oc", pack_clean, 'Clean package')
 nmap_leader('oh', inlay_hint, 'Inlay')
 nmap_leader('or', '<Cmd>lua MiniMisc.resize_window()<CR>', 'Resize to default width')
 nmap_leader("os", ":split<Return>", 'split')
@@ -172,6 +202,9 @@ nmap_leader('sw', '<Cmd>lua MiniSessions.write()<CR>', 'Write current')
 -- t is for 'Terminal'
 nmap_leader('tT', '<Cmd>horizontal term<CR>', 'Terminal (horizontal)')
 nmap_leader('tt', '<Cmd>vertical term<CR>', 'Terminal (vertical)')
+
+--r is for rest kulala
+nmap_leader('rs', function() require('kulala').run() end, 'Send request')
 
 local make_pick_core = function(cwd, desc)
   return function()
@@ -209,13 +242,13 @@ map("n", "<A-k>", ":m .-2<CR>==", opts)
 map("n", "<leader>qq", "<cmd>qa<cr>", { desc = "Quit All" })
 map("n", "<leader>qa", "<cmd>q<cr>", { desc = "Quit" })
 
--- Select
-map("i", "<Tab>", function()
-  return vim.fn.pumvisible() == 1 and "<C-n>" or "<Tab>"
-end, { expr = true, noremap = true })
-map("i", "<S-Tab>", function()
-  return vim.fn.pumvisible() == 1 and "<C-p>" or "<S-Tab>"
-end, { expr = true, noremap = true })
+-- -- Select
+-- map("i", "<Tab>", function()
+--   return vim.fn.pumvisible() == 1 and "<C-n>" or "<Tab>"
+-- end, { expr = true, noremap = true })
+-- map("i", "<S-Tab>", function()
+--   return vim.fn.pumvisible() == 1 and "<C-p>" or "<S-Tab>"
+-- end, { expr = true, noremap = true })
 
 -- Agrega esto en tu sección de mappings:
 map("n", "gd", vim.lsp.buf.definition, opts)      -- Go to definition
