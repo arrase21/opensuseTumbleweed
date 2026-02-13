@@ -67,43 +67,6 @@ require('mini.extra').setup()
 -- Mini Comment ===========================================================================
 require('mini.comment').setup()
 
--- Starter ================================================================================
-Mvim_starter_custom = function()
-  return {
-    { name = "Quit Neovim", action = "qa", section = "", },
-    -- { name = "Recent Files", action = function() require("mini.extra").pickers.oldfiles() end, section = "Search" },
-    -- { name = "Session",      action = function() require("mini.sessions").select() end,        section = "Search" },
-  }
-end
-
-require("mini.starter").setup({
-  autoopen = true,
-  items = {
-    -- require("mini.starter").sections.builtin_actions(),
-    Mvim_starter_custom(),
-    require("mini.starter").sections.recent_files(5, false, false),
-    require("mini.starter").sections.recent_files(5, true, false),
-    require("mini.starter").sections.sessions(5, true),
-  },
-  header = function()
-    local v = vim.version()
-    local versionstring = string.format("  Neovim Version: %d.%d.%d", v.major, v.minor, v.patch)
-    local image = [[
-┌─────────────────────────────────────────┐
-│                                         │
-│    ███╗   ███╗██╗   ██╗██╗███╗   ███╗   │
-│    ████╗ ████║██║   ██║██║████╗ ████║   │
-│    ██╔████╔██║██║   ██║██║██╔████╔██║   │
-│    ██║╚██╔╝██║╚██╗ ██╔╝██║██║╚██╔╝██║   │
-│    ██║ ╚═╝ ██║ ╚████╔╝ ██║██║ ╚═╝ ██║   │
-│    ╚═╝     ╚═╝  ╚═══╝  ╚═╝╚═╝     ╚═╝   │
-└─────────────────────────────────────────┘
-]]
-    finalimage = image .. versionstring
-    return finalimage
-  end
-})
-
 
 
 -- local starter = require("mini.starter")
@@ -244,6 +207,8 @@ end
 require('mini.git').setup()
 -- Ind   =================================================================
 require('mini.indentscope').setup()
+require('mini.cursorword').setup()
+
 
 -- keymap==================================================================
 require('mini.keymap').setup()
@@ -258,14 +223,10 @@ do
   local hi_words = MiniExtra.gen_highlighter.words
   hipatterns.setup({
     highlighters = {
-      -- Highlight a fixed set of common words. Will be highlighted in any place,
-      -- not like "only in comments".
       fixme = hi_words({ 'FIXME', 'Fixme', 'fixme' }, 'MiniHipatternsFixme'),
       hack = hi_words({ 'HACK', 'Hack', 'hack' }, 'MiniHipatternsHack'),
       todo = hi_words({ 'TODO', 'Todo', 'todo' }, 'MiniHipatternsTodo'),
       note = hi_words({ 'NOTE', 'Note', 'note' }, 'MiniHipatternsNote'),
-
-      -- Highlight hex color string (#aabbcc) with that color as a background
       hex_color = hipatterns.gen_highlighter.hex_color(),
     },
   })
@@ -332,3 +293,44 @@ do
     },
   })
 end
+
+
+
+-- Starter ================================================================================
+Mvim_starter_custom = function()
+  return {
+    { name = "Quit Neovim", action = "qa", section = "", },
+    -- { name = "Recent Files", action = function() require("mini.extra").pickers.oldfiles() end, section = "Search" },
+    -- { name = "Session",      action = function() require("mini.sessions").select() end,        section = "Search" },
+  }
+end
+
+require("mini.starter").setup({
+  autoopen = true,
+  items = {
+    -- require("mini.starter").sections.builtin_actions(),
+    Mvim_starter_custom(),
+    require("mini.starter").sections.recent_files(5, false, false),
+    require("mini.starter").sections.recent_files(5, true, false),
+    require("mini.starter").sections.sessions(5, true),
+  },
+  header = function()
+    local v = vim.version()
+    local versionstring = string.format("  Neovim Version: %d.%d.%d", v.major, v.minor, v.patch)
+    local image = [[
+┌─────────────────────────────────────────┐
+│                                         │
+│    ███╗   ███╗██╗   ██╗██╗███╗   ███╗   │
+│    ████╗ ████║██║   ██║██║████╗ ████║   │
+│    ██╔████╔██║██║   ██║██║██╔████╔██║   │
+│    ██║╚██╔╝██║╚██╗ ██╔╝██║██║╚██╔╝██║   │
+│    ██║ ╚═╝ ██║ ╚████╔╝ ██║██║ ╚═╝ ██║   │
+│    ╚═╝     ╚═╝  ╚═══╝  ╚═╝╚═╝     ╚═╝   │
+└─────────────────────────────────────────┘
+]]
+    finalimage = image .. versionstring
+    return finalimage
+  end
+})
+
+

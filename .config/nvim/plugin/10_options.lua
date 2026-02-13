@@ -73,7 +73,7 @@ vim.o.iskeyword       = '@,48-57,_,192-255,-' -- Treat dash as `word` textobject
 vim.o.pummaxwidth     = 100    -- Limit maximum width of popup menu
 vim.o.completetimeout = 100
 vim.o.pumborder       = 'bold' -- Use border in built-in completion menu
-require('vim._extui').enable({ enable = true })
+-- require('vim._extui').enable({ enable = true })
 
 
 

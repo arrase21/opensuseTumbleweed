@@ -39,77 +39,50 @@ require("lualine").setup({
   },
 })
 
--- Themes ==========================================================
 
--- require('kanagawa').setup({
---   transparent = true,
---   compile = false,
---   undercurl = true,
---   commentStyle = { italic = true },
---   functionStyle = {},
---   keywordStyle = { italic = true },
---   statementStyle = { bold = true },
---   typeStyle = {},
---
---   colors = {
---     palette = {},
---     theme = {
---       all = {
---         ui = {
---           float = {
---             bg = "none",
---           },
---           bg_gutter = "none",
---         }
---       }
---     }
---   },
---
---   overrides = function(colors)
---     local theme = colors.theme
---     return {
---       NormalFloat = { bg = "none" },
---       FloatBorder = { bg = "none" },
---       FloatTitle = { bg = "none" },
---
---       DiagnosticVirtualTextError = { bg = "none" },
---       DiagnosticVirtualTextWarn = { bg = "none" },
---       DiagnosticVirtualTextInfo = { bg = "none" },
---       DiagnosticVirtualTextHint = { bg = "none" },
---
---       -- Simplificar completion menu
---       Pmenu = { fg = theme.ui.shade0, bg = theme.ui.bg_p1 },
---       PmenuSel = { fg = "NONE", bg = theme.ui.bg_p2 },
---       PmenuSbar = { bg = theme.ui.bg_m1 },
---       PmenuThumb = { bg = theme.ui.bg_p2 },
---     }
---   end,
---
---   theme = "wave", -- o "dragon", "lotus"
---   background = {
---     dark = "wave",
---     light = "lotus"
---   },
--- })
---
--- -- Tokyo Night =========================================================================
--- require("tokyonight").setup({ transparent = true })
--- vim.cmd("colorscheme tokyonight")
---
--- -- Solarized ===========================================================================
--- -- require("solarized-osaka").setup({ transparent = true })
--- -- vim.cmd("colorscheme solarized-osaka")
---
--- --Gruvbox =================================================================
--- require("gruvbox").setup({
---   enable = {
---     lualine = true,
---   },
---
---   styles = {
---     bold = true,
---     italic = true,
---     transparency = true,
---   },
---
--- })
+local dap, dapui = require("dap"), require("dapui")
+
+dapui.setup()
+require("dap-go").setup()
+require("dap-python").setup("python")
+
+dap.listeners.before.attach.dapui_config = function()
+  dapui.open()
+end
+dap.listeners.before.launch.dapui_config = function()
+  dapui.open()
+end
+dap.listeners.before.event_terminated.dapui_config = function()
+  dapui.close()
+end
+dap.listeners.before.event_exited.dapui_config = function()
+  dapui.close()
+end
+
+local keys = {
+  { "<leader>db", dap.toggle_breakpoint,                                                                     desc = "Toggle Breakpoint" },
+  { "<leader>dB", function() dap.set_breakpoint(vim.fn.input("Condition: ")) end,                            desc = "Conditional Breakpoint" },
+  { "<leader>dc", dap.continue,                                                                              desc = "Continue / Start" },
+  { "<leader>dC", dap.run_to_cursor,                                                                         desc = "Run to Cursor" },
+  { "<leader>di", dap.step_into,                                                                             desc = "Step Into" },
+  { "<leader>do", dap.step_out,                                                                              desc = "Step Out" },
+  { "<leader>dO", dap.step_over,                                                                             desc = "Step Over" },
+  { "<leader>dl", dap.run_last,                                                                              desc = "Run Last" },
+  { "<leader>dt", dap.terminate,                                                                             desc = "Terminate" },
+  { "<leader>dr", dap.repl.toggle,                                                                           desc = "Toggle REPL" },
+  { "<leader>du", dapui.toggle,                                                                              desc = "Toggle DAP UI" },
+  { "<leader>dh", function() require("dap.ui.widgets").hover() end,                                          desc = "Hover" },
+  { "<leader>dp", function() require("dap.ui.widgets").preview() end,                                        desc = "Preview" },
+  { "<leader>df", function() require("dap.ui.widgets").centered_float(require("dap.ui.widgets").frames) end, desc = "Frames" },
+  { "<leader>ds", function() require("dap.ui.widgets").centered_float(require("dap.ui.widgets").scopes) end, desc = "Scopes" },
+}
+
+for _, key in ipairs(keys) do
+  vim.keymap.set("n", key[1], key[2], { desc = "DAP: " .. key.desc })
+end
+
+-- Opcional: iconos bonitos si usas algún plugin como nvim-web-devicons
+vim.fn.sign_define("DapBreakpoint", { text = "󰃤 ", texthl = "DapBreakpoint", linehl = "", numhl = "" })
+vim.fn.sign_define("DapBreakpointCondition",
+  { text = "󱌢 ", texthl = "DapBreakpointCondition", linehl = "", numhl = "" })
+vim.fn.sign_define("DapStopped", { text = "→", texthl = "DapStopped", linehl = "", numhl = "" })
