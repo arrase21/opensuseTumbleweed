@@ -31,7 +31,7 @@ wlogout nwg-look swaybg polkit-gnome sox ImageMagick
 desktop_apps_pkgs="
 ghostty foot thunar telegram-desktop rofi-wayland
 yazi fastfetch fd bat fzf eza fish tmux starship btop
-typescript go tree-sitter
+typescript go tree-sitter lazygit
 "
 
 build_deps="

@@ -17,7 +17,7 @@ rofi -config ~/.config/mango/rofi/config.rasi -show drun
 
 custom_menu() {
     options=" \n \n \n \n\n\n"
-    chosen=$(echo -e "$options" | rofi -config ~/.config/mango/rofi/submenu.rasi -dmenu  -theme-str 'mainbox {children: ["listview" ];}' -p "")
+    chosen=$(echo -e "$options" | rofi -config ~/.config/mango/rofi/launcher/submenu.rasi -dmenu  -theme-str 'mainbox {children: ["listview" ];}' -p "")
     case $chosen in
         " ")
             rofi -show drun
@@ -48,7 +48,7 @@ custom_menu() {
 
 session_options() {
     options="  Shutdown\n  Reboot\n  Lock\n󰍃  Logout"
-    chosen=$(echo -e "$options" | rofi -config ~/.config/mango/rofi/sysmenu.rasi -dmenu -theme-str 'listview {lines: 4;}' -theme-str 'window {width: 285px;}' -theme-str 'mainbox {children: ["listview" ];}' -p "")
+    chosen=$(echo -e "$options" | rofi -config ~/.config/mango/rofi/launcher/sysmenu.rasi -dmenu -theme-str 'listview {lines: 4;}' -theme-str 'window {width: 285px;}' -theme-str 'mainbox {children: ["listview" ];}' -p "")
     case $chosen in
         "󰌍")
             system_menu
@@ -73,7 +73,7 @@ session_options() {
 
 default_apps_func() {
     options="󰌍\n  Browser\n󰠮  Editor"
-    chosen=$(echo -e "$options" | rofi -config ~/.config/mango/rofi/sysmenu.rasi -dmenu -p "")
+    chosen=$(echo -e "$options" | rofi -config ~/.config/mango/rofi/launcher/sysmenu.rasi -dmenu -p "")
     case $chosen in
         "󰌍")
             settings_func
@@ -95,7 +95,7 @@ settings_func() {
     options="󰌍\n  Reload Shell\n  Set Default Apps\n󰌁  Customize Rice\n󰚰  Update Config"
 
     # Prompt user to choose an option
-    chosen=$(echo -e "$options" | rofi -config ~/.config/mango/rofi/sysmenu.rasi -dmenu -p "")
+    chosen=$(echo -e "$options" | rofi -config ~/.config/mango/rofi/launcher/sysmenu.rasi -dmenu -p "")
 
     # Execute the corresponding command based on the selected option
     case $chosen in
@@ -130,7 +130,7 @@ customize_func() {
     # Menu options displayed in rofi
     options="󰌍\n  Set Style Locks\n  Widgets Settings\n  Wallpapers\n󰌁  Themes"
     # Prompt user to choose an option
-    chosen=$(echo -e "$options" | rofi -config ~/.config/mango/rofi/sysmenu.rasi -dmenu -p "")
+    chosen=$(echo -e "$options" | rofi -config ~/.config/mango/rofi/launcher/sysmenu.rasi -dmenu -p "")
     # Execute the corresponding command based on the selected option
     case $chosen in
         "󰌍")
@@ -154,7 +154,7 @@ customize_func() {
 
 maintain_menu() {
     options="󰌍\n󰃢  Clear Cache\n󱘡  Clear Clipboard"
-    chosen=$(echo -e "$options" | rofi -config ~/.config/mango/rofi/sysmenu.rasi -dmenu -theme-str 'listview {lines: 6;}' -p "")
+    chosen=$(echo -e "$options" | rofi -config ~/.config/mango/rofi/launcher/sysmenu.rasi -dmenu -theme-str 'listview {lines: 6;}' -p "")
     case $chosen in
         "󰌍")
             system_menu
@@ -185,7 +185,7 @@ maintain_menu() {
 
 manual_func() {
     options="󰌍\n  Keybinds"
-    chosen=$(echo -e "$options" | rofi -config ~/.config/mango/rofi/sysmenu.rasi -dmenu -p "")
+    chosen=$(echo -e "$options" | rofi -config ~/.config/mango/rofi/launcher/sysmenu.rasi -dmenu -p "")
     # Execute the corresponding command based on the selected option
     case $chosen in
         "󰌍")
@@ -202,7 +202,7 @@ manual_func() {
 
 screenshot_func() {
     options="󰌍\n  Screenshots\n  Fullscreen\n  Selection\n  Now"
-    chosen=$(echo -e "$options" | rofi -config ~/.config/mango/rofi/sysmenu.rasi -dmenu -theme-str 'listview {lines: 6;}' -p "")
+    chosen=$(echo -e "$options" | rofi -config ~/.config/mango/rofi/launcher/sysmenu.rasi -dmenu -theme-str 'listview {lines: 6;}' -p "")
     case $chosen in
         "󰌍")
             system_menu
@@ -227,7 +227,7 @@ screenshot_func() {
 
 connections_func() {
     options="󰌍\n󰤨  WiFi\n  Bluetooth"
-    chosen=$(echo -e "$options" | rofi -config ~/.config/mango/rofi/sysmenu.rasi -dmenu -theme-str 'listview {lines: 6;}' -p "")
+    chosen=$(echo -e "$options" | rofi -config ~/.config/mango/rofi/launcher/sysmenu.rasi -dmenu -theme-str 'listview {lines: 6;}' -p "")
     case $chosen in
         "󰌍")
             system_menu
@@ -246,7 +246,7 @@ connections_func() {
 
 misc_func() {
     options="󰌍\n  Toggle DND\n  Toggle Cafein\n󰈈  Toggle Eye Saver"
-    chosen=$(echo -e "$options" | rofi -config ~/.config/mango/rofi/sysmenu.rasi -dmenu -theme-str 'listview {lines: 6;}' -p "")
+    chosen=$(echo -e "$options" | rofi -config ~/.config/mango/rofi/launcher/sysmenu.rasi -dmenu -theme-str 'listview {lines: 6;}' -p "")
     case $chosen in
         "󰌍")
             system_menu
@@ -272,7 +272,7 @@ misc_func() {
 system_menu() {
     options="  Apps\n  Connections\n󰃢  Maintaining\n󰅇  Clipboard\n󰄀  Screenshot\n󰐱  Miscellaneous\n  Session Options\n  Manual\n󰌽  Themes\n  Wallpapers\n  Settings"
     # chosen=$(echo -e "$options" | rofi -config ~/.config/mango/rofi/sysmenu.rasi -dmenu -theme-str 'listview {lines: 14;}' -theme-str 'mainbox {children: ["inputbar","listview" ];}'  -p "")
-    chosen=$(echo -e "$options" | rofi -config ~/.config/mango/rofi/sysmenu.rasi -dmenu -p "")
+    chosen=$(echo -e "$options" | rofi -config ~/.config/mango/rofi/launcher/sysmenu.rasi -dmenu -p "")
     case $chosen in
         "  Apps")
             drun_launcher
@@ -325,7 +325,7 @@ set_wallpaper() {
 theme_menu() {
    THEME_DIR="$HOME/.config/themes"
     THEMES=$(find "$THEME_DIR" -mindepth 1 -maxdepth 1 -type d -printf '%f\n')
-    chosen=$(echo -e "󰌍\n$THEMES" | rofi -config ~/.config/mango/rofi/sysmenu.rasi -dmenu -p "" -theme-str 'listview {lines: 10;}')
+    chosen=$(echo -e "󰌍\n$THEMES" | rofi -config ~/.config/mango/rofi/launcher/sysmenu.rasi -dmenu -p "" -theme-str 'listview {lines: 10;}')
     if [[ -z "$chosen" ]]; then 
         exit 1
     elif [[ "$chosen" = "󰌍" ]];then

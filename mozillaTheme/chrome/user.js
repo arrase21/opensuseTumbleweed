@@ -11,13 +11,13 @@ user_pref("toolkit.telemetry.updatePing.enabled", false);
 user_pref("toolkit.telemetry.bhrPing.enabled", false);
 user_pref("toolkit.telemetry.firstShutdownPing.enabled", false);
 
-user_pref("browser.ping-centre.telemetry", false)
-user_pref("toolkit.telemetry.hybridContent.enabled", false)
-user_pref("browser.download.animateNotifications", false)
-user_pref("browser.pocket.enabled",false)
-user_pref("loop.enabled",false)
-user_pref("reader.parse-on-load.enabled",false)
-user_pref("reader.parse-on-load.force-enabled", false)
+user_pref("browser.ping-centre.telemetry", false);
+user_pref("toolkit.telemetry.hybridContent.enabled", false);
+user_pref("browser.download.animateNotifications", false);
+user_pref("browser.pocket.enabled",false);
+user_pref("loop.enabled",false);
+user_pref("reader.parse-on-load.enabled",false);
+user_pref("reader.parse-on-load.force-enabled", false);
 
 /* ==================== UI LIGERA / ANIMACIONES ==================== */
 user_pref("general.smoothScroll", false);

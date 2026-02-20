@@ -89,7 +89,7 @@ case $1 in
         chosen=$(list_browsers_for_dmenu | gum choose --header="  Set default browser")
         ;;
     *)
-        chosen=$(list_browsers_for_dmenu | rofi -config "$HOME/.config/mango/rofi/browser.rasi" -show drun -dmenu -i -p " ")
+        chosen=$(list_browsers_for_dmenu | rofi -config "$HOME/.config/mango/rofi/themes/browser.rasi" -show drun -dmenu -i -p " ")
         ;;
 esac
 

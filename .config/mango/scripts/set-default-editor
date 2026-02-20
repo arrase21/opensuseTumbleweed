@@ -19,7 +19,7 @@ case $1 in
         [ -z "$chosen" ] && exit 1
         ;;
     *)
-        chosen=$(list_editors_for_dmenu | rofi -config $HOME/.config/mango/rofi/browser.rasi -show drun -dmenu -i -p " ")
+        chosen=$(list_editors_for_dmenu | rofi -config $HOME/.config/mango/rofi/themes/browser.rasi -show drun -dmenu -i -p " ")
         [ -z "$chosen" ] && exit 1
         ;;
 esac

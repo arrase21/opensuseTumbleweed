@@ -249,7 +249,8 @@
     "exec": "python3 -u ~/.local/bin/scroll.py",
     "format": "{text}",
     "return-type": "json",
-    "on-click": "playerctl -a next",
+    // "on-click": "eww close music-widget && eww open music-widget",
+    "on-click": "~/.config/eww/get-widget.sh",
     "on-click-middle": "playerctl -a play-pause",
     "on-click-right": "playerctl -a previous"
   }

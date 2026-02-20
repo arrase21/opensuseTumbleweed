@@ -22,7 +22,7 @@ element-text {
 }
 
 listview {
-    lines: 7;
+    lines: 10;
 }
 
 scrollbar {

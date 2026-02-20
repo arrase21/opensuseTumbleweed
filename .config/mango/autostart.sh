@@ -19,7 +19,9 @@ wl-paste --type text --watch cliphist store >/dev/null 2>&1 &
 # wl-paste --type image --watch cliphist store &
 # Permission authentication
 /usr/libexec/polkit-gnome-authentication-agent-1 >/dev/null 2>&1 &
-
+eww daemon &
 # 自启动脚本 仅作参考
 # ime input
 fcitx5 --replace -d >/dev/null 2>&1 &
+
+# dms run >/dev/null 2>&1 &

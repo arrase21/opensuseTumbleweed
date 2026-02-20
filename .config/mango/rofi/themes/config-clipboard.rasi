@@ -1,10 +1,18 @@
 // Config //
+
+ @theme "~/.config/mango/rofi/colors.rasi"
+// @theme "~/.config/mango/rofi/matugen/colors-rofi.rasi"
+* {
+    font: "Iosevka 12";
+    element-bg:           @on-secondary-fixed;
+    foreground-colour:    @secondary;
+    primary:              @on-secondary;
+}
 configuration {
     modi:                        "drun";
     show-icons:                  false;
 }
 
- @theme "~/.config/mango/rofi/colors.rasi"
 
 
 // Main //
@@ -17,8 +25,8 @@ window {
     cursor:                      "default";
     spacing:                     0em;
     padding:                     0em;
-    border-color:                @main-br;
-    background-color:            @main-bg;
+    border-color:                @primary;
+    background-color:            @element-bg;
 }
 mainbox {
     enabled:                     true;
@@ -52,13 +60,13 @@ inputbar {
     enabled:                     true;
     padding:                     0em;
     children:                    [ "entry" ];
-    background-color:            @color5;
+    background-color:            @element-bg;
     expand:                      true;
 }
 entry {
     enabled:                     true;
     padding:                     1.8em;
-    text-color:                  @color7;
+    text-color:                  @foreground-colour;
     background-color:            transparent;
 }
 
@@ -81,7 +89,7 @@ listview {
     expand:                      false;
     cursor:                      "default";
     background-color:            transparent;
-    text-color:                  @color5;
+    text-color:                  @primary;
 }
 dummy {
     spacing:                     0em;
@@ -95,17 +103,17 @@ element {
     enabled:                     true;
     padding:                     0.5em;
     cursor:                      pointer;
-    background-color:            transparent;
-    text-color:                  @color7;
+    background-color:            @element-bg;
+    text-color:                  @element-bg;
 }
 element selected.normal {
-    background-color:            @color5;
-    text-color:                  @color7;
+    background-color:            @primary;
+    text-color:                  @element-bg;
 }
 element-text {
     vertical-align:              0.0;
     horizontal-align:            0.0;
     cursor:                      inherit;
     background-color:            transparent;
-    text-color:                  inherit;
+    text-color:                  @foreground-colour;
 }

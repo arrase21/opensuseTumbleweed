@@ -1,79 +1,25 @@
- @theme "~/.config/mango/rofi/wallust/colors-rofi.rasi"
-window{
-    background-color:            @background-color;
-    border-color:                @color10;
-  }
+/***
+ *    ┏┓┏┓┓ ┏┓┳┓┏┓
+ *    ┃ ┃┃┃ ┃┃┣┫┗┓
+ *    ┗┛┗┛┗┛┗┛┛┗┗┛
+ *                
+ */
 
-inputbar {
-    border-color:                @color8;
-    background-color:            @color13;
-    text-color:                  @color7;
-}
 
-prompt {
-  text-color:                  inherit;
-  background-color:            @color7;
-}
+/*--------Importing matugen colors-----*/
+@import '~/.config/mango/rofi/matugen/colors-rofi.rasi'
 
-textbox-prompt-colon {
-  text-color:       inherit;
-  background-color: inherit;
-}
-textbox{
-    border-color:                @color12;
-    background-color:            @color1;
-    text-color:                  @color1;
-    placeholder-color:           @color1;
-  }
-message {
-  border-color:                @color12;
-  background-color:            @color8;
-  text-color:                  @color1;
-}
 
-entry {
-  background-color: transparent;
-  placeholder-color:@color7;
-}
+/*--------Color definitions------------*/
 
-mainbox{
-    border-color:                @color12;
-  }
-
-listview {
-  // background-color: transparent;
-}
-
-mode-switcher {
-    border-color:                @color2;
-    background-color:            @color13;
-}
-
-button {
-  text-color:                  @color7;
-}
-
-button selected {
-  text-color:                  @color7;
-  background-color:            @color8;
-}
-
-element {
-  background-color:            @color12;
-  text-color:                  @color5;
-}
-
-element selected {
-  background-color:   @color13;
-  text-color:         @color7;
-}
-
-scrollbar {
-    handle-color:                @color12;
-}
-
-error-message {
-    border-color:                @color12;
-    background-color:            @color12;
-    text-color:                  @color12;
+* {
+       background:       @surface;
+       background-alt:   @surface-container-highest;
+       background-alpha: @surface-alpha;
+       foreground:       @on-surface;
+       border-color:     @tertiary;
+       selected:         @primary-fixed;
+       selected-text:    @surface;
+       active:           @tertiary;
+       urgent:           @error;
 }
