@@ -14,9 +14,9 @@
 # input_path = '~/.config/matugen/templates/gtk-colors.css'
 # output_path = '~/.config/gtk-4.0/colors.css'
 
-# [templates.hyprlock]
-# input_path  = '~/.config/matugen/templates/hyprlock-colors.conf'
-# output_path = '~/.config/hypr/extra/hyprlock-colors.conf'
+[templates.hyprlock]
+input_path  = '~/.config/matugen/templates/hyprlock-colors.conf'
+output_path = '~/.config/hypr/hyprlock-colors.conf'
 
 # [templates.qt5ct]
 # input_path = '~/.config/matugen/templates/qtct-colors.conf'
@@ -34,10 +34,10 @@ output_path = '~/.config/mango/rofi/matugen/colors-rofi.rasi'
 input_path = '~/.config/matugen/templates/matugen-waybar.css'
 output_path = '~/.config/mango/waybar/matugen/matugen-waybar.css'
 
-# [templates.starship]
-# input_path = '~/.config/matugen/templates/starship-colors.toml'
-# output_path = '~/.config/starship.toml'
-#
+[templates.starship]
+input_path = '~/.config/matugen/templates/starship-colors.toml'
+output_path = '~/.config/starship.toml'
+
 [templates.yazi]
 input_path = '~/.config/matugen/templates/yazi-theme.toml'
 output_path = '~/.config/yazi/theme.toml'
