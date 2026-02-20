@@ -16,10 +16,10 @@
 @define-color textcolor2 @on_primary_container;
 @define-color textcolor4 @inverse_primary;
 @define-color foreground #585858;
-@define-color background #011423;
+@define-color background #282828;
 
 * {
-  background:@background;
+  background-color:@background;
   border: none;
   border-radius: 0;
   min-height: 0;
@@ -89,6 +89,7 @@
 }
 
 #custom-mtp,
+
 #cpu {
   margin-right: 6px;
 }
