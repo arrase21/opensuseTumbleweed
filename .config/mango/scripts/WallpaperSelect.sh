@@ -7,6 +7,10 @@ iDIR="$HOME/.config/swaync/images"
 
 [ -d "$cacheDir" ] || mkdir -p "$cacheDir"
 
+# -------------------------------------------------
+# Detectar monitor enfocado
+# -------------------------------------------------
+
 get_focused_monitor() {
     local output=$(wlr-randr --json 2>/dev/null |
         jq -r '.[] | select(.enabled==true) | .name' | head -n1)
@@ -21,6 +25,10 @@ get_focused_monitor() {
 }
 
 focused_monitor=$(get_focused_monitor)
+
+# -------------------------------------------------
+# Obtener info del monitor
+# -------------------------------------------------
 
 get_monitor_info() {
     local monitor="$1"
@@ -48,6 +56,10 @@ rofi_command="rofi -i -show -dmenu \
     -theme $HOME/.config/mango/rofi/themes/wallselect.rasi \
     -theme-str $rofi_override"
 
+# -------------------------------------------------
+# Paralelismo inteligente
+# -------------------------------------------------
+
 get_optimal_jobs() {
     local cores=$(nproc)
     (( cores <= 2 )) && echo 2 || echo $(( cores > 4 ? 4 : cores-1 ))
@@ -55,11 +67,18 @@ get_optimal_jobs() {
 
 PARALLEL_JOBS=$(get_optimal_jobs)
 
+# -------------------------------------------------
+# Procesar imágenes (NO procesa GIF)
+# -------------------------------------------------
+
 process_image() {
     local imagen="$1"
     local nombre_archivo=$(basename "$imagen")
     local cache_file="${cacheDir}/${nombre_archivo}"
     local lock_file="${cacheDir}/.lock_${nombre_archivo}"
+
+    # 👉 Si es GIF no lo convertimos
+    [[ "$imagen" =~ \.gif$ ]] && return 0
 
     (
         flock -x 200
@@ -78,10 +97,18 @@ export cacheDir
 
 rm -f "${cacheDir}"/.lock_* 2>/dev/null || true
 
+# -------------------------------------------------
+# Generar cache paralelo
+# -------------------------------------------------
+
 find "$wall_dir" -type f \
-\( -name "*.jpg" -o -name "*.jpeg" -o -name "*.png" -o -name "*.gif" \) \
+\( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.webp" -o -iname "*.gif" \) \
 -print0 |
 xargs -0 -P "$PARALLEL_JOBS" -I {} bash -c 'process_image "{}"'
+
+# -------------------------------------------------
+# Limpiar cache huérfano
+# -------------------------------------------------
 
 for cached in "$cacheDir"/*; do
     [ -f "$cached" ] || continue
@@ -91,7 +118,15 @@ done
 
 rm -f "${cacheDir}"/.lock_* 2>/dev/null || true
 
+# -------------------------------------------------
+# Reiniciar rofi si está abierto
+# -------------------------------------------------
+
 pidof rofi >/dev/null && pkill rofi
+
+# -------------------------------------------------
+# Selector con preview correcto
+# -------------------------------------------------
 
 wall_selection=$(find "$wall_dir" -type f \
 \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" \
@@ -99,12 +134,19 @@ wall_selection=$(find "$wall_dir" -type f \
     xargs -0 basename -a |
     LC_ALL=C sort -V |
     while IFS= read -r A; do
-        [[ "$A" =~ \.gif$ ]] &&
-            printf "%s\n" "$A" ||
+        if [[ "$A" =~ \.gif$ ]]; then
+            # 👉 GIF usa archivo original
+            printf '%s\x00icon\x1f%s/%s\n' "$A" "$wall_dir" "$A"
+        else
+            # 👉 otras imágenes usan cache
             printf '%s\x00icon\x1f%s/%s\n' "$A" "$cacheDir" "$A"
+        fi
     done | $rofi_command)
 
-### ---------- SWWW ----------
+# -------------------------------------------------
+# Configuración SWWW
+# -------------------------------------------------
+
 FPS=60
 TYPE="any"
 DURATION=2
@@ -112,25 +154,33 @@ SWWW_PARAMS="--transition-fps $FPS --transition-type $TYPE --transition-duration
 
 swww query || swww-daemon --format xrgb
 
+# -------------------------------------------------
+# Aplicar wallpaper
+# -------------------------------------------------
+
 if [[ -n "$wall_selection" ]]; then
+
     selected="${wall_dir}/${wall_selection}"
 
     cp "$selected" ~/.config/wall.png
 
     swww img -o "$focused_monitor" "$selected" $SWWW_PARAMS
-    ### 👉 colores
+
+    # 👉 colores
     "$scriptsDir/WallustSwww" --dark
     matugen image "$selected" --mode dark --source-color-index 0
-    ### 👉 recarga notificaciones
-if pgrep -x waybar >/dev/null; then
-    pkill -SIGUSR2 waybar
-else
-    waybar -c "$WAYBAR_CONFIG" -s "$WAYBAR_CSS_DEST" &
-fi
 
+    # 👉 recargar waybar
+    if pgrep -x waybar >/dev/null; then
+        pkill -SIGUSR2 waybar
+    else
+        waybar &
+    fi
+
+    # 👉 recargar swaync
     pkill -USR2 swaync-client 2>/dev/null || swaync-client -rs &
+
     "$scriptsDir/mako.sh" 2>/dev/null || true
 
     notify-send "Wallpaper cambiado" "$wall_selection" -i "$selected"
 fi
-

@@ -1,384 +1,257 @@
 #!/usr/bin/env bash
 
 cd ~
-# Usage Information
-usage() {
-    echo -e "\n Usage:
-      --menu                            : Displays a custom menu with multiple options. \n
-      --sys_menu                        : Displays system menu. \n
-      --screenshot_menu                 : Displays system menu. \n
-      "
-    exit 1
+
+CONFIG="$HOME/.config/mango/rofi/launcher/sysmenu.rasi"
+
+# -------------------------------------------------
+# UTIL
+# -------------------------------------------------
+
+run_menu() {
+    echo -e "$1" | rofi -config "$CONFIG" -dmenu
 }
+
+get_action() {
+    echo "$1" | awk -F'|' '{print $2}'
+}
+
+# -------------------------------------------------
+# LAUNCHERS
+# -------------------------------------------------
 
 drun_launcher() {
-rofi -config ~/.config/mango/rofi/config.rasi -show drun
+    rofi -config ~/.config/mango/rofi/config.rasi -show drun
 }
 
-custom_menu() {
-    options=" \n \n \n \n\n\n"
-    chosen=$(echo -e "$options" | rofi -config ~/.config/mango/rofi/launcher/submenu.rasi -dmenu  -theme-str 'mainbox {children: ["listview" ];}' -p "")
-    case $chosen in
-        " ")
-            rofi -show drun
-            ;;
-        " ")
-            pcmanfm-qt
-            ;;
-        "")
-            session_options
-            ;;
-        " ")
-            foot
-            ;;
-        " ")
-            bash ~/scripts/open-browser
-            ;;
-        "")
-            bash ~/launchrofi.sh -sm
-            ;;
-        "")
-            manual_func
-            ;;
-        *)
-            echo "No option selected"
-            ;;
-    esac
-}
+# -------------------------------------------------
+# SESSION MENU
+# -------------------------------------------------
 
 session_options() {
-    options="  Shutdown\n  Reboot\n  Lock\n󰍃  Logout"
-    chosen=$(echo -e "$options" | rofi -config ~/.config/mango/rofi/launcher/sysmenu.rasi -dmenu -theme-str 'listview {lines: 4;}' -theme-str 'window {width: 285px;}' -theme-str 'mainbox {children: ["listview" ];}' -p "")
-    case $chosen in
-        "󰌍")
-            system_menu
-            ;;
-        "  Shutdown")
-            systemctl poweroff
-            ;;
-        "  Reboot")
-            systemctl reboot
-            ;;
-        "  Lock")
-            hyprlock & disown
-            ;;
-        "󰍃  Logout")
-            hyprctl dispatch exit && sleep 1 && loginctl terminate-user "$USER"
-            ;;
-        *)
-            echo "No option selected"
-            ;;
+    options="  Shutdown|shutdown
+  Reboot|reboot
+  Lock|lock
+󰍃  Logout|logout
+󰌍  Back|back"
+
+    chosen=$(run_menu "$options")
+    action=$(get_action "$chosen")
+
+    case "$action" in
+        shutdown) systemctl poweroff ;;
+        reboot) systemctl reboot ;;
+        lock) hyprlock & disown ;;
+        logout) hyprctl dispatch exit ;;
+        back) system_menu ;;
     esac
 }
 
-default_apps_func() {
-    options="󰌍\n  Browser\n󰠮  Editor"
-    chosen=$(echo -e "$options" | rofi -config ~/.config/mango/rofi/launcher/sysmenu.rasi -dmenu -p "")
-    case $chosen in
-        "󰌍")
-            settings_func
-            ;;
-        "  Browser")
-            bash ~/.config/mango/scripts/set-default-browser
-            default_apps_func
-            ;;
-        "󰠮  Editor")
-            bash ~/.config/mango/scripts/set-default-editor
-            default_apps_func
-            ;;
-        *)
-            ;;
-    esac
-}
-settings_func() {
-    # Menu options displayed in rofi
-    options="󰌍\n  Reload Shell\n  Set Default Apps\n󰌁  Customize Rice\n󰚰  Update Config"
-
-    # Prompt user to choose an option
-    chosen=$(echo -e "$options" | rofi -config ~/.config/mango/rofi/launcher/sysmenu.rasi -dmenu -p "")
-
-    # Execute the corresponding command based on the selected option
-    case $chosen in
-        "󰌍")
-            system_menu
-            ;;
-        "  Reload Shell")
-            pkill waybar 
-            waybar -c ~/.config/mango/waybar/config -s ~/.config/mango/waybar/style.css >/dev/null 2>&1 &
-            makoctl reload   
-            settings_func
-            ;;
-        "  Set Default Apps")
-           default_apps_func 
-            ;;
-        "󰌁  Customize Rice")
-            customize_func
-            ;;
-        "󰚰  Update Config")
-            foot --override=colors.alpha=1 --app-id=Update -e bash ~/Dotfiles/bin/update_binarydots
-            cd ~
-            settings_func
-            ;;
-        *)
-            echo "No option selected"
-            ;;
-    esac
-}
-
-
-customize_func() {
-    # Menu options displayed in rofi
-    options="󰌍\n  Set Style Locks\n  Widgets Settings\n  Wallpapers\n󰌁  Themes"
-    # Prompt user to choose an option
-    chosen=$(echo -e "$options" | rofi -config ~/.config/mango/rofi/launcher/sysmenu.rasi -dmenu -p "")
-    # Execute the corresponding command based on the selected option
-    case $chosen in
-        "󰌍")
-            settings_func
-            ;;
-        "  Set Style Locks")
-            lock_menu
-            ;;
-        "󰌁  Themes")
-            theme_menu
-            ;;
-        "  Wallpapers")
-            set_wallpaper
-            ;;
-        *)
-            echo "No option selected"
-            ;;
-    esac
-}
-
-
-maintain_menu() {
-    options="󰌍\n󰃢  Clear Cache\n󱘡  Clear Clipboard"
-    chosen=$(echo -e "$options" | rofi -config ~/.config/mango/rofi/launcher/sysmenu.rasi -dmenu -theme-str 'listview {lines: 6;}' -p "")
-    case $chosen in
-        "󰌍")
-            system_menu
-            ;;
-        "󰃢  Clear Cache")
-         	find ~/.cache -mindepth 1 -maxdepth 1 \
-         	  ! -name "spotify" \
-         	  ! -name "cliphist" \
-         	  ! -name "paru" \
-         	  ! -name "mcpelauncher-webview"\
-         	  ! -name "pip" \
-         	  ! -name "rofi-entry-history.txt" \
-         	  ! -name "Hyprland Polkit Agent" \
-         	  ! -name "spotube" \
-         	  ! -name "oss.krtirtho.spotube" \
-         	  -exec rm -rf {} + >/dev/null 2>&1 & disown
-            maintain_menu
-            ;;
-        "󱘡  Clear Clipboard")
-            rm -rf ~/.cache/cliphist >/dev/null 2>&1 & disown
-            maintain_menu
-            ;; 
-        *)
-            echo "No option selected"
-            ;;
-    esac
-}
-
-manual_func() {
-    options="󰌍\n  Keybinds"
-    chosen=$(echo -e "$options" | rofi -config ~/.config/mango/rofi/launcher/sysmenu.rasi -dmenu -p "")
-    # Execute the corresponding command based on the selected option
-    case $chosen in
-        "󰌍")
-            system_menu
-            ;;
-        "  Keybinds")
-            rofi -config $HOME/.config/mango/rofi/browser.rasi -show drun -dmenu -i -p  ' ' < ~/.config/mango/scripts/help.txt
-            ;;
-        *)
-            echo "No option selected"
-            ;;
-    esac
-}
-
-screenshot_func() {
-    options="󰌍\n  Screenshots\n  Fullscreen\n  Selection\n  Now"
-    chosen=$(echo -e "$options" | rofi -config ~/.config/mango/rofi/launcher/sysmenu.rasi -dmenu -theme-str 'listview {lines: 6;}' -p "")
-    case $chosen in
-        "󰌍")
-            system_menu
-            ;;
-        "  Screenshots")
-            foot -e yazi ~/Pictures/Screenshots/
-            ;;
-        "  Fullscreen")
-            bash ~/screenshot.sh fullscreen
-            ;;
-        "  Selection")
-            bash ~/screenshot.sh region
-            ;;
-        "  Now")
-            bash ~/screenshot.sh instant
-            ;;
-        *)
-            echo "No option selected"
-            ;;
-    esac
-}
+# -------------------------------------------------
+# CONNECTIONS
+# -------------------------------------------------
 
 connections_func() {
-    options="󰌍\n󰤨  WiFi\n  Bluetooth"
-    chosen=$(echo -e "$options" | rofi -config ~/.config/mango/rofi/launcher/sysmenu.rasi -dmenu -theme-str 'listview {lines: 6;}' -p "")
-    case $chosen in
-        "󰌍")
-            system_menu
-            ;;
-        "󰤨  WiFi") 
-            bash ~/scripts/rofi-wifi
-            ;;
-        "  Bluetooth")
-            bash ~/scripts/rofi-bluetooth 
-            ;;
-        *)
-            echo "No option selected"
-            ;;
+    options="󰤨  WiFi|wifi
+  Bluetooth|bluetooth
+󰌍  Back|back"
+
+    chosen=$(run_menu "$options")
+    action=$(get_action "$chosen")
+
+    case "$action" in
+        wifi) bash ~/scripts/rofi-wifi ;;
+        bluetooth) bash ~/scripts/rofi-bluetooth ;;
+        back) system_menu ;;
     esac
 }
+
+# -------------------------------------------------
+# SCREENSHOT
+# -------------------------------------------------
+
+screenshot_func() {
+    options="  Screenshots|folder
+  Fullscreen|fullscreen
+  Selection|region
+  Now|instant
+󰌍  Back|back"
+
+    chosen=$(run_menu "$options")
+    action=$(get_action "$chosen")
+
+    case "$action" in
+        folder) foot -e yazi ~/Pictures/Screenshots/ ;;
+        fullscreen) bash $HOME/.config/mango/scripts/screenshot.sh fullscreen ;;
+        region) bash $HOME/.config/mango/scripts/screenshot.sh region ;;
+        instant) bash $HOME/.config/mango/scripts/screenshot.sh instant ;;
+        back) system_menu ;;
+    esac
+}
+
+# -------------------------------------------------
+# MISC
+# -------------------------------------------------
 
 misc_func() {
-    options="󰌍\n  Toggle DND\n  Toggle Cafein\n󰈈  Toggle Eye Saver"
-    chosen=$(echo -e "$options" | rofi -config ~/.config/mango/rofi/launcher/sysmenu.rasi -dmenu -theme-str 'listview {lines: 6;}' -p "")
-    case $chosen in
-        "󰌍")
-            system_menu
-            ;;
-        "  Toggle DND")
-            makoctl mode -t dnd
-            misc_func
-            ;;
-        "  Toggle Cafein")
-            bash $HOME/scripts/cafein toggle -n
-            misc_func
-            ;;
-        "󰈈  Toggle Eye Saver")
-            bash $HOME/.config/mango/scripts/Sunset.sh
-            misc_func
-            ;;
-        *)
-            echo "No option selected"
-            ;;
+    options="  Toggle DND|dnd
+  Toggle Cafein|cafein
+󰈈  Toggle Eye Saver|eye
+󰌍  Back|back"
+
+    chosen=$(run_menu "$options")
+    action=$(get_action "$chosen")
+
+    case "$action" in
+        dnd) makoctl mode -t dnd ;;
+        cafein) bash $HOME/scripts/cafein toggle -n ;;
+        eye) bash $HOME/.config/mango/scripts/Sunset.sh ;;
+        back) system_menu ;;
     esac
 }
 
-system_menu() {
-    options="  Apps\n  Connections\n󰃢  Maintaining\n󰅇  Clipboard\n󰄀  Screenshot\n󰐱  Miscellaneous\n  Session Options\n  Manual\n󰌽  Themes\n  Wallpapers\n  Settings"
-    # chosen=$(echo -e "$options" | rofi -config ~/.config/mango/rofi/sysmenu.rasi -dmenu -theme-str 'listview {lines: 14;}' -theme-str 'mainbox {children: ["inputbar","listview" ];}'  -p "")
-    chosen=$(echo -e "$options" | rofi -config ~/.config/mango/rofi/launcher/sysmenu.rasi -dmenu -p "")
-    case $chosen in
-        "  Apps")
-            drun_launcher
-            ;;
-        "  Connections")
-            connections_func
-            ;;
-        "󰃢  Maintaining")
-            maintain_menu
-            ;;
-        "󰅇  Clipboard")
-            bash ~/.config/mango/scripts/ClipManager.sh
-            ;;
-        "󰄀  Screenshot")
-            screenshot_func 
-            ;;
-        "󰐱  Miscellaneous")
-            misc_func 
-            ;;
-        "  Session Options")
-            session_options
-            ;;
-        "  Manual")
-            manual_func
-            ;;
-        "󰌽  Themes")
-            theme_menu
-            ;;
-        "  Wallpapers")
-            set_wallpaper
-            ;;
-        "  Settings")
-            settings_func
-            ;;
-        *)
-            echo "No option selected"
-            ;;
+# -------------------------------------------------
+# MAINTAIN
+# -------------------------------------------------
+
+maintain_menu() {
+    options="󰃢  Clear Cache|cache
+󱘡  Clear Clipboard|clipboard
+󰌍  Back|back"
+
+    chosen=$(run_menu "$options")
+    action=$(get_action "$chosen")
+
+    case "$action" in
+        cache)
+            find ~/.cache -mindepth 1 -maxdepth 1 \
+                ! -name "spotify" \
+                ! -name "cliphist" \
+                ! -name "paru" \
+                -exec rm -rf {} + ;;
+        clipboard)
+            rm -rf ~/.cache/cliphist ;;
+        back) system_menu ;;
     esac
 }
-set_wallpaper() {
-  SCR="$HOME/.config/mango/scripts"
-  "$SCR/WallpaperSelect.sh"
-    # # Prompt user to choose an option
-    # chosen=$(python3 ~/scripts/wallpapers.py echoImageNames | rofi -config ~/.config/mango/rofi/sysmenu.rasi -dmenu -theme-str 'mainbox {children: ["inputbar","listview" ];}'  -p "")
-    # # Execute the corresponding command based on the selected option
-    # echo $chosen
-    # python3 ~/scripts/wallpapers.py changeWallpaper $chosen
+
+# -------------------------------------------------
+# SETTINGS
+# -------------------------------------------------
+
+settings_func() {
+    options="  Reload Shell|reload
+  Set Default Apps|apps
+󰌁  Customize Rice|custom
+󰚰  Update Config|update
+󰌍  Back|back"
+
+    chosen=$(run_menu "$options")
+    action=$(get_action "$chosen")
+
+    case "$action" in
+        reload)
+            pkill waybar
+            waybar >/dev/null 2>&1 & ;;
+        apps)
+            bash ~/.config/mango/scripts/set-default-browser ;;
+        custom)
+            customize_func ;;
+        update)
+            foot -e bash ~/Dotfiles/bin/update_binarydots ;;
+        back) system_menu ;;
+    esac
 }
+
+# -------------------------------------------------
+# CUSTOMIZE
+# -------------------------------------------------
+
+customize_func() {
+    options="  Set Style Locks|locks
+  Wallpapers|walls
+󰌁  Themes|themes
+󰌍  Back|back"
+
+    chosen=$(run_menu "$options")
+    action=$(get_action "$chosen")
+
+    case "$action" in
+        locks) lock_menu ;;
+        walls) set_wallpaper ;;
+        themes) theme_menu ;;
+        back) settings_func ;;
+    esac
+}
+
+# -------------------------------------------------
+# WALLPAPER
+# -------------------------------------------------
+
+set_wallpaper() {
+    "$HOME/.config/mango/scripts/WallpaperSelect.sh"
+}
+
+# -------------------------------------------------
+# THEMES
+# -------------------------------------------------
 
 theme_menu() {
-   THEME_DIR="$HOME/.config/themes"
-    THEMES=$(find "$THEME_DIR" -mindepth 1 -maxdepth 1 -type d -printf '%f\n')
-    chosen=$(echo -e "󰌍\n$THEMES" | rofi -config ~/.config/mango/rofi/launcher/sysmenu.rasi -dmenu -p "" -theme-str 'listview {lines: 10;}')
-    if [[ -z "$chosen" ]]; then 
-        exit 1
-    elif [[ "$chosen" = "󰌍" ]];then
+    THEME_DIR="$HOME/.config/themes"
+    THEMES=$(find "$THEME_DIR" -mindepth 1 -maxdepth 1 -type d -printf '%f|theme_%f\n')
+
+    options="󰌍  Back|back
+$THEMES"
+
+    chosen=$(run_menu "$options")
+    action=$(get_action "$chosen")
+
+    if [[ "$action" == back ]]; then
         system_menu
-        return
+    elif [[ "$action" == theme_* ]]; then
+        theme_name=${action#theme_}
+        "$HOME/.config/mango/scripts/themes.sh" -c "$theme_name"
     fi
-    systemd-run --user --scope \
-        --setenv=WAYLAND_DISPLAY="$WAYLAND_DISPLAY" \
-        --setenv=XDG_RUNTIME_DIR="$XDG_RUNTIME_DIR" \
-        "$HOME/.config/mango/scripts/themes.sh" -c "$chosen"
 }
-# Check for flags and validate input
-if [[ $# -ne 1 ]]; then
-    if [[ "$1" != "--conf_launcher" ]]; then
-        usage 
-    fi
-fi
-# Execute the appropriate function based on the provided flag
+
+# -------------------------------------------------
+# SYSTEM MENU (MAIN)
+# -------------------------------------------------
+
+system_menu() {
+    options="  Apps|apps
+  Connections|connections
+󰃢  Maintaining|maintain
+󰄀  Screenshot|screenshot
+󰐱  Miscellaneous|misc
+󰌁  Customize|customize
+  Session Options|session
+  Settings|settings
+  Wallpapers|wallpapers"
+
+    chosen=$(run_menu "$options")
+    action=$(get_action "$chosen")
+
+    case "$action" in
+        apps) drun_launcher ;;
+        connections) connections_func ;;
+        maintain) maintain_menu ;;
+        screenshot) screenshot_func ;;
+        misc) misc_func ;;
+        customize) customize_func;;
+        session) session_options ;;
+        settings) settings_func ;;
+        wallpapers) set_wallpaper ;;
+    esac
+}
+# -------------------------------------------------
+# FLAGS
+# -------------------------------------------------
+
 case "$1" in
-    --drun|-d)
-        drun_launcher
-        ;;
-    # --window|-w)
-    #     rofi \
-    #     -show window \
-    #     -theme ~/.config/rofi/window.rasi
-    #     ;;
-    #
-    # --run|-r)
-    #     run_launcher
-    #     ;;
-    --menu|-m)
-        custom_menu
-        ;;
-    --power-menu|-pm)
-        session_options
-        ;;
-    --widget_settings|-ws)
-    	widget_settings
-    	;;
-     --rice_settings|-rs)
-     	settings_func
-     	;;
-     --system_menu|--sys_menu|-sm)
-     	system_menu
-     	;;
-    --screenshot_menu|--ss_menu|-ss)
-     	screenshot_func
-     	;;
-    --conf_launcher|-cl)
-        conf_launcher "$2" "$3"
-        ;;
-    *)
-        usage
-        ;;
+    --drun|-d) drun_launcher ;;
+    --system_menu|--sys_menu|-sm) system_menu ;;
+    --screenshot_menu|--ss_menu|-ss) screenshot_func ;;
+    --power-menu|-pm) session_options ;;
+    *) system_menu ;;
 esac

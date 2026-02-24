@@ -37,10 +37,22 @@ window {
 /* ---- Mainbox ---- */
 mainbox {
     enabled:                     true;
-    children:                    [ "listview" ];
+    children:                    [ "listview","inputbar" ];
     background-color:            @background;
 }
 
+
+inputbar {
+    children: [entry];  // Esto elimina el prompt al solo mostrar el entry
+    background-color:@background;
+}
+entry {
+  expand: true;
+  horizontal-align: 0.5;
+  horizontal-align: 0.5;
+  text-color:@active;
+  background-color:@background;
+}
 
 /* ---- Listview ---- */
 listview {

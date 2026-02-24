@@ -55,7 +55,7 @@ entry {
     placeholder-color:              @foreground-colour;
     expand:                         true;
     horizontal-align:               0;
-    placeholder:                    "Search CTRL TAB to change MODE";
+    placeholder:                    "search";
     blink:                          true;
     border:                  	      0px 0px 2px 0px;
     border-radius:                  10px;
@@ -103,6 +103,7 @@ scrollbar {
 }
 
 mainbox {
+    children:                    [ "inputbar", "listview" ];
     background-color:               @element-bg;
     children:                       [ inputbar, message, listview ];
     spacing:                        15px;

@@ -1,4 +1,0 @@
-/* ---- Global Configuration Fonts ---- */
-@import "~/.config/mango/rofi/0-shared-fonts.rasi"
-@theme "~/.config/mango/rofi/themes/style1alt.rasi"
-
