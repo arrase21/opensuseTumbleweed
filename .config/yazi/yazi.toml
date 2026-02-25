@@ -3,12 +3,19 @@ show_hidden = false
 show_symlink = true
 
 [opener]
+app_image = [
+    { run = 'chmod +x "$@" && "$@"', orphan = true, desc = "AppImage", for = "unix" }
+]
 play = [
-	{ run = 'mpv "$@"', orphan = true, for = "unix" },
+    { run = 'mpv "$@"', orphan = true, for = "unix" },
 ]
 edit = [
-	{ run = 'nvim "$@"', block = true, for = "unix" },
+    { run = 'nvim "$@"', block = true, for = "unix" },
 ]
-open = [
-	{ run = 'xdg-open "$@"', desc = "Open" },
+
+[open]
+rules = [
+    { url = "*.AppImage", use = "app_image" },
+    { mime = "video/*", use = "play" },
+    { mime = "text/*", use = "edit" },
 ]
