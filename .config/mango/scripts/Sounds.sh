@@ -73,4 +73,5 @@ if ! test -f "$sound_file"; then
 fi
 
 # pipewire priority, fallback pulseaudio
-pw-play "$sound_file" || pa-play "$sound_file"
+# pw-play "$sound_file" || pa-play "$sound_file"
+mpv --no-terminal --really-quiet --volume=100 "$sound_file" &

@@ -9,7 +9,7 @@ elif [[ "$CONSTATE" =~ "disabled" ]]; then
 	TOGGLE="Toggle On"
 fi
 
-rofi -dmenu -config ~/.config/mango/rofi/wifi.rasi -p "Scaning Networks..." -lines "" & disown
+rofi -dmenu -config ~/.config/mango/rofi/config.rasi -p "Scaning Networks..." -lines "" & disown
 
 # Starts a scan of available broadcasting SSIDs
 # nmcli dev wifi rescan
@@ -44,7 +44,7 @@ elif [[ "$CONSTATE" =~ "disabled" ]]; then
 	LINENUM=1
 fi
 
-CHENTRY=$(echo -e "$TOGGLE\nManual\n$LIST" | uniq -u | rofi -dmenu -replace -config ~/.config/mango/rofi/wifi.rasi -p "Wi-Fi SSID: " -lines "$LINENUM" -a "$HIGHLINE"  )
+CHENTRY=$(echo -e "$TOGGLE\nManual\n$LIST" | uniq -u | rofi -dmenu -replace -config ~/.config/mango/rofi/config.rasi -p "Wi-Fi SSID: " -lines "$LINENUM" -a "$HIGHLINE"  )
 #echo "$CHENTRY"
 CHSSID=$(echo "$CHENTRY" | sed  's/\s\{2,\}/\|/g' | awk -F "|" '{print $1}')
 #echo "$CHSSID"
@@ -87,7 +87,7 @@ else
       WIFIPASS=$(
         echo "if connection is stored, hit enter" |
           rofi -dmenu -password \
-          -config ~/.config/mango/rofi/wifi.rasi \
+          -config ~/.config/mango/rofi/config.rasi \
           -theme-str 'entry { placeholder: "Super Secret Password"; } listview { enabled: true; }' \
           -p "Password: " -lines 1 -font "$FONT"
         )

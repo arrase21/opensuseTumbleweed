@@ -19,5 +19,4 @@ fi
 # Otros daemons que usan wallust
 pkill -USR2 swaync-client 2>/dev/null || swaync-client -rs &
 "$HOME/.config/mango/scripts/mako.sh" 2>/dev/null || true
-"$HOME/.config/mango/scripts/ewwii_wallust.sh" 2>/dev/null || true
 exit 0

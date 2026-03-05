@@ -17,9 +17,10 @@ ok(){ echo -e "\033[1;32m✔ $1\033[0m"; }
 
 core_pkgs="
 bc curl wget unzip 7zip findutils git jq inxi xdg-user-dirs xdg-utils
-ydotool opi libnotify-tools pavucontrol playerctl pamixer xwayland
-wayland-protocols-devel brightnessctl bluez NetworkManager upower
-power-profiles-daemon
+ydotool opi libnotify-tools pavucontrol playerctl pamixer xwayland 
+libadwaita-devel wayland-protocols-devel brightnessctl bluez 
+NetworkManager upower glib2-devel power-profiles-daemon gtk4-devel 
+pango-devel gdk-pixbuf-devel cairo-devel libepoxy-devel
 "
 
 wayland_pkgs="
@@ -31,7 +32,7 @@ wlogout nwg-look swaybg polkit-gnome sox ImageMagick
 desktop_apps_pkgs="
 ghostty foot thunar telegram-desktop rofi-wayland
 yazi fastfetch fd bat fzf eza fish tmux starship btop
-typescript go tree-sitter lazygit
+typescript go tree-sitter
 "
 
 build_deps="
@@ -129,50 +130,50 @@ setup_xdg_dirs() {
   ok "XDG directories updated"
 }
 
-compile_wlsunset() {
-  title "Compilando wlsunset"
-  cd "$HOME/repos"
-  
-  if [ ! -d wlsunset ]; then
-    step "Clonando wlsunset"
-    git clone https://github.com/kennylevinsen/wlsunset
-    cd wlsunset
-    meson build
-    ninja -C build
-    sudo ninja -C build install
-    ok "wlsunset compiled and installed"
-  else
-    step "wlsunset ya existe, actualizando"
-    cd wlsunset
-    git pull
-    meson build --wipe 2>/dev/null || meson build
-    ninja -C build
-    sudo ninja -C build install
-    ok "wlsunset updated"
-  fi
-}
+#compile_wlsunset() {
+#  title "Compilando wlsunset"
+#  cd "$HOME/repos"
+#  
+#  if [ ! -d wlsunset ]; then
+#    step "Clonando wlsunset"
+#    git clone https://github.com/kennylevinsen/wlsunset
+#    cd wlsunset
+#    meson build
+#    ninja -C build
+#    sudo ninja -C build install
+#    ok "wlsunset compiled and installed"
+#  else
+#    step "wlsunset ya existe, actualizando"
+#    cd wlsunset
+#    git pull
+#    meson build --wipe 2>/dev/null || meson build
+#    ninja -C build
+#    sudo ninja -C build install
+#    ok "wlsunset updated"
+#  fi
+#}
 
-compile_wlr_dpms() {
-  title "Compilando wlr-dpms"
-  cd "$HOME/repos"
-  
-  if [ ! -d wlr-dpms ]; then
-    step "Clonando wlr-dpms"
-    git clone https://git.sr.ht/~dsemy/wlr-dpms
-    cd wlr-dpms
-    make
-    sudo make install
-    ok "wlr-dpms compiled and installed"
-  else
-    step "wlr-dpms ya existe, actualizando"
-    cd wlr-dpms
-    git pull
-    make clean
-    make
-    sudo make install
-    ok "wlr-dpms updated"
-  fi
-}
+#compile_wlr_dpms() {
+#  title "Compilando wlr-dpms"
+#  cd "$HOME/repos"
+#  
+#  if [ ! -d wlr-dpms ]; then
+#    step "Clonando wlr-dpms"
+#    git clone https://git.sr.ht/~dsemy/wlr-dpms
+#    cd wlr-dpms
+#    make
+#    sudo make install
+#    ok "wlr-dpms compiled and installed"
+#  else
+#    step "wlr-dpms ya existe, actualizando"
+#    cd wlr-dpms
+#    git pull
+#    make clean
+#    make
+#    sudo make install
+#    ok "wlr-dpms updated"
+#  fi
+#}
 
 install_mangowc_repo() {
   title "Installing Mangowc from unofficial repo"
@@ -276,14 +277,14 @@ main() {
   clone_dotfiles
   copy_configs
   setup_xdg_dirs
-  compile_wlsunset
-  compile_wlr_dpms
+  #compile_wlsunset
+  #compile_wlr_dpms
   install_mangowc_repo
   install_brave
   install_tmux_plugins
   # install_rust_tools
   install_fonts
-  setup_android_mtp
+  #setup_android_mtp
 
   title "INSTALL COMPLETE"
   echo "👉 Restart session recommended"

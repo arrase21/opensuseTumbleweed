@@ -15,8 +15,6 @@ waybar -c ~/.config/mango/waybar/config -s ~/.config/mango/waybar/style.css >/de
 # clipboard content manager=====================================================================
 wl-clip-persist --clipboard regular --reconnect-tries 0 >/dev/null 2>&1 &
 wl-paste --type text --watch cliphist store >/dev/null 2>&1 &
-# wl-paste --type text --watch cliphist store &
-# wl-paste --type image --watch cliphist store &
 # Permission authentication
 /usr/libexec/polkit-gnome-authentication-agent-1 >/dev/null 2>&1 &
 eww daemon &
