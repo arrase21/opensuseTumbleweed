@@ -1,44 +1,63 @@
+-- ┌────────────────┐
+-- │ Plugin manager │
+-- └────────────────┘
 local configs = vim.tbl_map(function(path)
   return vim.fn.fnamemodify(path, ':t:r')
 end, vim.api.nvim_get_runtime_file('lsp/*.lua', true))
 
 vim.lsp.enable(configs)
 
--- Plugins =====================================================================================================
-vim.pack.add({
-  --Themes =====================================================================================================
-  { src = "https://github.com/craftzdog/solarized-osaka.nvim" },
-  { src = "https://github.com/rebelot/kanagawa.nvim" },
-  { src = "https://github.com/folke/tokyonight.nvim" },
-  { src = "https://gitlab.com/motaz-shokry/gruvbox.nvim" },
-  -- ===========================================================================================================
-  { src = "https://github.com/mistweaverco/kulala.nvim" },
-  { src = "https://github.com/nvim-mini/mini.nvim" },
-  { src = "https://github.com/nvim-lualine/lualine.nvim" },
-  { src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "main" },
-  -- dap  ======================================================================================================
-  { src = "https://github.com/mfussenegger/nvim-dap"},
-  { src = "https://github.com/mfussenegger/nvim-dap-python"},
-  { src = "https://github.com/rcarriga/nvim-dap-ui"},
-  { src = "https://github.com/leoluz/nvim-dap-go"},
-  { src = "https://github.com/nvim-neotest/nvim-nio"}
-})
+_G.Config = {}
 
---AutoCmd or configs ===========================================================================================
-_G.Config = _G.Config or {}
+-- Load now to have 'mini.misc' available for custom loading helpers.
+vim.pack.add({ 'https://github.com/nvim-mini/mini.nvim' })
+
+local misc = require('mini.misc')
+Config.now = function(f) misc.safely('now', f) end
+Config.later = function(f) misc.safely('later', f) end
+Config.now_if_args = vim.fn.argc(-1) > 0 and Config.now or Config.later
+Config.on_event = function(ev, f) misc.safely('event:' .. ev, f) end
+Config.on_filetype = function(ft, f) misc.safely('filetype:' .. ft, f) end
+
 local gr = vim.api.nvim_create_augroup('custom-config', {})
-_G.Config.new_autocmd = function(event, pattern, callback, desc)
-  vim.api.nvim_create_autocmd(event, {
-    group = gr,
-    pattern = pattern,
-    callback = callback,
-    desc = desc,
-  })
+Config.new_autocmd = function(event, pattern, callback, desc)
+  local opts = { group = gr, pattern = pattern, callback = callback, desc = desc }
+  vim.api.nvim_create_autocmd(event, opts)
 end
 
--- Themes ==================================================================
-require('plugins.themes')
--- vim.cmd('colorscheme tokyonight')
--- vim.cmd('colorscheme solarized-osaka')
--- vim.cmd("colorscheme kanagawa-wave")
-vim.cmd("colorscheme gruvbox-soft")
+Config.on_packchanged = function(plugin_name, kinds, callback, desc)
+  local f = function(ev)
+    local name, kind = ev.data.spec.name, ev.data.kind
+    if not (name == plugin_name and vim.tbl_contains(kinds, kind)) then return end
+    if not ev.data.active then vim.cmd.packadd(plugin_name) end
+    callback()
+  end
+  Config.new_autocmd('PackChanged', '*', f, desc)
+end
+require("preview.events").setup()
+
+-- local function source_matugen()
+--   local matugen_path = os.getenv("HOME") .. "/.config/nvim/colors/generated.lua"
+--
+--   if vim.fn.filereadable(matugen_path) == 1 then
+--     dofile(matugen_path)
+--   else
+--     vim.cmd("colorscheme base16-catppuccin-mocha")
+--     vim.notify("Matugen aún no generó colores", vim.log.levels.INFO)
+--   end
+-- end
+--
+-- vim.api.nvim_create_autocmd("Signal", {
+--   pattern = "SIGUSR1",
+--   callback = function()
+--     source_matugen()
+--
+--     vim.api.nvim_set_hl(0, "Normal", { bg = "NONE" })
+--     vim.api.nvim_set_hl(0, "NormalFloat", { bg = "NONE" })
+--     vim.api.nvim_set_hl(0, "WinSeparator", { bg = "NONE" })
+--     vim.api.nvim_set_hl(0, "Comment", { italic = true })
+--   end,
+-- })
+-- Config.later(function()
+--   source_matugen()
+-- end)
