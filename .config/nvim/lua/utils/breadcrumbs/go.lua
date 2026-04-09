@@ -4,7 +4,6 @@ local function ic(char, hl)
   return string.format('%%#%s#%s%%* ', hl, char)
 end
 
--- tipos que representan nodos de tipo en Go
 local TYPE_NODES = {
   type_identifier = true,
   qualified_type = true,

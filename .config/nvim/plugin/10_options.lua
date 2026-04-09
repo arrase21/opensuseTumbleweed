@@ -19,9 +19,10 @@ vim.opt.pumborder     = "rounded" -- Rounded floating windows
 vim.opt.showtabline   = 2         -- Always show tabs
 vim.opt.signcolumn    = "yes"     -- Always show sign column
 vim.opt.cursorcolumn  = false     -- Highlight current column
-vim.opt.termguicolors = true      -- True color support
+-- vim.opt.termguicolors = true      -- True color support
 vim.o.cursorline      = true      -- Enable current line highlighting
-
+vim.o.colorcolumn     = '+1'      -- Draw column on the right of maximum width
+vim.o.termguicolors   = true
 -- Special UI symbols
 vim.o.fillchars       = 'eob: ,fold:╌' -- End-of-buffer and fold chars
 vim.o.listchars       = 'extends:…,precedes:…,nbsp:␣,tab:  ,'
@@ -33,37 +34,47 @@ vim.o.foldnestmax     = 10       -- Max fold levels
 vim.o.foldtext        = ''       -- Use default fold text
 
 -- Editing =====================================================================
-vim.opt.tabstop       = 2    -- Tab width
-vim.opt.shiftwidth    = 2    -- Indent width
-vim.opt.smartindent   = true -- Smart auto-indent
+vim.opt.tabstop       = 2                                     -- Tab width
+vim.o.expandtab       = true                                  -- Convert tabs to spaces
+vim.opt.shiftwidth    = 2                                     -- Indent width
+vim.opt.smartindent   = true                                  -- Smart auto-indent
+vim.o.ignorecase      = true                                  -- Ignore case during search
+vim.o.incsearch       = true                                  -- Show search matches while typing
 
--- Built-in completion
-vim.o.completetimeout = 100 -- Limit completion sources delay
+vim.o.complete        = '.,w,b,kspell'                        -- Use less sources
+vim.o.completeopt     = 'menuone,noselect,fuzzy,nosort,popup' -- Use custom behavior
+vim.o.completetimeout = 200                                   -- Limit sources delay
+-- o.autocomplete = true
+-- vim.o.complete        = "o,.,w,b,u"
+vim.opt.shortmess:prepend("c") -- avoid having to press enter on snippet completion
 
 -- Autocommands ================================================================
 Config.new_autocmd('FileType', nil, function()
-	vim.cmd('setlocal formatoptions-=c formatoptions-=o')
+  vim.cmd('setlocal formatoptions-=c formatoptions-=o')
 end, "Proper 'formatoptions'")
 
 -- Diagnostics ================================================================
 local diagnostic_opts = {
-	signs            = {
-		text = {
-			[vim.diagnostic.severity.ERROR] = " ",
-			[vim.diagnostic.severity.WARN]  = " ",
-			[vim.diagnostic.severity.HINT]  = "󰌵 ",
-			[vim.diagnostic.severity.INFO]  = " ",
-		},
-		linehl = {
-			[vim.diagnostic.severity.ERROR] = "ErrorMsg",
-		},
-		numhl = {
-			[vim.diagnostic.severity.WARN] = "WarningMsg",
-		},
-	},
-	virtual_text     = true,
-	underline        = { severity = { min = vim.diagnostic.severity.HINT } },
-	virtual_lines    = false,
-	update_in_insert = false,
+  signs            = {
+    priority = 9999,
+    text = {
+      [vim.diagnostic.severity.ERROR] = " ",
+      [vim.diagnostic.severity.WARN]  = " ",
+      [vim.diagnostic.severity.HINT]  = "󰌵 ",
+      [vim.diagnostic.severity.INFO]  = " ",
+    },
+  },
+  -- virtual_text     = false,
+  underline        = true,
+  virtual_lines    = false,
+  virtual_text     = {
+    prefix = '󰅚',
+    source = "if_many",
+    -- source = "always",
+    severity = { min = 'WARN', max = 'ERROR' },
+    spacing = 4,
+  },
+  update_in_insert = false,
 }
+
 Config.later(function() vim.diagnostic.config(diagnostic_opts) end)

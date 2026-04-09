@@ -1,8 +1,12 @@
 {
   "plugins": {
-    "base16-nvim": {
-      "rev": "190397833e53fdfd5cf400c5baaf1a4e533158e5",
-      "src": "https://github.com/RRethy/base16-nvim"
+    "dracula.nvim": {
+      "rev": "6632dac59d44a4d03ac04507c43a082fe1da53b4",
+      "src": "https://github.com/arrase21/dracula.nvim"
+    },
+    "fzf-lua": {
+      "rev": "4deeecf611c0beba6455e6cf06e2c051a6169dd4",
+      "src": "https://github.com/ibhagwan/fzf-lua"
     },
     "gruvbox.nvim": {
       "rev": "9d0e3af224c5492069a493bb43c6ec2b78497454",
@@ -17,11 +21,11 @@
       "src": "https://github.com/mistweaverco/kulala.nvim"
     },
     "mini.nvim": {
-      "rev": "439cdcd6992bc9012efd7d8ed7a7b7a0f1fac32a",
+      "rev": "2431902e78b76f435542d1e606f08475360068ca",
       "src": "https://github.com/nvim-mini/mini.nvim"
     },
     "nvim-dap": {
-      "rev": "a9d8cb68ee7184111dc66156c4a2ebabfbe01bc5",
+      "rev": "45a69eba683a2c448dd9ecfc4de89511f0646b5f",
       "src": "https://github.com/mfussenegger/nvim-dap"
     },
     "nvim-dap-go": {
@@ -33,7 +37,7 @@
       "src": "https://github.com/mfussenegger/nvim-dap-python"
     },
     "nvim-dap-ui": {
-      "rev": "f5b6673f374626515401c5bc51b005f784a4f252",
+      "rev": "1a66cabaa4a4da0be107d5eda6d57242f0fe7e49",
       "src": "https://github.com/rcarriga/nvim-dap-ui"
     },
     "nvim-nio": {
@@ -41,12 +45,20 @@
       "src": "https://github.com/nvim-neotest/nvim-nio"
     },
     "nvim-treesitter": {
-      "rev": "6620ae1c44dfa8623b22d0cbf873a9e8d073b849",
+      "rev": "4916d6592ede8c07973490d9322f187e07dfefac",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter"
+    },
+    "snacks.nvim": {
+      "rev": "ad9ede6a9cddf16cedbd31b8932d6dcdee9b716e",
+      "src": "http://github.com/folke/snacks.nvim"
     },
     "solarized-osaka.nvim": {
       "rev": "f0c2f0ba0bd56108d53c9bfae4bb28ff6c67bbdb",
       "src": "https://github.com/craftzdog/solarized-osaka.nvim"
+    },
+    "tiny-inline-diagnostic.nvim": {
+      "rev": "57a0eb84b2008c76e77930639890d9874195b1e1",
+      "src": "https://github.com/rachartier/tiny-inline-diagnostic.nvim"
     },
     "tokyonight.nvim": {
       "rev": "cdc07ac78467a233fd62c493de29a17e0cf2b2b6",

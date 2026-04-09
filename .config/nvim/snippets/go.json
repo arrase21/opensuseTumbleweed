@@ -1,0 +1,252 @@
+{
+  "main package": {
+    "prefix": "pkgm",
+    "body": "package main",
+    "description": "Package main"
+  },
+  "main function": {
+    "prefix": "fmain",
+    "body": "func main() {\n\t$0\n}",
+    "description": "Main function"
+  },
+  "function": {
+    "prefix": "fn",
+    "body": "func ${1}(${2}) ${3} {\n\t$0\n}",
+    "description": "Function declaration"
+  },
+  "function with error return": {
+    "prefix": "fne",
+    "body": "func ${1:name}(${2:params}) (${3:returnType}, error) {\n\t$0\n\treturn ${4:value}, nil\n}",
+    "description": "Function with error return"
+  },
+  "method": {
+    "prefix": "meth",
+    "body": "func (${1:r} ${2:receiver}) ${3:name}(${4:params}) ${5:returnType} {\n\t$0\n}",
+    "description": "Method declaration"
+  },
+  "if error": {
+    "prefix": "iferr",
+    "body": "if err != nil {\n\treturn ${1:err}\n}",
+    "description": "If error return"
+  },
+  "if error wrap": {
+    "prefix": "iferrw",
+    "body": "if err != nil {\n\treturn fmt.Errorf(\"${1:message}: %w\", err)\n}",
+    "description": "If error wrap and return"
+  },
+  "if": {
+    "prefix": "if",
+    "body": "if ${1:condition} {\n\t$0\n}",
+    "description": "If statement"
+  },
+  "if else": {
+    "prefix": "ife",
+    "body": "if ${1:condition} {\n\t$2\n} else {\n\t$0\n}",
+    "description": "If else statement"
+  },
+  "for range": {
+    "prefix": "forr",
+    "body": "for ${1:k}, ${2:v} := range ${3:slice} {\n\t$0\n}",
+    "description": "For range loop"
+  },
+  "for i": {
+    "prefix": "fori",
+    "body": "for ${1:i} := 0; ${1:i} < ${2:n}; ${1:i}++ {\n\t$0\n}",
+    "description": "For i loop"
+  },
+  "for": {
+    "prefix": "for",
+    "body": "for ${1:condition} {\n\t$0\n}",
+    "description": "For loop"
+  },
+  "struct": {
+    "prefix": "st",
+    "body": "type ${1:Name} struct {\n\t${2:Field} ${3:type}\n}",
+    "description": "Struct declaration"
+  },
+  "interface": {
+    "prefix": "iface",
+    "body": "type ${1:Name} interface {\n\t${2:Method}(${3:params}) ${4:returnType}\n}",
+    "description": "Interface declaration"
+  },
+  "goroutine": {
+    "prefix": "go",
+    "body": "go func() {\n\t$0\n}()",
+    "description": "Goroutine anonymous function"
+  },
+  "goroutine named": {
+    "prefix": "gof",
+    "body": "go ${1:funcName}($0)",
+    "description": "Goroutine named function"
+  },
+  "channel make": {
+    "prefix": "mkchan",
+    "body": "${1:ch} := make(chan ${2:type}, ${3:buffer})",
+    "description": "Make channel"
+  },
+  "select": {
+    "prefix": "sel",
+    "body": "select {\ncase ${1:v} := <-${2:ch}:\n\t$0\ndefault:\n}",
+    "description": "Select statement"
+  },
+  "defer": {
+    "prefix": "df",
+    "body": "defer ${1:func}($0)",
+    "description": "Defer statement"
+  },
+  "defer close": {
+    "prefix": "dfc",
+    "body": "defer ${1:resource}.Close()",
+    "description": "Defer close"
+  },
+  "switch": {
+    "prefix": "sw",
+    "body": "switch ${1:expr} {\ncase ${2:value}:\n\t$0\ndefault:\n}",
+    "description": "Switch statement"
+  },
+  "type switch": {
+    "prefix": "swt",
+    "body": "switch ${1:v} := ${2:expr}.(type) {\ncase ${3:Type}:\n\t$0\ndefault:\n}",
+    "description": "Type switch"
+  },
+  "map make": {
+    "prefix": "mkmap",
+    "body": "${1:m} := make(map[${2:key}]${3:value})",
+    "description": "Make map"
+  },
+  "map literal": {
+    "prefix": "map",
+    "body": "map[${1:key}]${2:value}{\n\t${3:key}: ${4:value},\n}",
+    "description": "Map literal"
+  },
+  "slice make": {
+    "prefix": "mksl",
+    "body": "${1:s} := make([]${2:type}, ${3:len})",
+    "description": "Make slice"
+  },
+  "append": {
+    "prefix": "app",
+    "body": "${1:slice} = append(${1:slice}, ${2:value})",
+    "description": "Append to slice"
+  },
+  "error new": {
+    "prefix": "errnew",
+    "body": "errors.New(\"${1:message}\")",
+    "description": "errors.New"
+  },
+  "error fmt": {
+    "prefix": "errf",
+    "body": "fmt.Errorf(\"${1:message}: %w\", ${2:err})",
+    "description": "fmt.Errorf"
+  },
+  "error type": {
+    "prefix": "errt",
+    "body": "type ${1:Name}Error struct {\n\t${2:Field} ${3:type}\n}\n\nfunc (e *${1:Name}Error) Error() string {\n\treturn fmt.Sprintf(\"${4:message}: %v\", e.${2:Field})\n}",
+    "description": "Custom error type"
+  },
+  "fmt println": {
+    "prefix": "fpl",
+    "body": "fmt.Println(${1})",
+    "description": "fmt.Println"
+  },
+  "fmt printf": {
+    "prefix": "fpf",
+    "body": "fmt.Printf(\"${1:%v}\\n\", ${2})",
+    "description": "fmt.Printf"
+  },
+  "fmt sprintf": {
+    "prefix": "fsp",
+    "body": "fmt.Sprintf(\"${1:%v}\", ${2})",
+    "description": "fmt.Sprintf"
+  },
+  "log": {
+    "prefix": "lg",
+    "body": "log.Printf(\"${1:message}: %v\\n\", ${2})",
+    "description": "log.Printf"
+  },
+  "log fatal": {
+    "prefix": "lgf",
+    "body": "log.Fatalf(\"${1:message}: %v\\n\", ${2})",
+    "description": "log.Fatalf"
+  },
+  "test function": {
+    "prefix": "tf",
+    "body": "func Test${1:Name}(t *testing.T) {\n\t$0\n}",
+    "description": "Test function"
+  },
+  "test table": {
+    "prefix": "tft",
+    "body": "func Test${1:Name}(t *testing.T) {\n\ttests := []struct {\n\t\tname string\n\t\t${2:input} ${3:type}\n\t\twant ${4:type}\n\t}{\n\t\t{name: \"${5:case}\", ${2:input}: ${6:value}, want: ${7:expected}},\n\t}\n\tfor _, tt := range tests {\n\t\tt.Run(tt.name, func(t *testing.T) {\n\t\t\t$0\n\t\t})\n\t}\n}",
+    "description": "Table driven test"
+  },
+  "benchmark function": {
+    "prefix": "bf",
+    "body": "func Benchmark${1:Name}(b *testing.B) {\n\tfor i := 0; i < b.N; i++ {\n\t\t$0\n\t}\n}",
+    "description": "Benchmark function"
+  },
+  "init function": {
+    "prefix": "finit",
+    "body": "func init() {\n\t$0\n}",
+    "description": "Init function"
+  },
+  "var": {
+    "prefix": "var",
+    "body": "var ${1:name} ${2:type}",
+    "description": "Variable declaration"
+  },
+  "var block": {
+    "prefix": "varb",
+    "body": "var (\n\t${1:name} ${2:type}\n)",
+    "description": "Variable block declaration"
+  },
+  "const": {
+    "prefix": "const",
+    "body": "const ${1:name} = ${2:value}",
+    "description": "Constant declaration"
+  },
+  "const iota": {
+    "prefix": "iota",
+    "body": "const (\n\t${1:Name} ${2:type} = iota\n\t$0\n)",
+    "description": "Const iota block"
+  },
+  "context with timeout": {
+    "prefix": "ctxt",
+    "body": "ctx, cancel := context.WithTimeout(${1:context.Background()}, ${2:time.Second})\ndefer cancel()\n$0",
+    "description": "Context with timeout"
+  },
+  "context with cancel": {
+    "prefix": "ctxc",
+    "body": "ctx, cancel := context.WithCancel(${1:context.Background()})\ndefer cancel()\n$0",
+    "description": "Context with cancel"
+  },
+  "waitgroup": {
+    "prefix": "wg",
+    "body": "var wg sync.WaitGroup\nwg.Add(${1:1})\ngo func() {\n\tdefer wg.Done()\n\t$0\n}()\nwg.Wait()",
+    "description": "WaitGroup pattern"
+  },
+  "mutex": {
+    "prefix": "mu",
+    "body": "var mu sync.Mutex\nmu.Lock()\ndefer mu.Unlock()\n$0",
+    "description": "Mutex lock/unlock"
+  },
+  "http handler": {
+    "prefix": "hhf",
+    "body": "func ${1:name}(w http.ResponseWriter, r *http.Request) {\n\t$0\n}",
+    "description": "HTTP handler function"
+  },
+  "http server": {
+    "prefix": "hsrv",
+    "body": "srv := &http.Server{\n\tAddr:    \"${1::8080}\",\n\tHandler: ${2:handler},\n}\nif err := srv.ListenAndServe(); err != nil {\n\tlog.Fatal(err)\n}",
+    "description": "HTTP server"
+  },
+  "json marshal": {
+    "prefix": "jsm",
+    "body": "${1:data}, err := json.Marshal(${2:v})\nif err != nil {\n\treturn ${3:err}\n}",
+    "description": "JSON marshal"
+  },
+  "json unmarshal": {
+    "prefix": "jsu",
+    "body": "if err := json.Unmarshal(${1:data}, &${2:v}); err != nil {\n\treturn ${3:err}\n}",
+    "description": "JSON unmarshal"
+  }
+}
