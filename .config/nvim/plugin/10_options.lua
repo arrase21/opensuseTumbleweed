@@ -42,7 +42,7 @@ vim.o.ignorecase      = true                                  -- Ignore case dur
 vim.o.incsearch       = true                                  -- Show search matches while typing
 
 vim.o.complete        = '.,w,b,kspell'                        -- Use less sources
-vim.o.completeopt     = 'menuone,noselect,fuzzy,nosort,popup' -- Use custom behavior
+vim.o.completeopt     = 'menuone,noinsert,fuzzy,nosort,popup' -- Use custom behavior
 vim.o.completetimeout = 200                                   -- Limit sources delay
 -- o.autocomplete = true
 -- vim.o.complete        = "o,.,w,b,u"
@@ -70,7 +70,6 @@ local diagnostic_opts = {
   virtual_text     = {
     prefix = '󰅚',
     source = "if_many",
-    -- source = "always",
     severity = { min = 'WARN', max = 'ERROR' },
     spacing = 4,
   },

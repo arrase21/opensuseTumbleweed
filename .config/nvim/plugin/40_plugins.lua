@@ -1,11 +1,12 @@
 -- ┌─────────────────────────┐
 -- │ Plugins outside of MINI │
 -- └─────────────────────────┘
-
 local add = vim.pack.add
-local now, later = Config.now_if_args, Config.later
+local now_if_args, later = Config.now_if_args, Config.later
 
-add({ 'https://github.com/nvim-treesitter/nvim-treesitter', })
+now_if_args(function()
+  add({ 'https://github.com/nvim-treesitter/nvim-treesitter', })
+end)
 
 -- ┌─────────────────────────┐
 -- │        Themes           │
@@ -16,7 +17,6 @@ add({ "https://github.com/rebelot/kanagawa.nvim", })
 require('kanagawa').setup({
   transparent = true,
   compile = false,
-
   colors = {
     palette = {},
     theme = {
@@ -30,7 +30,6 @@ require('kanagawa').setup({
       }
     }
   },
-
   overrides = function(colors)
     local theme = colors.theme
     return {
@@ -44,45 +43,50 @@ require('kanagawa').setup({
 })
 -- vim.cmd("colorscheme kanagawa-wave")
 -- GruvBox ==============================================================
-add { "https://gitlab.com/motaz-shokry/gruvbox.nvim" }
-require("gruvbox").setup({
-  enable = {
-    lualine = true,
-  },
-  styles = {
-    bold = true,
-    italic = true,
-    transparency = true,
-  },
-})
--- vim.cmd('colorscheme gruvbox')
-
+now_if_args(function()
+  add { "https://gitlab.com/motaz-shokry/gruvbox.nvim" }
+  require("gruvbox").setup({
+    enable = {
+      lualine = true,
+    },
+    styles = {
+      bold = true,
+      italic = true,
+      transparency = true,
+    },
+  })
+  -- vim.cmd('colorscheme gruvbox')
+end)
 -- Solarized ============================================================
-add { "https://github.com/craftzdog/solarized-osaka.nvim" }
-require("solarized-osaka").setup({ transparent = true })
--- vim.cmd("colorscheme solarized-osaka")
+now_if_args(function()
+  add { "https://github.com/craftzdog/solarized-osaka.nvim" }
+  require("solarized-osaka").setup({ transparent = true })
+  -- vim.cmd("colorscheme solarized-osaka")
+end)
 
 -- TokyoNight ===========================================================
-add({ "https://github.com/folke/tokyonight.nvim" })
-require("tokyonight").setup({
-  transparent = false,
-})
--- vim.cmd('colorscheme tokyonight')
-
+now_if_args(function()
+  add({ "https://github.com/folke/tokyonight.nvim" })
+  require("tokyonight").setup({
+    transparent = false
+  })
+  -- vim.cmd('colorscheme tokyonight')
+end)
 
 --dracula ===============================================================
-add({ "https://github.com/arrase21/dracula.nvim" })
-require("dracula").setup({
-  transparent_bg = true
-})
-vim.cmd('colorscheme dracula')
+now_if_args(function()
+  add({ "https://github.com/arrase21/dracula.nvim" })
+  require("dracula").setup({
+    transparent_bg = true
+  })
+  vim.cmd('colorscheme dracula')
+end)
 
 -- ┌─────────────────────────┐
 -- │           DAP           │
 -- └─────────────────────────┘
 
 -- Dap ==================================================================
-
 later(function()
   add({
     "https://github.com/mfussenegger/nvim-dap",
@@ -94,16 +98,13 @@ later(function()
 
   local dap, dapui = require("dap"), require("dapui")
   local widgets = require("dap.ui.widgets")
-
   dapui.setup()
   require("dap-go").setup()
   require("dap-python").setup("~/.local/share/uv/tools/debugpy/bin/python")
-
   dap.listeners.before.attach.dapui_config = function() dapui.open() end
   dap.listeners.before.launch.dapui_config = function() dapui.open() end
   dap.listeners.before.event_terminated.dapui_config = function() dapui.close() end
   dap.listeners.before.event_exited.dapui_config = function() dapui.close() end
-
   local d_map = {
     b = { dap.toggle_breakpoint, "Toggle Breakpoint" },
     B = { function() dap.set_breakpoint(vim.fn.input("Condition: ")) end, "Conditional Breakpoint" },
@@ -121,11 +122,9 @@ later(function()
     f = { function() widgets.centered_float(widgets.frames) end, "Frames" },
     s = { function() widgets.centered_float(widgets.scopes) end, "Scopes" },
   }
-
   for suffix, conf in pairs(d_map) do
     vim.keymap.set("n", "<leader>d" .. suffix, conf[1], { desc = "DAP: " .. conf[2] })
   end
-  -- Iconos de los signos
   vim.fn.sign_define("DapBreakpoint", { text = "󰃤 ", texthl = "DapBreakpoint" })
   vim.fn.sign_define("DapBreakpointCondition", { text = "󱌢 ", texthl = "DapBreakpointCondition" })
   vim.fn.sign_define("DapStopped", { text = "→", texthl = "DapStopped" })
@@ -136,4 +135,46 @@ later(function()
   add({ "https://github.com/mistweaverco/kulala.nvim" })
   require("kulala").setup()
   vim.api.nvim_set_hl(0, "MiniCursorword", { link = "Visual" })
+end)
+
+now_if_args(function()
+  add({ "https://github.com/ibhagwan/fzf-lua" })
+  require("fzf-lua").setup({
+    winopts = {
+      fullscreen = true,
+      preview = {
+        layout = "vertical",
+        vertical = "up:65%",
+      },
+    },
+    grep_curbuf = {
+      fzf_opts = {
+        ['--exact'] = '',
+        ['--no-sort'] = '',
+      }
+    },
+    files = {
+      fzf_opts = {
+        ['--exact'] = '',
+        ['--no-sort'] = '',
+      }
+    },
+    keymap = {
+      fzf = {
+        ["ctrl-q"] = "select-all+accept",
+      },
+    },
+    diagnostics = {
+      cwd_only       = false,
+      file_icons     = false,
+      git_icons      = false,
+      color_headings = true, -- use diag highlights to color source & filepath
+      diag_icons     = true, -- display icons from diag sign definitions
+      diag_source    = true, -- display diag source (e.g. [pycodestyle])
+      diag_code      = true, -- display diag code (e.g. [undefined])
+      icon_padding   = '',   -- add padding for wide diagnostics signs
+      multiline      = 2,    -- split heading and diag to separate lines
+    }
+  })
+  require("fzf-lua").register_ui_select()
 end)

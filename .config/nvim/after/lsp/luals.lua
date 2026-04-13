@@ -9,6 +9,9 @@ return {
       -- },
       runtime = { version = "LuaJIT" },
       signatureHelp = { enabled = true },
+      semantic = {
+        enable = false, -- desactiva semantic tokens de lua_ls
+      },
     },
   },
 }
