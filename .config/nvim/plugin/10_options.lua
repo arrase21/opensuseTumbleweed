@@ -14,11 +14,11 @@ vim.o.number          = true      -- Absolute line numbers
 vim.o.relativenumber  = true      -- Relative line numbers
 vim.o.cmdheight       = 0         -- Hide command line (use statusline)
 vim.o.confirm         = true      -- Confirm unsaved changes
-vim.opt.winborder     = "rounded" -- Rounded floating windows
-vim.opt.pumborder     = "rounded" -- Rounded floating windows
-vim.opt.showtabline   = 2         -- Always show tabs
-vim.opt.signcolumn    = "yes"     -- Always show sign column
-vim.opt.cursorcolumn  = false     -- Highlight current column
+vim.o.winborder       = "rounded" -- Rounded floating windows
+vim.o.pumborder       = "rounded" -- Rounded floating windows
+vim.o.showtabline     = 2         -- Always show tabs
+vim.o.signcolumn      = "yes"     -- Always show sign column
+vim.o.cursorcolumn    = false     -- Highlight current column
 -- vim.opt.termguicolors = true      -- True color support
 vim.o.cursorline      = true      -- Enable current line highlighting
 vim.o.colorcolumn     = '+1'      -- Draw column on the right of maximum width
@@ -34,15 +34,16 @@ vim.o.foldnestmax     = 10       -- Max fold levels
 vim.o.foldtext        = ''       -- Use default fold text
 
 -- Editing =====================================================================
-vim.opt.tabstop       = 2                                     -- Tab width
+vim.o.tabstop         = 2                                     -- Tab width
 vim.o.expandtab       = true                                  -- Convert tabs to spaces
-vim.opt.shiftwidth    = 2                                     -- Indent width
-vim.opt.smartindent   = true                                  -- Smart auto-indent
+vim.o.shiftwidth      = 2                                     -- Indent width
+vim.o.smartindent     = true                                  -- Smart auto-indent
 vim.o.ignorecase      = true                                  -- Ignore case during search
 vim.o.incsearch       = true                                  -- Show search matches while typing
 
 vim.o.complete        = '.,w,b,kspell'                        -- Use less sources
 vim.o.completeopt     = 'menuone,noinsert,fuzzy,nosort,popup' -- Use custom behavior
+-- vim.o.autocomplete = true
 vim.o.completetimeout = 200                                   -- Limit sources delay
 -- o.autocomplete = true
 -- vim.o.complete        = "o,.,w,b,u"

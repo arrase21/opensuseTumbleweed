@@ -1,12 +1,35 @@
 local now, now_if_args, later = Config.now, Config.now_if_args, Config.later
--- Mini Icons ========================================================================
+
 now(function()
+  -- Mini Session ========================================================================================
+  require('mini.sessions').setup()
+  -- Mini Session ========================================================================================
+  require('mini.cursorword').setup()
+  -- Mini Notify =========================================================================================
+  require('mini.notify').setup()
+  -- Mini tabline ========================================================================================
+  require('mini.tabline').setup()
+  -- Mini Clue ===========================================================================================
+  local miniclue = require('mini.clue')
+  miniclue.setup({
+    window = {
+      delay = 100,
+    },
+    clues = {
+      Config.leader_group_clues,
+      miniclue.gen_clues.g(),
+      miniclue.gen_clues.registers(),
+    },
+    triggers = {
+      { mode = 'n', keys = '<Leader>' }, -- Leader triggers
+      { mode = 'n', keys = 'g' },        -- `g` key
+    },
+  })
+  -- Mini Icons ============================================================================================
   local ext3_blocklist = { scm = true, txt = true, yml = true }
   local ext4_blocklist = { json = true, yaml = true }
   require('mini.icons').setup({
-    filetype = {
-      go = { glyph = "" }
-    },
+    filetype = { go = { glyph = "" } },
     use_file_extension = function(ext, _)
       return not (ext3_blocklist[ext:sub(-3)] or ext4_blocklist[ext:sub(-4)])
     end,
@@ -15,33 +38,51 @@ now(function()
   later(MiniIcons.tweak_lsp_kind)
 end)
 
--- Mini Misc ==========================================================================
+--Later =====================================================================================================
+later(function()
+  -- Mini Visits ============================================================================================
+  require('mini.visits').setup()
+  -- Mini Extra =============================================================================================
+  require('mini.extra').setup()
+  -- Mini Comment ===========================================================================================
+  require('mini.comment').setup()
+  -- Mini Pick ==============================================================================================
+  require('mini.pick').setup()
+  -- Mini Surroud ===========================================================================================
+  require('mini.surround').setup()
+  -- Mini Git ===============================================================================================
+  require('mini.git').setup()
+  -- Mini Diff ===============================================================================================
+  require('mini.diff').setup({ view = { style = "sign", signs = { add = '󰄛', change = '▒', delete = '消' }, } })
+  -- Mini Pairs ==============================================================================================
+  require('mini.pairs').setup({ modes = { command = true } })
+  -- Mini indentscope ========================================================================================
+  require('mini.indentscope').setup({ symbol = "▏", })
+  -- Mini Keymap =============================================================================================
+  require('mini.keymap').setup()
+  MiniKeymap.map_multistep('i', '<Tab>', { 'pmenu_next' })
+  MiniKeymap.map_multistep('i', '<CR>', { 'pmenu_accept', 'minipairs_cr' })
+  MiniKeymap.map_multistep('i', '<BS>', { 'minipairs_bs' })
+end)
+
 now_if_args(function()
+  -- Mini Files ===============================================================================================
+  require('mini.files').setup({
+    windows = {
+      preview = true,
+      width_preview = 85,
+    },
+    mappings = {
+      go_in_plus = "<CR>",
+      synchronize = "<Leader>w",
+    },
+  })
+  -- Mini Misc =================================================================================================
   require('mini.misc').setup()
   MiniMisc.setup_auto_root()
   MiniMisc.setup_restore_cursor()
   MiniMisc.setup_termbg_sync()
-end)
--- Mini Session ========================================================================
-now(function() require('mini.sessions').setup() end)
-
--- Mini Notify ==========================================================================
-now(function() require('mini.notify').setup() end)
-
--- Mini tabline ==========================================================================
-now(function() require('mini.tabline').setup() end)
-
--- Mini Visits ==========================================================================
-later(function() require('mini.visits').setup() end)
-
--- Mini Extra ============================================================================
-later(function() require('mini.extra').setup() end)
-
--- Mini Comment ==========================================================================
-later(function() require('mini.comment').setup() end)
-
--- Mini Completion =======================================================================
-now_if_args(function()
+  -- Mini Completion ===========================================================================================
   local process_items_opts = { kind_priority = { Text = -1, Snippet = 99 } }
   local process_items = function(items, base)
     return MiniCompletion.default_process_items(items, base, process_items_opts)
@@ -60,90 +101,41 @@ now_if_args(function()
   vim.lsp.config('*', { capabilities = MiniCompletion.get_lsp_capabilities() })
 end)
 
--- Mini Keymap ========================================================================
-later(function()
-  require('mini.keymap').setup()
-  MiniKeymap.map_multistep('i', '<Tab>', { 'pmenu_next' })
-  MiniKeymap.map_multistep('i', '<CR>', { 'pmenu_accept', 'minipairs_cr' })
-  MiniKeymap.map_multistep('i', '<BS>', { 'minipairs_bs' })
-end)
--- Mini Diff ========================================================================
-later(function()
-  require('mini.diff').setup({
-    view = {
-      style = "sign",
-      signs = { add = '󰄛', change = '▒', delete = '消' },
-    }
-  })
-end)
+-- Mini Starter ====================================================================================================
+Mvim_starter_custom = function()
+  return {
+    { name = "Quit Neovim", action = "qa",                                                    section = "", },
+    { name = "Old Files",   action = function() require("mini.extra").pickers.oldfiles() end, section = "" },
+  }
+end
+require("mini.starter").setup({
+  autoopen = true,
+  items = {
+    Mvim_starter_custom(),
+    require("mini.starter").sections.recent_files(4, false, false),
+    require("mini.starter").sections.sessions(4, false, false),
+    -- require("mini.starter").sections.quit(3, false, false),
+  },
+  header = function()
+    local image = [[
+    ┌─────────────────────────────────────────────────────┐
+    │                                                     │
+    │    █████╗ ██████╗ ██████╗  █████╗ ███████╗███████╗  │
+    │   ██╔══██╗██╔══██╗██╔══██╗██╔══██╗██╔════╝██╔════╝  │
+    │   ███████║██████╔╝██████╔╝███████║███████╗█████╗    │
+    │   ██╔══██║██╔══██╗██╔══██╗██╔══██║╚════██║██╔══╝    │
+    │   ██║  ██║██║  ██║██║  ██║██║  ██║███████║███████╗  │
+    │   ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚══════╝  │
+    │                       ARRASE                        │
+    └─────────────────────────────────────────────────────┘
+    ]]
+    return image
+  end,
+  footer = "",
+  query_updater = false,
+})
 
--- Mini Files ========================================================================
-now_if_args(function()
-  require('mini.files').setup({
-    windows = {
-      preview = true,
-      width_preview = 85,
-    },
-  })
-end)
-
--- Mini Git ========================================================================
-later(function() require('mini.git').setup() end)
-
--- Mini indentscope ========================================================================
-later(function()
-  require('mini.indentscope').setup({
-    symbol = "▏",
-  })
-end)
--- Mini Pairs ========================================================================
-later(function()
-  require('mini.pairs').setup({ modes = { command = true } })
-end)
-
--- Mini Pick ========================================================================
-later(function() require('mini.pick').setup() end)
-
--- Mini Surroud ========================================================================
-later(function() require('mini.surround').setup() end)
-
--- Mini Clue ========================================================================
-now(function()
-  local miniclue = require('mini.clue')
-  miniclue.setup({
-    window = {
-      delay = 100,
-      scroll_down = '<C-d>',
-      scroll_up = '<C-u>',
-    },
-    clues = {
-      Config.leader_group_clues,
-      miniclue.gen_clues.builtin_completion(),
-      miniclue.gen_clues.g(),
-      miniclue.gen_clues.marks(),
-      miniclue.gen_clues.registers(),
-      miniclue.gen_clues.windows({ submode_resize = true }),
-      miniclue.gen_clues.z(),
-    },
-    triggers = {
-      { mode = 'n', keys = '<Leader>' }, -- Leader triggers
-      { mode = 'n', keys = [[\]] },      -- mini.basics
-      { mode = 'n', keys = '[' },        -- mini.bracketed
-      { mode = 'n', keys = ']' },
-      { mode = 'i', keys = '<C-x>' },    -- Built-in completion
-      { mode = 'n', keys = 'g' },        -- `g` key
-      { mode = 'n', keys = "'" },        -- Marks
-      { mode = 'n', keys = '`' },
-      { mode = 'n', keys = '"' },        -- Registers
-      { mode = 'i', keys = '<C-r>' },
-      { mode = 'c', keys = '<C-r>' },
-      { mode = 'n', keys = '<C-w>' }, -- Window commands
-      { mode = 'n', keys = 'z' },     -- `z` key
-    },
-  })
-end)
-
--- Mini Statusline ========================================================================
+-- Mini Statusline ================================================================================================
 local function set_hl()
   for name, opts in pairs({
     SLSepGreen  = { fg = '#50FA7B', bg = 'none' },
@@ -223,38 +215,4 @@ require('mini.statusline').setup({
     end,
     inactive = function() return '%#SLInfo# %f %=' end,
   },
-})
-
--- Mini Starter ========================================================================
-Mvim_starter_custom = function()
-  return {
-    { name = "Quit Neovim", action = "qa",                                                    section = "", },
-    { name = "Old Files",   action = function() require("mini.extra").pickers.oldfiles() end, section = "" },
-  }
-end
-require("mini.starter").setup({
-  autoopen = true,
-  items = {
-    Mvim_starter_custom(),
-    require("mini.starter").sections.recent_files(4, false, false),
-    require("mini.starter").sections.sessions(4, false, false),
-    -- require("mini.starter").sections.quit(3, false, false),
-  },
-  header = function()
-    local image = [[
-    ┌─────────────────────────────────────────────────────┐
-    │                                                     │
-    │    █████╗ ██████╗ ██████╗  █████╗ ███████╗███████╗  │
-    │   ██╔══██╗██╔══██╗██╔══██╗██╔══██╗██╔════╝██╔════╝  │
-    │   ███████║██████╔╝██████╔╝███████║███████╗█████╗    │
-    │   ██╔══██║██╔══██╗██╔══██╗██╔══██║╚════██║██╔══╝    │
-    │   ██║  ██║██║  ██║██║  ██║██║  ██║███████║███████╗  │
-    │   ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚══════╝  │
-    │                       ARRASE                        │
-    └─────────────────────────────────────────────────────┘
-    ]]
-    return image
-  end,
-  footer = "",
-  query_updater = false,
 })

@@ -25,7 +25,7 @@ pango-devel gdk-pixbuf-devel cairo-devel libepoxy-devel
 
 wayland_pkgs="
 grim slurp swappy wl-clipboard cliphist waybar hyprlock mako swayidle
-mpv mpv-mpris npm-default meson rust cargo SwayNotificationCenter swww 
+mpv mpv-mpris npm-default meson rust cargo SwayNotificationCenter awww 
 wlogout nwg-look swaybg polkit-gnome sox ImageMagick
 "
 
@@ -43,37 +43,37 @@ meson ninja gcc make
 # FUNCIONES INSTALL
 ##################################
 
-add_repositories() {
-  title "Adding external repositories"
-  step "Adding DankLinux repository"
-  if ! zypper lr | grep -q "danklinux"; then
-    sudo zypper addrepo https://download.opensuse.org/repositories/home:AvengeMedia:danklinux/openSUSE_Tumbleweed/home:AvengeMedia:danklinux.repo
-    ok "DankLinux repo added"
-  else
-    echo "  ℹ️  DankLinux repo already exists"
-  fi
-  step "Adding DMS repository"
-  if ! zypper lr | grep -q "dms"; then
-    sudo zypper addrepo https://download.opensuse.org/repositories/home:/AvengeMedia:/dms/openSUSE_Tumbleweed/home:AvengeMedia:dms.repo
-    ok "DMS repo added"
-  else
-    echo "  ℹ️  DMS repo already exists"
-  fi
-  
-  step "Refreshing repositories"
-  sudo zypper refresh
-  ok "Repositories refreshed"
-}
+# add_repositories() {
+#   title "Adding external repositories"
+#   step "Adding DankLinux repository"
+#   if ! zypper lr | grep -q "danklinux"; then
+#     sudo zypper addrepo https://download.opensuse.org/repositories/home:AvengeMedia:danklinux/openSUSE_Tumbleweed/home:AvengeMedia:danklinux.repo
+#     ok "DankLinux repo added"
+#   else
+#     echo "  ℹ️  DankLinux repo already exists"
+#   fi
+#   step "Adding DMS repository"
+#   if ! zypper lr | grep -q "dms"; then
+#     sudo zypper addrepo https://download.opensuse.org/repositories/home:/AvengeMedia:/dms/openSUSE_Tumbleweed/home:AvengeMedia:dms.repo
+#     ok "DMS repo added"
+#   else
+#     echo "  ℹ️  DMS repo already exists"
+#   fi
+#
+#   step "Refreshing repositories"
+#   sudo zypper refresh
+#   ok "Repositories refreshed"
+# }
 
-install_dms() {
-  title "Installing DMS (Display Manager Selector)"
-  if ! command -v dms >/dev/null 2>&1; then
-    sudo zypper install -y dms
-    ok "DMS installed"
-  else
-    echo "  ℹ️  DMS already installed"
-  fi
-}
+# install_dms() {
+#   title "Installing DMS (Display Manager Selector)"
+#   if ! command -v dms >/dev/null 2>&1; then
+#     sudo zypper install -y dms
+#     ok "DMS installed"
+#   else
+#     echo "  ℹ️  DMS already installed"
+#   fi
+# }
 
 install_dependencies() {
   title "Installing dependencies"
@@ -102,12 +102,9 @@ copy_configs() {
   BASE="$HOME/repos/opensuseTumbleweed"
   mkdir -p "$HOME/.config" "$HOME/.local" "$HOME/Pictures"
   
-  # -a = archive (preserva permisos, timestamps, etc)
-  # --no-perms = evita problemas de permisos en home
   rsync -a --no-perms "$BASE/.config/" "$HOME/.config/" 2>/dev/null || true
   rsync -a --no-perms "$BASE/.local/" "$HOME/.local/" 2>/dev/null || true
   
-  # Carpetas sin punto inicial (verifica que existan primero)
   [ -d "$BASE/.themes" ] && rsync -a --no-perms "$BASE/.themes/" "$HOME/.themes/" 2>/dev/null || true
   [ -d "$BASE/.icons" ] && rsync -a --no-perms "$BASE/.icons/" "$HOME/.icons/" 2>/dev/null || true
   [ -d "$BASE/wallpapers" ] && rsync -a --no-perms "$BASE/wallpapers/" "$HOME/Pictures/wallpapers/" 2>/dev/null || true
@@ -118,10 +115,8 @@ copy_configs() {
 setup_xdg_dirs() {
   title "Configurando XDG user directories"
   
-  # Actualizar directorios XDG
   xdg-user-dirs-update
   
-  # Si tienes un archivo personalizado en tu repo, copiarlo
   if [ -f "$HOME/repos/opensuseTumbleweed/.config/user-dirs.dirs" ]; then
     cp "$HOME/repos/opensuseTumbleweed/.config/user-dirs.dirs" "$HOME/.config/"
     xdg-user-dirs-update
@@ -271,8 +266,8 @@ main() {
   clear
   title "Mangowc Installer"
 
-  add_repositories
-  install_dms
+  # add_repositories
+  # install_dms
   install_dependencies
   clone_dotfiles
   copy_configs

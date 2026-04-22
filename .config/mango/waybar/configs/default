@@ -1,10 +1,18 @@
 {
+
+"include": [
+  "$HOME/.config/mango/waybar/Modules",
+  "$HOME/.config/mango/waybar/ModulesWorkspaces",
+  "$HOME/.config/mango/waybar/ModulesCustom",
+  "$HOME/.config/mango/waybar/ModulesGroups",
+  ],
+
   "reload_style_on_change": true,
   "layer": "top",
   "position": "top",
   "spacing": 0,
   "height": 22,
-  "modules-left": ["custom/menu","ext/workspaces"],
+  "modules-left": ["custom/menu","ext/workspaces#default"],
   "modules-center": ["clock", "custom/update", "custom/screenrecording-indicator"],
   "modules-right": [
     "custom/mpris",
@@ -18,266 +26,11 @@
     "battery",
     "custom/power"
   ],
-  "custom/menu":{
-    "format": " |",
-    "on-click":"rofi -config $HOME/.config/mango/rofi/config.rasi -show drun",
-  },
-
+  
   // "dwl/tags": {
   //   "num-tags": 9,
   //   "tag-labels": [" ","󰈹 "," "," "," "," "," "," ","󰠮 "],
   //   "hide-vacant": true
   // },
-    "ext/workspaces": {
-      "format": "{icon}",
-      "ignore-hidden": false,
-      "on-click": "activate",
-      "on-click-right": "deactivate",
-      "on-scroll-up":"mmsg -d viewtoleft_have_client",
-      "on-scroll-down":"mmsg -d viewtoright_have_client",
-      "disable-scroll": true,
-    "format-icons": {
-      "1": "",
-      "2": "",
-      "3": "",
-      "4": "",
-      "5": "",
-      "6": "",
-      "7": "",
-      "8": "",
-      "9": "",
-      "10": ""
-    }
-  },
-  "backlight": {
-    "interval": 2,
-    "device": "amdgpu_bl0",
-    "format": "{icon}",
-    "format-icons": [
-      "󰖔 ",
-      "󰖨 "
-    ],
-    "on-click": "bash -c '$HOME/.config/mango/scripts/Sunset.sh'",
-    "on-scroll-up": "$HOME/.config/mango/scripts/Brightness.sh --inc",
-    "on-scroll-down": "$HOME/.config/mango/scripts/Brightness.sh --dec",
-    "smooth-scrolling-threshold": 1
-  },
 
-  "cpu": {
-    "format": "󰍛 {usage}% ",
-    "interval": 1,
-    "min-length": 5,
-    "format-alt-click": "click",
-    "format-alt": "{icon0}{icon1}{icon2}{icon3} {usage:>2}% 󰍛",
-    "format-icons": [
-      "▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"
-    ],
-    "on-click-right": "xdg-terminal-exec btop"
-  },
-
-  "memory": {
-    "interval": 10,
-    "format": "{used:0.1f}G󰾆 ",
-    "format-alt": "{percentage}%󰾆 ",
-    "format-alt-click": "click",
-    "tooltip": true,
-    "tooltip-format": "{used:0.1f}GB/{total:0.1f}G",
-    "on-click-right": "xdg-terminal-exec btop"
-  },
-
-  "temperature": {
-    "critical-threshold": 90,
-    "format": "{icon}{temperatureC}°C",
-    "tooltip": true,
-    "format-icons": ["󰈸"]
-  },
-  
-  "custom/power": {
-    "format": "",
-    "tooltip": false,
-    "on-click": "wlogout -C ~/.config/mango/wlogout/style.css -l  ~/.config/mango/wlogout/layout  -b 6 --protocol layer-shell",
-    "on-click-right": "foot --app-id=power-term -e bash ~/.config/mango/scripts/power_profile.sh",
-    "menu-file": "foot --app-id=power-term -e bash ~/.config/mango/scripts/power_profile.sh",
-    "menu-actions": {
-      "performance": "foot --app-id=power-term -e bash ~/.config/mango/scripts/power_profile.sh",
-      "schedutil": "bash ~/.config/mango/scripts/power-profile --schedutil"
-    }
-  },
-  
-  "clock": {
-    "format": "{:%H:%M} ",
-    "format-alt": "{  %d·%m·%y}",
-    "tooltip-format": "<span>{calendar}</span>",
-    "calendar": {
-      "mode": "month",
-      "format": {
-        "months": "<span color='#ff6699'><b>{}</b></span>",
-        "days": "<span color='#cdd6f4'><b>{}</b></span>",
-        "weekdays": "<span color='#7CD37C'><b>{}</b></span>",
-        "today": "<span color='#ffcc66'><b>{}</b></span>"
-      }
-    }
-  },
-
-
-  "network": {
-    "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
-    "format": "{icon}",
-    "format-wifi": "{icon}",
-    "format-ethernet": "󰀂",
-    "format-disconnected": "󰤮",
-    "tooltip-format-wifi": "{essid} ({frequency} GHz)\n⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}",
-    "tooltip-format-ethernet": "⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}",
-    "tooltip-format-disconnected": "Disconnected",
-    "interval": 3,
-    "spacing": 1,
-    "on-click": "foot --app-id=wifi-term -e bash ~/.config/mango/scripts/wifi-gum.sh"
-  },
-
-  "battery": {
-    "format": "{capacity}% {icon}",
-    "format-discharging": "{icon}",
-    "format-charging": "{icon}",
-    "format-plugged": "",
-    "format-icons": {
-      "charging": ["󰢜", "󰂆", "󰂇", "󰂈", "󰢝", "󰂉", "󰢞", "󰂊", "󰂋", "󰂅"],
-      "default": ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
-    },
-    "format-full": "󰂅",
-    "tooltip-format-discharging": "{power:>1.0f}W↓ {capacity}%",
-    "tooltip-format-charging": "{power:>1.0f}W↑ {capacity}%",
-    "interval": 5,
-    "on-click": "foot --app-id=blue-term -e bash ~/.config/mango/scripts/blue.sh",
-    "states": {
-      "warning": 20,
-      "critical": 10
-    }
-  },
-
-  "bluetooth": {
-    "format": "",
-    "format-disabled": "󰂲",
-    "format-connected": "",
-    "tooltip-format": "Devices connected: {num_connections}",
-    "on-click": "foot --app-id=blue-term -e bluetui"
-  },
-
-  "group/motherboard": {
-	  "orientation": "horizontal",
-    "drawer": {
-      "transition-duration": 500,
-      "children-class": "cpu",
-      "transition-left-to-right": true
-    },
-	  "modules": [
-		  "cpu",
-		  "memory",
-		  "temperature",
-    ]
-  },
-  "group/audio": {
-    "orientation": "inherit",
-    "drawer": {
-      "transition-duration": 500,
-      "children-class": "pulseaudio",
-      "transition-left-to-right": true
-    },
-    "modules": [
-      "pulseaudio",
-      "pulseaudio#microphone"
-    ]
-  },
-  
-  "pulseaudio": {
-    "format": "{icon}",
-    "format-bluetooth": "{icon} 󰂰 {volume}",
-    "format-muted": "󰖁",
-    "format-icons": {
-      "headphone": "",
-      "hands-free": "",
-      "headset": "",
-      "phone": "",
-      "portable": "",
-      "car": "",
-      "default": [
-        "",
-        "",
-        "󰕾",
-        ""
-      ],
-      "ignored-sinks": [
-        "Easy Effects Sink"
-      ]
-    },
-    "scroll-step": 5.0,
-    "on-click": "$HOME/.config/mango/scripts/Volume.sh --toggle",
-    "on-click-right": "pavucontrol -t 3",
-    "on-scroll-up": "$HOME/.config/mango/scripts/Volume.sh --inc",
-    "on-scroll-down": "$HOME/.config/mango/scripts/Volume.sh --dec",
-    "tooltip-format": "{icon} {desc} | {volume}%",
-    "smooth-scrolling-threshold": 1
-  },
-  
-  "pulseaudio#microphone": {
-    "format": "{format_source}",
-    "format-source": "",
-    "format-source-muted": "",
-    "on-click": "$HOME/.config/mango/scripts/Volume.sh --toggle-mic",
-    "on-click-right": "pavucontrol -t 4",
-    "on-scroll-up": "$HOME/.config/mango/scripts/Volume.sh --mic-inc",
-    "on-scroll-down": "$HOME/.config/mango/scripts/Volume.sh --mic-dec",
-    "tooltip-format": "{icon} {desc} | {volume}%",
-    "scroll-step": 5
-  },
-
-  "group/tray-expander": {
-    "orientation": "inherit",
-    "drawer": {
-      "transition-duration": 600,
-      "children-class": "tray-group-item"
-    },
-    "modules": ["custom/expand-icon", "tray"]
-  },
-  "custom/expand-icon": {
-    "format": "",
-    "tooltip": false
-  },
-
-  "custom/screenrecording-indicator": {
-    "on-click": "cmd-screenrecord",
-    "exec": "~/.config/mango/waybar/indicators/screen-recording.sh",
-    "signal": 8,
-    "return-type": "json"
-  },
-
-  "tray": {
-    "icon-size": 12,
-    "spacing": 17
-  },
-
-"custom/mtp": {
-    "exec": "/home/arrase/.local/bin/waybar-android.sh",
-    "on-click": "/home/arrase/.local/bin/mtp-auto-mount.sh mount",
-    "on-click-right": "/home/arrase/.local/bin/mtp-auto-mount.sh umount",
-    "interval": 5
-},
-  "custom/weather": {
-    "format": "{}",
-    "format-alt": "{alt}: {}",
-    "format-alt-click": "click",
-    "interval": 3600,
-    "return-type": "json",
-    "exec": "$HOME/.config/hypr/UserScripts/WeatherWrap.sh",
-    "tooltip": true,
-  },
-
-"custom/mpris": {
-    "exec": "python3 -u ~/.local/bin/scroll.py",
-    "format": "{text}",
-    "return-type": "json",
-    // "on-click": "eww close music-widget && eww open music-widget",
-    "on-click": "~/.config/eww/get-widget.sh",
-    "on-click-middle": "playerctl -a play-pause",
-    "on-click-right": "playerctl -a previous"
-  }
 }

@@ -1,4 +1,3 @@
-
 * {
 	font-family: "JetBrainsMono Nerd Font";
 	font-weight: bold;
@@ -106,7 +105,9 @@ tooltip label {
 #custom-lock,
 #custom-hint,
 #custom-hypridle,
-#custom-menu,
+#custom-menu{
+  color: @textcolor3;
+}
 #custom-playerctl,
 #custom-power_vertical,
 #custom-power,

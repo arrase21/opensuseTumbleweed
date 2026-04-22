@@ -70,6 +70,7 @@ change_theme() {
     echo "Advertencia: $THEME_FILE no existe"
   fi
 
+  paplay /usr/share/sounds/freedesktop/stereo/message.oga &
   sleep 1
   echo "Tema cambiado a '$chosen'"
 }

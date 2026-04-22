@@ -17,6 +17,28 @@
 		"default": "",
 	},
 },
+// Default
+"ext/workspaces#default": {
+      "format": "{icon}",
+      "ignore-hidden": false,
+      "on-click": "activate",
+      "on-click-right": "deactivate",
+      "on-scroll-up":"mmsg -d viewtoleft_have_client",
+      "on-scroll-down":"mmsg -d viewtoright_have_client",
+      "disable-scroll": true,
+    "format-icons": {
+      "1": "",
+      "2": "",
+      "3": "",
+      "4": "",
+      "5": "",
+      "6": "",
+      "7": "",
+      "8": "",
+      "9": "",
+      "10": ""
+    }
+  },
 
 // ROMAN Numerals style
 "ext/workspaces#roman": {

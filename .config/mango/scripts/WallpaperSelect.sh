@@ -152,7 +152,7 @@ TYPE="any"
 DURATION=2
 SWWW_PARAMS="--transition-fps $FPS --transition-type $TYPE --transition-duration $DURATION"
 
-swww query || swww-daemon --format xrgb
+awww query || awww-daemon --format xrgb
 
 # -------------------------------------------------
 # Aplicar wallpaper
@@ -164,17 +164,18 @@ if [[ -n "$wall_selection" ]]; then
 
     cp "$selected" ~/.config/wall.png
 
-    swww img -o "$focused_monitor" "$selected" $SWWW_PARAMS
+    awww img -o "$focused_monitor" "$selected" $SWWW_PARAMS
 
     # 👉 colores
     "$scriptsDir/WallustSwww" --dark
-    matugen image "$selected" --mode dark --source-color-index 0
+    matugen image "$selected" -m dark --source-color-index 0
 
     # 👉 recargar waybar
+    killall waybar
     if pgrep -x waybar >/dev/null; then
         pkill -SIGUSR2 waybar
     else
-        waybar &
+        waybar -c ~/.config/mango/waybar/config -s ~/.config/mango/waybar/style.css &
     fi
 
     # 👉 recargar swaync
@@ -183,4 +184,5 @@ if [[ -n "$wall_selection" ]]; then
     "$scriptsDir/mako.sh" 2>/dev/null || true
 
     notify-send "Wallpaper cambiado" "$wall_selection" -i "$selected"
+    mpv /usr/share/sounds/freedesktop/stereo/message.oga &
 fi

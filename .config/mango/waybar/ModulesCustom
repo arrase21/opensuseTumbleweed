@@ -1,5 +1,4 @@
 {
-
   "custom/menu":{
     "format": " |",
     "on-click":"rofi -config $HOME/.config/mango/rofi/config.rasi -show drun",
@@ -46,7 +45,7 @@
     "on-click-right": "playerctl -a previous"
   },
 
-  "custom/weather": {
+"custom/weather": {
     "format": "{}",
     "format-alt": "{alt}: {}",
     "format-alt-click": "click",

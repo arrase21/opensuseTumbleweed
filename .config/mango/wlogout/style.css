@@ -1,9 +1,13 @@
+@import "colors.css";
+@define-color textcolor @error;
+@define-color background @on_secondary;
+
 window {
     font-family: HYLeMiaoTiJ,CaskaydiaCove Nerd Font, monospace;
     font-size: 12pt;
     font-weight: bold;
-    color: #f4dfcd; 
-    background-color: rgba(46, 42, 30, 0.69);
+    color: @background; 
+    background-color: alpha(@background, 0.68);
 }
 
 button {
@@ -12,10 +16,10 @@ button {
     font-size: 20px;
     background-size: 60%;
     border: none;
-    color: #d5b497;
+    color: @textcolor;
     text-shadow: none;
     border-radius: 20px 20px 20px 20px;
-    background-color: rgba(121, 81, 1, 0);
+    background-color: alpha(@textcolor, 0);
     margin-top: 60px;
     margin-bottom: 60px;
     transition: all 0.3s cubic-bezier(.55, 0.0, .28, 1.682), box-shadow 0.5s ease-in;

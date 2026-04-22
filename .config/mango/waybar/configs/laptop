@@ -1,5 +1,4 @@
 {
-
 "include": [
   "$HOME/.config/mango/waybar/Modules",
   "$HOME/.config/mango/waybar/ModulesWorkspaces",
@@ -15,9 +14,9 @@
 "spacing": 3,
 "fixed-center": true,
 "ipc": true,
-"margin-top": 3,
-"margin-left": 8,
-"margin-right": 8,
+"margin-top": 0,
+"margin-left": 0,
+"margin-right": 0,
 
 "modules-left": [
 	"ext/workspaces#pacman",
@@ -30,7 +29,6 @@
 	"custom/separator#dot-line",
 	"custom/weather",
 	"custom/separator#blank_3",
-	"custom/cava_mviz",
 	],
 
 "modules-center": [
@@ -44,12 +42,12 @@
 	], 
 
 "modules-right": [
+	"custom/mpris", 
 	"network",
 	"custom/separator#dot-line",
 	"group/notify",
   "custom/expand-icon",
 	"tray",
-	"mpris", 
 	"custom/separator#dot-line",
 	"bluetooth",
 	"custom/separator#dot-line", 

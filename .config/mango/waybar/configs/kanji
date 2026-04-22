@@ -10,26 +10,18 @@
 "exclusive": true,
 "passthrough": false,
 "position": "top",
-"height": 18,
 
 "modules-left": [
 	"custom/menu",
-	"custom/light_dark",
-	"custom/separator#dot-line",
-	"power-profiles-daemon",
   "custom/separator#blank",
-  "group/motherboard",
+  "cpu",
+  "memory",
+  "temperature",
 	"custom/separator#line",
 	"custom/weather",
-  "mpd#2",
-  "mpd#3",
-  "mpd#4",
-  "mpd"
 	],
 
 "modules-center": [
-	"group/notify",
-	"custom/cava_mviz",
 	"custom/separator#dot-line",
 	"clock",
 	"custom/separator#line",
@@ -42,6 +34,8 @@
   "group/tray-expander",
   "custom/separator#line",
 	"network",
+	"custom/separator#line",
+	"bluetooth",
 	"custom/separator#line",
 	"group/audio",
 	"custom/separator#line",

@@ -1,5 +1,3 @@
-/* Colores para el tema catppuccin */
-
 /* @import url('./wallust/colors-waybar.css'); */
 @import url('./matugen/matugen-waybar.css');
 
@@ -11,17 +9,15 @@
 /* @define-color foreground #585858; */
 /* @define-color background #282828; */
 
-
 @define-color bordercolor @on_secondary;
 @define-color textcolor1 @inverse_primary;
-@define-color textcolor3 @primary;
+@define-color textcolor3 @primary_fixed_dim;
 @define-color textcolor2 @on_primary_container;
 @define-color textcolor4 @inverse_primary;
 @define-color textcolor5 @tertiary;
-@define-color textcolor6 @on_error_container;
+@define-color textcolor6 @on_tertiary_container;
 @define-color foreground #585858;
-@define-color background #1e1e2a;
-
+@define-color background @surface_dim;
 
 * {
   background-color:@background;
@@ -51,7 +47,7 @@
     padding: 0px 6px;
     margin: 0px 1.5px;
     border-radius: 3px 3px 3px 3px;
-    color: @textcolor4;
+    color: @textcolor3;
     background-color: @background;
     transition: all 0.1s linear;
 }
@@ -65,7 +61,7 @@
 
 #taskbar button.hidden,
 #workspaces button.hidden {
-    color: @textcolor2;
+    color: @textcolor6;
     /* background: @foreground; */
     border-radius: 3px 3px 3px 3px;
     min-width: 9px;
@@ -91,15 +87,15 @@
 #custom-mtp,
 
 #cpu {
-  margin-right: 6px;
+  margin:0px 6px;
   color: @textcolor3;
 }
 #temperature{
-  margin-right: 6px;
+  margin:0px 6px;
   color: @textcolor3;
 }
 #memory{
-  margin-right: 6px;
+  margin:0px 6px;
     color: @textcolor3;
 }
 
@@ -115,7 +111,9 @@
   padding:0px 2px;
   margin:0px 5px;
 }
-#custom-menu,
+#custom-menu{
+  color:@textcolor1;
+}
 #custom-screenrecording-indicator,
 #custom-update {
   min-width: 12px;
@@ -127,14 +125,12 @@
 }
 
 #bluetooth {
-  padding:0px 2px;
   margin:0px 5px;
   color:  @textcolor5;
 }
 
 #network {
   color:  @textcolor5;
-  padding:0px 2px;
   margin:0px 5px;
 }
 

@@ -26,6 +26,7 @@
     "on-click-right": "xdg-terminal-exec btop"
   },
 
+
   "memory": {
     "interval": 10,
     "format": "{used:0.1f}G󰾆 ",
@@ -69,10 +70,11 @@
     "tooltip-format-disconnected": "Disconnected",
     "interval": 3,
     "spacing": 1,
-    "on-click": "foot --app-id=wifi-term -e bash ~/.config/mango/scripts/wifi-gum.sh"
+    //"on-click": "foot --app-id=wifi-term -e bash ~/.config/mango/scripts/wifi-gum.sh"
+    "on-click": "foot --app-id=wifi-term -e bash gazelle"
   },
 
-  "battery": {
+    "battery": {
     "format": "{capacity}% {icon}",
     "format-discharging": "{icon}",
     "format-charging": "{icon}",
@@ -85,7 +87,6 @@
     "tooltip-format-discharging": "{power:>1.0f}W↓ {capacity}%",
     "tooltip-format-charging": "{power:>1.0f}W↑ {capacity}%",
     "interval": 5,
-    "on-click": "foot --app-id=blue-term -e bash ~/.config/mango/scripts/blue.sh",
     "states": {
       "warning": 20,
       "critical": 10
@@ -97,10 +98,10 @@
     "format-disabled": "󰂲",
     "format-connected": "",
     "tooltip-format": "Devices connected: {num_connections}",
-    "on-click": "foot --app-id=blue-term -e bash ~/.config/mango/scripts/bluethoot.sh"
+    "on-click": "foot --app-id=blue-term -e bluetui"
   },
 
- "pulseaudio": {
+  "pulseaudio": {
     "format": "{icon}",
     "format-bluetooth": "{icon} 󰂰 {volume}",
     "format-muted": "󰖁",
@@ -123,7 +124,8 @@
     },
     "scroll-step": 5.0,
     "on-click": "$HOME/.config/mango/scripts/Volume.sh --toggle",
-    "on-click-right": "pavucontrol -t 3",
+    //"on-click-right": "pavucontrol -t 3",
+    "on-click-right": "foot --app-id=wifi-term wiremix",
     "on-scroll-up": "$HOME/.config/mango/scripts/Volume.sh --inc",
     "on-scroll-down": "$HOME/.config/mango/scripts/Volume.sh --dec",
     "tooltip-format": "{icon} {desc} | {volume}%",
@@ -135,12 +137,15 @@
     "format-source": "",
     "format-source-muted": "",
     "on-click": "$HOME/.config/mango/scripts/Volume.sh --toggle-mic",
-    "on-click-right": "pavucontrol -t 4",
+    //"on-click-right": "pavucontrol -t 4",
+    "on-click-right": "foot --app-id=wifi-term wiremix",
+    //"on-click-right": "foot --app-id=wifi-term -e bash wiremix",
     "on-scroll-up": "$HOME/.config/mango/scripts/Volume.sh --mic-inc",
     "on-scroll-down": "$HOME/.config/mango/scripts/Volume.sh --mic-dec",
     "tooltip-format": "{icon} {desc} | {volume}%",
     "scroll-step": 5
   },
+
 
  "tray": {
     "icon-size": 12,

@@ -47,15 +47,16 @@ now_if_args(function()
   add { "https://gitlab.com/motaz-shokry/gruvbox.nvim" }
   require("gruvbox").setup({
     enable = {
-      lualine = true,
+      -- lualine = true,
+      statusline = true,
     },
     styles = {
       bold = true,
       italic = true,
-      transparency = true,
+      -- transparency = true,
     },
   })
-  -- vim.cmd('colorscheme gruvbox')
+  -- vim.cmd('colorscheme gruvbox-hard')
 end)
 -- Solarized ============================================================
 now_if_args(function()
@@ -166,7 +167,7 @@ now_if_args(function()
     },
     diagnostics = {
       cwd_only       = false,
-      file_icons     = false,
+      file_icons     = true,
       git_icons      = false,
       color_headings = true, -- use diag highlights to color source & filepath
       diag_icons     = true, -- display icons from diag sign definitions
@@ -178,3 +179,24 @@ now_if_args(function()
   })
   require("fzf-lua").register_ui_select()
 end)
+
+-- later(function()
+--   add({ "https://github.com/lervag/vimtex" })
+-- end)
+--
+-- later(function()
+--   add({ "https://github.com/frabjous/knap" })
+--   local kmap = vim.keymap.set
+--   kmap({ 'n', 'v', 'i' }, '<F5>', function() require("knap").process_once() end)
+--   kmap({ 'n', 'v', 'i' }, '<F6>', function() require("knap").close_viewer() end)
+--   kmap({ 'n', 'v', 'i' }, '<F7>', function() require("knap").toggle_autopreviewing() end)
+--   kmap({ 'n', 'v', 'i' }, '<F8>', function() require("knap").forward_jump() end)
+--
+--   -- vim.g.knap_settings = {
+--   --   texoutputext = "pdf",
+--   --   textopdf = "pdflatex -interaction=batchmode -halt-on-error $srcfile$",
+--   --   textopdfviewerlaunch = "zathura $outputfile$",
+--   --   textopdfviewerrefresh = "kill -HUP $pid$",
+--   --   textopdfshorthand = "tex",
+--   -- }
+-- end)

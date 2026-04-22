@@ -4,18 +4,15 @@ show_symlink = true
 
 [opener]
 app_image = [
-    { run = 'chmod +x "$@" && "$@"', orphan = true, desc = "AppImage", for = "unix" }
+    { run = 'chmod +x %s && %s', orphan = true, desc = "AppImage", for = "unix" }
 ]
-play = [
-    { run = 'mpv "$@"', orphan = true, for = "unix" },
-]
-edit = [
-    { run = 'nvim "$@"', block = true, for = "unix" },
+pdff = [
+    { run = 'zathura "$@"', orphan = true, for = "unix" }
 ]
 
 [open]
-rules = [
+prepend_rules = [
     { url = "*.AppImage", use = "app_image" },
-    { mime = "video/*", use = "play" },
-    { mime = "text/*", use = "edit" },
+    { url = "*.appimage", use = "app_image" },
+    { mime = "application/pdf", use = "pdff" }
 ]

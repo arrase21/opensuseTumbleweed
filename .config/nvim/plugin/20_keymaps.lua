@@ -48,7 +48,6 @@ local function pack_clean()
     vim.pack.del(unused_plugins)
   end
 end
-
 -- ┌─────────────────┐
 -- │ Custom mappings │
 -- └─────────────────┘
@@ -76,7 +75,6 @@ Config.leader_group_clues = {
   { mode = 'x', keys = '<Leader>l', desc = '+Language' },
 }
 
--- during mapping creation: a "lazy loading" approach to improve startup time.
 local map = function(mode, lhs, rhs, desc)
   vim.keymap.set(mode, lhs, rhs, { desc = desc, silent = true })
 end
@@ -97,7 +95,6 @@ end
 
 nmap_leader('ed', '<Cmd>lua MiniFiles.open()<CR>', 'Directory')
 nmap_leader('ef', explore_at_file, 'File directory')
--- nmap_leader('ei', '<Cmd>edit $MYVIMRC<CR>', 'init.lua')
 nmap_leader('en', '<Cmd>lua MiniNotify.show_history()<CR>', 'Notifications')
 nmap_leader('eq', explore_quickfix, 'Quickfix list')
 nmap_leader('eQ', explore_locations, 'Location list')
@@ -126,6 +123,9 @@ nmap_leader('fs', pick_workspace_symbols_live, 'Symbols workspace (live)')
 nmap_leader('fS', '<Cmd>Pick lsp scope="document_symbol"<CR>', 'Symbols document')
 nmap_leader('fv', '<Cmd>Pick visit_paths cwd=""<CR>', 'Visit paths (all)')
 nmap_leader('fV', '<Cmd>Pick visit_paths<CR>', 'Visit paths (cwd)')
+
+nmap_leader("fF", function() require("fzf-lua").files() end, "Diff")
+nmap_leader("fe", function() require("fzf-lua").grep_cword() end, "Diff")
 
 -- nmap_leader("gd", function() require("fzf-lua").git_diff() end, "Diff")
 -- nmap_leader("gc", function() require("fzf-lua").git_commits() end, "Commit")
@@ -219,6 +219,7 @@ local make_pick_core = function(cwd, desc)
 end
 nmap_leader('vc', make_pick_core('', 'Core visits (all)'), 'Core visits (all)')
 nmap_leader('vC', make_pick_core(nil, 'Core visits (cwd)'), 'Core visits (cwd)')
+nmap_leader('va', '<Cmd>lua MiniExtra.pickers.visit_labels()<CR>', 'View all label')
 nmap_leader('vv', '<Cmd>lua MiniVisits.add_label("core")<CR>', 'Add "core" label')
 nmap_leader('vV', '<Cmd>lua MiniVisits.remove_label("core")<CR>', 'Remove "core" label')
 nmap_leader('vl', '<Cmd>lua MiniVisits.add_label()<CR>', 'Add label')

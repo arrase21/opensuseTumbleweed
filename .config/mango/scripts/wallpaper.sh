@@ -31,8 +31,8 @@ if [[ -d "$WALLPAPERS_DIR" && -n "$(ls -A "$WALLPAPERS_DIR" 2>/dev/null)" ]]; th
 
     cp "$WALLPAPER" ~/.config/wall.png 2>/dev/null
 
-    if command -v swww >/dev/null 2>&1; then
-      swww img "$WALLPAPER" \
+    if command -v awww >/dev/null 2>&1; then
+      awww img "$WALLPAPER" \
         --transition-type wipe \
         --transition-fps 60 \
         --transition-duration 2

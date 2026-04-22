@@ -1,14 +1,12 @@
 #!/usr/bin/env bash
 exec 1>/dev/null 2>&1
-cache_dir="$HOME/.cache/swww/"
+cache_dir="$HOME/.cache/awww/"
 current_monitor=$(wlr-randr | grep -m1 -o '^[^ ]*')
 cache_file="${cache_dir}${current_monitor}"
 
 [[ -f "$cache_file" ]] || exit 1
 wallpaper_path=$(grep -m1 -v lanczos3 "$cache_file")
 [[ -f "$wallpaper_path" ]] || exit 1
-# wallust con prioridad alta + silencio total
-
 # Waybar recarga (USR2 es más suave que USR1)
 
 if pgrep -x waybar >/dev/null; then

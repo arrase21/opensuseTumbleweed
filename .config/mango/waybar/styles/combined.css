@@ -27,6 +27,7 @@
 
 
 * {
+  background-color: @backlight;
   border: none;
   border-radius: 0;
   min-height: 0;
@@ -36,9 +37,9 @@
 }
 
 window#waybar {
-  background-color: rgba(0,0,0,0.4);
+  background-color: rgba(0,0,0,0.5);
   border-radius: 6px;
-  margin:0px 1.5px;
+  margin:0px 0.5px;
 }
 
 tooltip {
@@ -104,8 +105,8 @@ tooltip {
 .modules-center {
   background-color: @background-module;
   border-radius: 0px 0px 45px 45px;
-	padding-top: 8px;
-	padding-bottom: 8px;
+	padding-top: 5px;
+	padding-bottom: 5px;
 	padding-left: 10px;
 	padding-right: 6px;
 }
@@ -113,10 +114,16 @@ tooltip {
   margin: 0px 10px;
 }
 
-#backlight,
+#backlight{
+  color: @foreground;
+  margin:0px 7px;
+}
 #backlight-slider,
 #battery,
-#bluetooth,
+#bluetooth{
+  color: @foreground;
+  margin:0px 7px;
+}
 #clock,
 #cpu,
 #disk,
@@ -124,11 +131,22 @@ tooltip {
 #keyboard-state,
 #memory,
 #mode,
-#mpris,
-#network,
+#custom-mpris{
+  color: @foreground;
+  margin:0px 7px;
+}
+#custom-expand-icon {
+  color: @foreground;
+  margin-right: 15px;
+}
+
+#network{
+	color: @foreground;
+  margin:0px 10px;
+}
 #power-profiles-daemon,
 #pulseaudio{
-  margin:0px 10px;
+  margin:0px 7px;
 }
 #pulseaudio-slider,
 #taskbar,
@@ -150,12 +168,14 @@ tooltip {
 #custom-lock,
 #custom-hint,
 #custom-hypridle,
-#custom-menu,
+#custom-menu{
+  color: @textcolor3;
+}
 #custom-playerctl,
 #custom-power_vertical,
 #custom-power{
-  padding: 0rem 0.4rem;
-  margin: 0rem 0.4rem;
+  color:@foreground;
+  margin:0px 7px;
 }
 #custom-quit,
 #custom-reboot,
@@ -163,6 +183,7 @@ tooltip {
 #custom-spotify,
 #custom-swaync,
 #custom-tty,
+
 #custom-updater {
     color: @foreground;
 	padding-right: 6px;
