@@ -4,10 +4,21 @@
 local add = vim.pack.add
 local now_if_args, later = Config.now_if_args, Config.later
 
-now_if_args(function()
-  add({ 'https://github.com/nvim-treesitter/nvim-treesitter', })
-end)
+-- now_if_args(function()
+--   add({ 'https://github.com/nvim-treesitter/nvim-treesitter', })
+-- end)
 
+-- now_if_args(function()
+--   add({ "https://github.com/arborist-ts/arborist.nvim", })
+--   require("arborist").setup()
+-- end)
+
+now_if_args(function()
+  add { ("https://github.com/romus204/tree-sitter-manager.nvim") }
+  require("tree-sitter-manager").setup({
+    auto_install = true, -- if enabled, install missing parsers when editing a new file
+  })
+end)
 -- ┌─────────────────────────┐
 -- │        Themes           │
 -- └─────────────────────────┘
@@ -47,8 +58,11 @@ now_if_args(function()
   add { "https://gitlab.com/motaz-shokry/gruvbox.nvim" }
   require("gruvbox").setup({
     enable = {
-      -- lualine = true,
-      statusline = true,
+      lualine = true,
+    },
+
+    highlight_groups = {
+      Visual = { reverse = true },
     },
     styles = {
       bold = true,
@@ -56,7 +70,7 @@ now_if_args(function()
       -- transparency = true,
     },
   })
-  -- vim.cmd('colorscheme gruvbox-hard')
+  vim.cmd('colorscheme gruvbox-hard')
 end)
 -- Solarized ============================================================
 now_if_args(function()
@@ -80,7 +94,7 @@ now_if_args(function()
   require("dracula").setup({
     transparent_bg = true
   })
-  vim.cmd('colorscheme dracula')
+  -- vim.cmd('colorscheme dracula')
 end)
 
 -- ┌─────────────────────────┐

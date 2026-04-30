@@ -165,7 +165,7 @@ local function sep(icon, hl_from, hl_to)
 end
 
 local function lsp_info()
-  local clients = vim.lsp.get_active_clients({ bufnr = 0 })
+  local clients = vim.lsp.get_clients({ bufnr = 0 })
   local ignore = { ['mini.snippets'] = true }
   clients = vim.tbl_filter(function(c) return not ignore[c.name] end, clients)
   if #clients == 0 then return 'No LSP' end

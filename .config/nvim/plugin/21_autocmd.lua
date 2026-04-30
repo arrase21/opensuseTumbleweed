@@ -50,15 +50,15 @@ vim.api.nvim_create_autocmd("FileType", {
   end
 })
 
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = { 'go', 'lua', 'python', 'http', 'json' },
-  callback = function(ev)
-    if pcall(vim.treesitter.start, ev.buf) then return end
-    vim.cmd('packadd nvim-treesitter')
-    pcall(require('nvim-treesitter.install').install, vim.bo[ev.buf].filetype)
-    vim.defer_fn(function() pcall(vim.treesitter.start, ev.buf) end, 500)
-  end,
-})
+-- vim.api.nvim_create_autocmd('FileType', {
+--   pattern = { 'go', 'lua', 'python', 'http', 'json' },
+--   callback = function(ev)
+--     if pcall(vim.treesitter.start, ev.buf) then return end
+--     vim.cmd('packadd nvim-treesitter')
+--     pcall(require('nvim-treesitter.install').install, vim.bo[ev.buf].filetype)
+--     vim.defer_fn(function() pcall(vim.treesitter.start, ev.buf) end, 500)
+--   end,
+-- })
 
 vim.api.nvim_create_autocmd("CursorHold", {
   callback = function()

@@ -27,15 +27,28 @@ if status is-interactive
     alias pva 'source .env/bin/activate.fish'
     alias pga 'source pgadmin4/bin/activate.fish'
 end
-
-function y
-    set tmp (mktemp -t "yazi-cwd.XXXXXX")
-    yazi $argv --cwd-file="$tmp"
-    if read -z cwd <"$tmp"
-        if test -n "$cwd" -a "$cwd" != "$PWD"
-            builtin cd -- "$cwd"
-        end
-    end
-    rm -f -- "$tmp"
-end
 fish_add_path /home/arrase/.opencode/bin
+
+# FZF
+source /usr/share/fzf/shell/key-bindings.fish
+source /usr/share/fish/completions/fzf.fish
+
+function __fzf_files
+    set -l dir (fd -H -t d . $HOME | fzf --preview 'eza --tree --level=2 --icons --color=always {} 2>/dev/null || tree -C {} | head -200')
+    test -n "$dir"; and builtin cd "$dir"; and commandline -f repaint
+end
+bind \cf __fzf_files
+set -Ux FZF_DEFAULT_OPTS '
+    --height 50%
+    --layout=reverse
+    --border=rounded
+    --prompt="❯ "
+    --pointer="▶"
+    --marker="✓"
+    --color=fg:#c0caf5,bg:-1,hl:#B388FF 
+    --color=fg+:#ffffff,bg+:-1,hl+:#B388FF 
+    --color=info:#7aa2f7,prompt:#2CF9ED,pointer:#bb9af7 
+    --color=marker:#9ece6a,spinner:#9ece6a,header:#565f89
+    --popup=center
+    --popup=70%
+'

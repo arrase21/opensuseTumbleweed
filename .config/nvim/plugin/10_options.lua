@@ -12,7 +12,7 @@ if vim.fn.exists('syntax_on') ~= 1 then vim.cmd('syntax enable') end
 -- UI =========================================================================
 vim.o.number          = true      -- Absolute line numbers
 vim.o.relativenumber  = true      -- Relative line numbers
-vim.o.cmdheight       = 0         -- Hide command line (use statusline)
+vim.o.cmdheight       = 1         -- Hide command line (use statusline)
 vim.o.confirm         = true      -- Confirm unsaved changes
 vim.o.winborder       = "rounded" -- Rounded floating windows
 vim.o.pumborder       = "rounded" -- Rounded floating windows
