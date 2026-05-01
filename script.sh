@@ -17,8 +17,8 @@ ok(){ echo -e "\033[1;32m✔ $1\033[0m"; }
 
 core_pkgs="
 bc curl wget unzip 7zip findutils git jq inxi xdg-user-dirs xdg-utils
-ydotool opi libnotify-tools pavucontrol playerctl pamixer xwayland 
-libadwaita-devel wayland-protocols-devel brightnessctl bluez 
+ydotool opi libnotify-tools playerctl wiremix pamixer bluetui xwayland 
+libadwaita-devel wayland-protocols-devel brightnessctl bluez scdoc
 NetworkManager upower glib2-devel power-profiles-daemon gtk4-devel 
 pango-devel gdk-pixbuf-devel cairo-devel libepoxy-devel
 "
@@ -43,38 +43,6 @@ meson ninja gcc make
 # FUNCIONES INSTALL
 ##################################
 
-# add_repositories() {
-#   title "Adding external repositories"
-#   step "Adding DankLinux repository"
-#   if ! zypper lr | grep -q "danklinux"; then
-#     sudo zypper addrepo https://download.opensuse.org/repositories/home:AvengeMedia:danklinux/openSUSE_Tumbleweed/home:AvengeMedia:danklinux.repo
-#     ok "DankLinux repo added"
-#   else
-#     echo "  ℹ️  DankLinux repo already exists"
-#   fi
-#   step "Adding DMS repository"
-#   if ! zypper lr | grep -q "dms"; then
-#     sudo zypper addrepo https://download.opensuse.org/repositories/home:/AvengeMedia:/dms/openSUSE_Tumbleweed/home:AvengeMedia:dms.repo
-#     ok "DMS repo added"
-#   else
-#     echo "  ℹ️  DMS repo already exists"
-#   fi
-#
-#   step "Refreshing repositories"
-#   sudo zypper refresh
-#   ok "Repositories refreshed"
-# }
-
-# install_dms() {
-#   title "Installing DMS (Display Manager Selector)"
-#   if ! command -v dms >/dev/null 2>&1; then
-#     sudo zypper install -y dms
-#     ok "DMS installed"
-#   else
-#     echo "  ℹ️  DMS already installed"
-#   fi
-# }
-
 install_dependencies() {
   title "Installing dependencies"
   sudo zypper --non-interactive install -y \
@@ -84,18 +52,21 @@ install_dependencies() {
     $build_deps || true
   ok "Dependencies installed"
 }
-
 clone_dotfiles() {
   title "Dotfiles"
   mkdir -p "$HOME/repos"
-  cd "$HOME/repos"
-  if [ ! -d opensuseTumbleweed ]; then
-    git clone https://github.com/arrase21/opensuseTumbleweed.git
+
+  if [ ! -d "$HOME/repos/opensuseTumbleweed/.git" ]; then
+    step "Clon Repo"
+    rm -rf "$HOME/repos/opensuseTumbleweed"
+    git clone https://github.com/arrase21/opensuseTumbleweed.git "$HOME/repos/opensuseTumbleweed"
   else
-    git -C opensuseTumbleweed pull --rebase
+    step "Update exist repo"
+    git -C "$HOME/repos/opensuseTumbleweed" pull --rebase
   fi
-  ok "Dotfiles ready"
+  ok "Dotfiles ready in $HOME/repos/opensuseTumbleweed"
 }
+
 
 copy_configs() {
   step "Copy configs"
@@ -112,9 +83,31 @@ copy_configs() {
   ok "Configs copied"
 }
 
+
+copy_configs() {
+  title "Install configs"
+  BASE="$HOME/repos/opensuseTumbleweed"
+  mkdir -p "$HOME/.config" "$HOME/.local" "$HOME/Pictures"
+
+  if [ ! -d "$BASE" ]; then
+    echo "❌ Error: The file $BASE dont exists. Clone fail."
+    exit 1
+  fi
+
+  step "Copy .config"
+  rsync -av --no-perms "$BASE/.config/" "$HOME/.config/"
+  
+  step "Copy .local"
+  rsync -av --no-perms "$BASE/.local/" "$HOME/.local/"
+  
+  [ -d "$BASE/.themes" ] && rsync -av --no-perms "$BASE/.themes/" "$HOME/.themes/"
+  [ -d "$BASE/.icons" ] && rsync -av --no-perms "$BASE/.icons/" "$HOME/.icons/"
+  [ -d "$BASE/wallpapers" ] && rsync -a --no-perms "$BASE/wallpapers/" "$HOME/Pictures/wallpapers/"
+  ok "Already config"
+}
+
 setup_xdg_dirs() {
   title "Configurando XDG user directories"
-  
   xdg-user-dirs-update
   
   if [ -f "$HOME/repos/opensuseTumbleweed/.config/user-dirs.dirs" ]; then
@@ -125,28 +118,28 @@ setup_xdg_dirs() {
   ok "XDG directories updated"
 }
 
-#compile_wlsunset() {
-#  title "Compilando wlsunset"
-#  cd "$HOME/repos"
-#  
-#  if [ ! -d wlsunset ]; then
-#    step "Clonando wlsunset"
-#    git clone https://github.com/kennylevinsen/wlsunset
-#    cd wlsunset
-#    meson build
-#    ninja -C build
-#    sudo ninja -C build install
-#    ok "wlsunset compiled and installed"
-#  else
-#    step "wlsunset ya existe, actualizando"
-#    cd wlsunset
-#    git pull
-#    meson build --wipe 2>/dev/null || meson build
-#    ninja -C build
-#    sudo ninja -C build install
-#    ok "wlsunset updated"
-#  fi
-#}
+compile_wlsunset() {
+ title "Compilando wlsunset"
+ cd "$HOME/repos"
+ 
+ if [ ! -d wlsunset ]; then
+   step "Clonando wlsunset"
+   git clone https://github.com/kennylevinsen/wlsunset
+   cd wlsunset
+   meson build
+   ninja -C build
+   sudo ninja -C build install
+   ok "wlsunset compiled and installed"
+ else
+   step "wlsunset ya existe, actualizando"
+   cd wlsunset
+   git pull
+   meson build --wipe 2>/dev/null || meson build
+   ninja -C build
+   sudo ninja -C build install
+   ok "wlsunset updated"
+ fi
+}
 
 #compile_wlr_dpms() {
 #  title "Compilando wlr-dpms"
@@ -172,7 +165,6 @@ setup_xdg_dirs() {
 
 install_mangowc_repo() {
   title "Installing Mangowc from unofficial repo"
-  
   # Verificar si opi está instalado
   if ! command -v opi >/dev/null 2>&1; then
     step "Instalando opi"
@@ -180,12 +172,12 @@ install_mangowc_repo() {
   fi
   
   # Intentar instalar mangowc con opi
-  step "Instalando mangowc (home:mantarimay:sway)"
-  if echo -e "1\n1" | opi mangowc 2>/dev/null; then
+  step "Instalando mangowc"
+  if echo -e "1\n1" | opi mangowm 2>/dev/null; then
     ok "Mangowc installed successfully"
   else
     echo "⚠️  OPI falló. Instalación manual requerida."
-    echo "    Ejecuta: opi mangowc"
+    echo "    Ejecuta: opi mangown"
     echo "    Y selecciona: 1 (repo) -> 1 (confirmar)"
   fi
 }
@@ -212,13 +204,13 @@ install_tmux_plugins() {
   ok "Tmux ready"
 }
 
-# install_rust_tools() {
-#   title "Rust tools"
-#   for pkg in wallust gyr satty; do
-#     cargo install --list | grep -q "$pkg" || cargo install "$pkg"
-#   done
-#   ok "Rust tools installed"
-# }
+install_rust_tools() {
+  title "Rust tools"
+  for pkg in matugen satty; do
+    cargo install --list | grep -q "$pkg" || cargo install "$pkg"
+  done
+  ok "Rust tools installed"
+}
 
 install_fonts() {
   title "Nerd Fonts"
@@ -271,13 +263,13 @@ main() {
   install_dependencies
   clone_dotfiles
   copy_configs
-  setup_xdg_dirs
-  #compile_wlsunset
+  compile_wlsunset
   #compile_wlr_dpms
+  setup_xdg_dirs
   install_mangowc_repo
   install_brave
   install_tmux_plugins
-  # install_rust_tools
+  install_rust_tools
   install_fonts
   #setup_android_mtp
 
