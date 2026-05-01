@@ -5,7 +5,7 @@ cacheDir="$HOME/.cache/wallcache"
 scriptsDir="$HOME/.config/mango/scripts/"
 iDIR="$HOME/.config/swaync/images"
 
-[ -d "$cacheDir" ] || mkdir -p "$cacheDir"
+S -d "$cacheDir" ] || mkdir -p "$cacheDir"
 
 # -------------------------------------------------
 # Detectar monitor enfocado
@@ -163,7 +163,7 @@ if [[ -n "$wall_selection" ]]; then
     selected="${wall_dir}/${wall_selection}"
 
     cp "$selected" ~/.config/wall.png
-
+    magick "$selected" -gravity center -crop 1:1 +repage "$HOME/.config/wall_square.png" 2>&1
     awww img -o "$focused_monitor" "$selected" $SWWW_PARAMS
 
     # 👉 colores
