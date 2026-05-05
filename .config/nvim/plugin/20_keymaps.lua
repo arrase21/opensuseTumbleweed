@@ -98,6 +98,8 @@ nmap_leader('ef', explore_at_file, 'File directory')
 nmap_leader('en', '<Cmd>lua MiniNotify.show_history()<CR>', 'Notifications')
 nmap_leader('eq', explore_quickfix, 'Quickfix list')
 nmap_leader('eQ', explore_locations, 'Location list')
+nmap_leader('et', '<Cmd>NvimTreeOpen()<CR>', 'NerdTree')
+
 
 local pick_added_hunks_buf = '<Cmd>Pick git_hunks path="%" scope="staged"<CR>'
 local pick_workspace_symbols_live = '<Cmd>Pick lsp scope="workspace_symbol_live"<CR>'
@@ -123,14 +125,6 @@ nmap_leader('fs', pick_workspace_symbols_live, 'Symbols workspace (live)')
 nmap_leader('fS', '<Cmd>Pick lsp scope="document_symbol"<CR>', 'Symbols document')
 nmap_leader('fv', '<Cmd>Pick visit_paths cwd=""<CR>', 'Visit paths (all)')
 nmap_leader('fV', '<Cmd>Pick visit_paths<CR>', 'Visit paths (cwd)')
-
-nmap_leader("fF", function() require("fzf-lua").files() end, "Diff")
-nmap_leader("fe", function() require("fzf-lua").grep_cword() end, "Diff")
-
--- nmap_leader("gd", function() require("fzf-lua").git_diff() end, "Diff")
--- nmap_leader("gc", function() require("fzf-lua").git_commits() end, "Commit")
--- nmap_leader("gb", function() require("fzf-lua").git_branches() end, "Branches")
--- nmap_leader("gl", function() require("fzf-lua").git_commits() end, "logs")
 
 nmap_leader('gg', lazygit, 'Lazygit')
 nmap_leader('gC', '<Cmd>Git commit --amend<CR>', 'Commit amend')
@@ -255,6 +249,21 @@ map("n", "<C-A-L>", "<cmd>vertical resize -2<cr>", "Decrease Window Width")
 map("n", "<C-A-h>", "<cmd>vertical resize +2<cr>", "Increase Window Width")
 
 nmap_leader('rs', function() require('kulala').run() end, 'Send request')
-
-nmap_leader("?", function() require("fzf-lua").builtin() end, "FZF Builtins")
 -- stylua: ignore end
+
+
+vim.keymap.set("i", "<Tab>", function()
+  return vim.fn.pumvisible() == 1 and "<C-n>" or "<Tab>"
+end, { expr = true, noremap = true })
+
+vim.keymap.set("i", "<S-Tab>", function()
+  return vim.fn.pumvisible() == 1 and "<C-p>" or "<S-Tab>"
+end, { expr = true, noremap = true })
+
+-- Confirmar con Enter
+vim.keymap.set("i", "<CR>", function()
+  if vim.fn.pumvisible() == 1 then
+    return "<C-y>"
+  end
+  return "<CR>"
+end, { expr = true, noremap = true })

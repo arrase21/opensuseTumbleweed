@@ -9,9 +9,7 @@ end
 if #configs > 0 then
   vim.lsp.enable(configs)
 end
--- ┌────────────────┐
--- │ Plugin manager │
--- └────────────────┘
+
 _G.Config = {}
 
 vim.pack.add({ 'https://github.com/nvim-mini/mini.nvim' })
@@ -28,14 +26,7 @@ Config.new_autocmd = function(event, pattern, callback, desc)
   vim.api.nvim_create_autocmd(event, opts)
 end
 
--- Config.on_packchanged = function(plugin_name, kinds, callback, desc)
---   local f = function(ev)
---     local name, kind = ev.data.spec.name, ev.data.kind
---     if not (name == plugin_name and vim.tbl_contains(kinds, kind)) then return end
---     if not ev.data.active then vim.cmd.packadd(plugin_name) end
---     callback(ev.data)
---   end
---   Config.new_autocmd('PackChanged', '*', f, desc)
--- end
 
 require("preview.events").setup()
+vim.g.mapleader = " "
+require("fzf")

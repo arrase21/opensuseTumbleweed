@@ -1,15 +1,76 @@
 local now, now_if_args, later = Config.now, Config.now_if_args, Config.later
 
+now(function() require('mini.notify').setup()end)
+
+now(function() require('mini.tabline').setup() end)
+
+now(function() require('mini.sessions').setup()end)
+
+now(function ()require('mini.cursorword').setup()end)
+
+later(function() require('mini.git').setup() end)
+
+later(function()require('mini.visits').setup()end)
+
+later(function() require('mini.indentscope').setup() end)
+
+later(function() require('mini.pairs').setup({ modes = { insert = true, command = true, terminal = false } }) end)
+
+later(function()require('mini.pick').setup()end)
+
+later(function() require('mini.surround').setup() end)
+
+
 now(function()
-  -- Mini Session ========================================================================================
-  require('mini.sessions').setup()
-  -- Mini Session ========================================================================================
-  require('mini.cursorword').setup()
-  -- Mini Notify =========================================================================================
-  require('mini.notify').setup()
-  -- Mini tabline ========================================================================================
-  require('mini.tabline').setup()
-  -- Mini Clue ===========================================================================================
+  require('mini.icons').setup({
+    filetype = { go = { glyph = "" } },
+    use_file_extension = function(ext, _)
+      local suf3, suf4 = ext:sub(-3), ext:sub(-4)
+      return suf3 ~= 'scm' and suf3 ~= 'txt' and suf3 ~= 'yml' and suf4 ~= 'json' and suf4 ~= 'yaml'
+    end,
+  })
+  later(MiniIcons.mock_nvim_web_devicons)
+  later(MiniIcons.tweak_lsp_kind)
+end)
+
+
+later(function()
+  local process_items_opts = { kind_priority = { Text = -1, Snippet = 99 } }
+  local process_items = function(items, base)
+    return MiniCompletion.default_process_items(items, base, process_items_opts)
+  end
+  require('mini.completion').setup({
+    lsp_completion = { source_func = 'omnifunc', auto_setup = false, process_items = process_items },
+  })
+  local on_attach = function(args) vim.bo[args.buf].omnifunc = 'v:lua.MiniCompletion.completefunc_lsp' end
+  _G.Config.new_autocmd('LspAttach', '*', on_attach, 'Custom `on_attach`')
+  if vim.fn.has('nvim-0.11') == 1 then vim.lsp.config('*', { capabilities = MiniCompletion.get_lsp_capabilities() }) end
+end)
+
+
+later(function()
+  require('mini.diff').setup({
+    view = {
+      style = "sign",
+      signs = { add = '▒', change = '▒', delete = '消' },
+    }
+  })
+end)
+
+now_if_args(function()
+  require('mini.files').setup({
+    windows = {
+      preview = true
+    },
+    mappings = {
+      go_in_plus = "<CR>",
+      synchronize = "<Leader>w",
+    },
+  })
+end)
+
+
+now(function()
   local miniclue = require('mini.clue')
   miniclue.setup({
     window = {
@@ -25,81 +86,9 @@ now(function()
       { mode = 'n', keys = 'g' },        -- `g` key
     },
   })
-  -- Mini Icons ============================================================================================
-  local ext3_blocklist = { scm = true, txt = true, yml = true }
-  local ext4_blocklist = { json = true, yaml = true }
-  require('mini.icons').setup({
-    filetype = { go = { glyph = "" } },
-    use_file_extension = function(ext, _)
-      return not (ext3_blocklist[ext:sub(-3)] or ext4_blocklist[ext:sub(-4)])
-    end,
-  })
-  later(MiniIcons.mock_nvim_web_devicons)
-  later(MiniIcons.tweak_lsp_kind)
 end)
 
---Later =====================================================================================================
-later(function()
-  -- Mini Visits ============================================================================================
-  require('mini.visits').setup()
-  -- Mini Extra =============================================================================================
-  require('mini.extra').setup()
-  -- Mini Comment ===========================================================================================
-  require('mini.comment').setup()
-  -- Mini Pick ==============================================================================================
-  require('mini.pick').setup()
-  -- Mini Surroud ===========================================================================================
-  require('mini.surround').setup()
-  -- Mini Git ===============================================================================================
-  require('mini.git').setup()
-  -- Mini Diff ===============================================================================================
-  require('mini.diff').setup({ view = { style = "sign", signs = { add = '󰄛', change = '▒', delete = '消' }, } })
-  -- Mini Pairs ==============================================================================================
-  require('mini.pairs').setup({ modes = { command = true } })
-  -- Mini indentscope ========================================================================================
-  require('mini.indentscope').setup({ symbol = "▏", })
-  -- Mini Keymap =============================================================================================
-  require('mini.keymap').setup()
-  MiniKeymap.map_multistep('i', '<Tab>', { 'pmenu_next' })
-  MiniKeymap.map_multistep('i', '<CR>', { 'pmenu_accept', 'minipairs_cr' })
-  MiniKeymap.map_multistep('i', '<BS>', { 'minipairs_bs' })
-end)
 
-now_if_args(function()
-  -- Mini Files ===============================================================================================
-  require('mini.files').setup({
-    windows = {
-      preview = true,
-      width_preview = 85,
-    },
-    mappings = {
-      go_in_plus = "<CR>",
-      synchronize = "<Leader>w",
-    },
-  })
-  -- Mini Misc =================================================================================================
-  require('mini.misc').setup()
-  MiniMisc.setup_auto_root()
-  MiniMisc.setup_restore_cursor()
-  MiniMisc.setup_termbg_sync()
-  -- Mini Completion ===========================================================================================
-  local process_items_opts = { kind_priority = { Text = -1, Snippet = 99 } }
-  local process_items = function(items, base)
-    return MiniCompletion.default_process_items(items, base, process_items_opts)
-  end
-  require('mini.completion').setup({
-    lsp_completion = {
-      source_func = 'omnifunc',
-      auto_setup = false,
-      process_items = process_items,
-    },
-  })
-  local on_attach = function(ev)
-    vim.bo[ev.buf].omnifunc = 'v:lua.MiniCompletion.completefunc_lsp'
-  end
-  _G.Config.new_autocmd('LspAttach', nil, on_attach, "Set 'omnifunc'")
-  vim.lsp.config('*', { capabilities = MiniCompletion.get_lsp_capabilities() })
-end)
 
 -- Mini Starter ====================================================================================================
 Mvim_starter_custom = function()
@@ -134,6 +123,7 @@ require("mini.starter").setup({
   footer = "",
   query_updater = false,
 })
+
 
 -- Mini Statusline ================================================================================================
 local function set_hl()
