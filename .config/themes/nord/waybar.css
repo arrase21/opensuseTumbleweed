@@ -11,8 +11,8 @@
 
 @define-color bordercolor @on_secondary;
 @define-color textcolor1 @inverse_primary;
+@define-color textcolor3 @primary_fixed_dim;
 @define-color textcolor2 @on_primary_container;
-@define-color textcolor3 @on_tertiary_fixed_variant;
 @define-color textcolor4 @inverse_primary;
 @define-color textcolor5 @tertiary;
 @define-color textcolor6 @on_tertiary_container;
@@ -20,7 +20,7 @@
 @define-color background @surface_dim;
 
 * {
-  background-color:#1d2021;
+  background-color:#2e3440;
   border: none;
   border-radius: 0;
   min-height: 0;
@@ -48,14 +48,12 @@
     margin: 0px 1.5px;
     border-radius: 3px 3px 3px 3px;
     color: @textcolor3;
-    background: transparent;
     transition: all 0.1s linear;
 }
 #taskbar button.active,
 #workspaces button.active {
     color: @textcolor1;
     border-radius: 3px 3px 3px 3px;
-    background: transparent;
     min-width: 9px;
     transition: all 0.1s linear;
 }
@@ -63,7 +61,7 @@
 #taskbar button.hidden,
 #workspaces button.hidden {
     color: @textcolor6;
-    background: transparent;
+    /* background: @foreground; */
     border-radius: 3px 3px 3px 3px;
     min-width: 9px;
     transition: all 0.1s linear;
@@ -93,11 +91,11 @@
 }
 #temperature{
   margin:0px 6px;
-  color: @textcolor1;
+  color: @textcolor3;
 }
 #memory{
   margin:0px 6px;
-    color: @textcolor1;
+    color: @textcolor3;
 }
 
 #custom-mpris,
@@ -152,8 +150,11 @@ tooltip {
 
 
 #clock {
-    color: @textcolor1;
+    /* background-color:#a3be8c; */
+    color: @textcolor3;
     padding: 0rem 1rem;
+    /* border-radius: 10px; */
+    /* margin: 8px 10px; */
 }
 
 #custom-screenrecording-indicator {
