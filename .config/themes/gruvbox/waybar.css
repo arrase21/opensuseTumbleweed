@@ -10,12 +10,12 @@
 /* @define-color background #282828; */
 
 @define-color bordercolor @on_secondary;
-@define-color textcolor1 @inverse_primary;
+@define-color textcolor1 #a9b665;
 @define-color textcolor2 @on_primary_container;
-@define-color textcolor3 @on_tertiary_fixed_variant;
+@define-color textcolor3 #ea6962;
 @define-color textcolor4 @inverse_primary;
-@define-color textcolor5 @tertiary;
-@define-color textcolor6 @on_tertiary_container;
+@define-color textcolor5 #d4be98;
+@define-color textcolor6 #d8a657;
 @define-color foreground #585858;
 @define-color background @surface_dim;
 
@@ -27,6 +27,15 @@
   font-family: "JetBrainsMono Nerd Font";
   font-size: 13px;
 }
+
+/* #282828 */
+/* #ea6962 */
+/* #a9b665 */
+/* #d8a657 */
+/* #7daea3 */
+/* #d3869b */
+/* #89b482 */
+/* #d4be98 */
 
 #taskbar,
 #workspaces {
@@ -89,15 +98,15 @@
 
 #cpu {
   margin:0px 6px;
-  color: @textcolor3;
+  color: #ea6962;
 }
 #temperature{
   margin:0px 6px;
-  color: @textcolor1;
+  color: #a9b665;
 }
 #memory{
   margin:0px 6px;
-    color: @textcolor1;
+    color: #a9b665;
 }
 
 #custom-mpris,
