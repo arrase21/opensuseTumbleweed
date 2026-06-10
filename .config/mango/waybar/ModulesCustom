@@ -40,7 +40,7 @@
     "format": "{text}",
     "return-type": "json",
     // "on-click": "eww close music-widget && eww open music-widget",
-    "on-click": "~/.config/eww/get-widget.sh",
+    "on-click": "touch /tmp/qs-media-toggle",
     "on-click-middle": "playerctl -a play-pause",
     "on-click-right": "playerctl -a previous"
   },

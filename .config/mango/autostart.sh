@@ -18,7 +18,6 @@ wl-clip-persist --clipboard regular --reconnect-tries 0 >/dev/null 2>&1 &
 wl-paste --type text --watch cliphist store >/dev/null 2>&1 &
 # Permission authentication
 /usr/libexec/polkit-gnome-authentication-agent-1 >/dev/null 2>&1 &
-eww daemon &
 # 自启动脚本 仅作参考
 # ime input
 # fcitx5 --replace -d >/dev/null 2>&1 &
